@@ -451,10 +451,9 @@ class TableBody extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
 
-    /* TODO resolve the issues caused by the role and className being added to the tbody tag.  These are causing 0 row tables to be rendered even though they shouldn't be */
     return (
       <ClickAwayListener onClickAway={this.handleClickAway}>
-        <tbody role="presentation" className={className} style={prepareStyles(Object.assign({}, style))}>
+        <tbody role='presentation' className={this.props.className} style={prepareStyles(Object.assign({}, style))}>
           {this.createRows()}
         </tbody>
       </ClickAwayListener>
