@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import UniqueId from 'lodash.uniqueid';
 import transitions from '../styles/transitions';
 import ClickAwayListener from '../internal/ClickAwayListener';
 import SnackbarBody from './SnackbarBody';
@@ -102,7 +103,7 @@ class Snackbar extends Component {
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
   };
-
+  contentId = UniqueId('snackbar')
   componentWillMount() {
     this.setState({
       open: this.props.open,
@@ -217,12 +218,14 @@ class Snackbar extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
+    const openAttr = open ? { open } : null;
 
     return (
       <ClickAwayListener onClickAway={open ? this.componentClickAway : null}>
-        <div {...other} style={prepareStyles(Object.assign(styles.root, style))}>
+        <div {...other} role="dialog" aria-live="polite" aria-describedby={this.contentId} {...openAttr} style={prepareStyles(Object.assign(styles.root, style))}>
           <SnackbarBody
             action={action}
+            contentId={this.contentId}
             contentStyle={contentStyle}
             message={message}
             open={open}
