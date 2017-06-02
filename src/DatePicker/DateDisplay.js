@@ -49,7 +49,7 @@ function getStyles(props, context, state) {
       marginBottom: 10,
     },
     yearTitle: {
-      cursor: props.disableYearSelection ? 'not-allowed' : (selectedYear ? 'default' : 'pointer'),
+      cursor: props.disableYearSelection || selectedYear ? 'default' : 'pointer',
     },
   };
 
@@ -149,14 +149,8 @@ class DateDisplay extends Component {
       day: '2-digit',
     }).format(selectedDate);
 
-    const ariaDateTime = new DateTimeFormat(locale, {
-      month: 'long',
-      weekday: 'long',
-      day: '2-digit',
-    }).format(selectedDate);
-
     return (
-      <div {...other} style={prepareStyles(styles.root, style)}>        
+      <div {...other} style={prepareStyles(styles.root, style)}>
         <SlideInTransitionGroup style={styles.year} direction={this.state.transitionDirection}>
           <div key={year} style={styles.yearTitle} onTouchTap={this.handleTouchTapYear}>
             {year}

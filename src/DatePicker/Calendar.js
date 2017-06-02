@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import EventListener from 'react-event-listener';
 import keycode from 'keycode';
@@ -40,9 +39,6 @@ class Calendar extends Component {
     onTouchTapOk: PropTypes.func,
     open: PropTypes.bool,
     shouldDisableDate: PropTypes.func,
-    tooltipTitle: PropTypes.string,
-    tooltipShiftLabel: PropTypes.string,
-    tooltipAltShiftLabel: PropTypes.string,
     utils: PropTypes.object,
   };
 
@@ -77,22 +73,9 @@ class Calendar extends Component {
     if (nextProps.initialDate !== this.props.initialDate) {
       const date = nextProps.initialDate || new Date();
       this.setState({
-        displayDate: getFirstDayOfMonth(date),
+        displayDate: this.props.utils.getFirstDayOfMonth(date),
         selectedDate: date,
       });
-    }
-
-    const calendarMonthNode = ReactDOM.findDOMNode(this.refs.calendarMonth);
-    // Maintain keyboard focus on CalendarMonth when month changes
-    if (calendarMonthNode && calendarMonthNode.contains(document.activeElement)) {
-      this.focusGrid = true;
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.focusGrid) {
-      this.focusGrid = false;
-      this.refs.calendarMonth.focus();
     }
   }
 
@@ -113,7 +96,7 @@ class Calendar extends Component {
       return false;
     }
 
-    return this.refs.calendarMonth.isSelectedDateDisabled();
+    return this.refs.calendar.isSelectedDateDisabled();
   }
 
   addSelectedDays(days) {
@@ -164,10 +147,6 @@ class Calendar extends Component {
   handleTouchTapDay = (event, date) => {
     this.setSelectedDate(date);
     if (this.props.onTouchTapDay) this.props.onTouchTapDay(event, date);
-  };
-
-  handleKeyboardFocusDay = (event, keyboardFocused, date) => {
-    if (this.props.keybaordFocusDay) this.props.keybaordFocusDay(event, keyboardFocused, date);
   };
 
   handleMonthChange = (months) => {
@@ -264,10 +243,6 @@ class Calendar extends Component {
     }
   }
 
-  focus = () => {
-    this.toolbar.focus();
-  };
-
   render() {
     const {prepareStyles} = this.context.muiTheme;
     const {hideCalendarDate} = this.props;
@@ -304,23 +279,6 @@ class Calendar extends Component {
         overflow: 'hidden',
         width: 310,
       },
-      tooltip: {
-        display: 'block',
-        float: 'left',
-        fontSize: 12,
-        fontWeight: 400,
-        height: this.props.mode === 'landscape' ? '20%' : 43,
-        lineHeight: '12px',
-        margin: '2px 8px 6px',
-      },
-      tooltipList: {
-        margin: 0,
-        padding: 0,
-        listStyle: 'none'
-      },
-      tooltipListItem: {
-        margin: '3px 0',
-      },
       weekTitle: {
         display: 'flex',
         flexDirection: 'row',
@@ -349,18 +307,7 @@ class Calendar extends Component {
       okLabel,
       onTouchTapCancel, // eslint-disable-line no-unused-vars
       onTouchTapOk, // eslint-disable-line no-unused-vars
-      showTooltip,
-      tabIndex,
-      tooltipTitle,
-      tooltipShiftLabel,
-      tooltipAltShiftLabel,
-      autoOk,
-      disableYearSelection,
-      initialDate,
-      onTouchTapDay,
-      shouldDisableDate,
       utils,
-      ...other
     } = this.props;
 
     return (
@@ -385,8 +332,6 @@ class Calendar extends Component {
           {this.state.displayMonthDay &&
             <div style={prepareStyles(styles.calendarContainer)}>
               <CalendarToolbar
-                ref={(el) => this.toolbar = el}
-                tabIndex={tabIndex}
                 DateTimeFormat={DateTimeFormat}
                 locale={locale}
                 displayDate={this.state.displayDate}
@@ -403,7 +348,6 @@ class Calendar extends Component {
               </div>
               <SlideInTransitionGroup direction={this.state.transitionDirection} style={styles.transitionSlide}>
                 <CalendarMonth
-                  role="presentation"
                   DateTimeFormat={DateTimeFormat}
                   locale={locale}
                   displayDate={this.state.displayDate}
@@ -412,8 +356,7 @@ class Calendar extends Component {
                   minDate={this.getMinDate()}
                   maxDate={this.getMaxDate()}
                   onTouchTapDay={this.handleTouchTapDay}
-                  onKeyboardFocusDay={this.handleKeyboardFocusDay}
-                  ref="calendarMonth"
+                  ref="calendar"
                   selectedDate={this.state.selectedDate}
                   shouldDisableDate={this.props.shouldDisableDate}
                   utils={utils}
@@ -426,18 +369,8 @@ class Calendar extends Component {
               {this.yearSelector()}
             </div>
           }
-          { showTooltip &&
-            <div style={styles.tooltip}>
-              <div>{tooltipTitle}</div>
-              <ul style={styles.tooltipList}>
-                <li style={styles.tooltipListItem}>{tooltipShiftLabel}</li>
-                <li style={styles.tooltipListItem}>{tooltipAltShiftLabel}</li>
-              </ul>
-            </div>
-          }
           {okLabel &&
             <CalendarActionButtons
-              ref="actions"
               autoOk={this.props.autoOk}
               cancelLabel={cancelLabel}
               okLabel={okLabel}
