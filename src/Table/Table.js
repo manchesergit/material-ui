@@ -279,8 +279,8 @@ class Table extends Component {
 
     if (fixedHeader) {
       headerTable = (
-        <div style={prepareStyles(Object.assign({}, headerStyle))}>
-          <table className={className} style={mergedTableStyle}>
+        <div role="presentation" style={prepareStyles(Object.assign({}, headerStyle))}>
+          <table role="rowgroup" className={className} style={mergedTableStyle}>
             {tHead}
           </table>
         </div>
@@ -304,10 +304,10 @@ class Table extends Component {
     }
 
     return (
-      <div style={prepareStyles(Object.assign(styles.tableWrapper, wrapperStyle))}>
+      <div role="grid" style={prepareStyles(Object.assign(styles.tableWrapper, wrapperStyle))}>
         {headerTable}
-        <div style={prepareStyles(Object.assign(styles.bodyTable, bodyStyle))} ref="tableDiv">
-          <table className={className} style={mergedTableStyle} ref="tableBody">
+        <div role="presentation" style={prepareStyles(Object.assign(styles.bodyTable, bodyStyle))} ref="tableDiv">
+          <table role="rowgroup" className={className} style={mergedTableStyle} ref="tableBody">
             {inlineHeader}
             {inlineFooter}
             {tBody}
