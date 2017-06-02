@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import YearButton from './YearButton';
-import {cloneDate} from './dateUtils';
 
 class CalendarYear extends Component {
   static propTypes = {
@@ -41,7 +40,6 @@ class CalendarYear extends Component {
     const minYear = utils.getYear(minDate);
     const maxYear = utils.getYear(maxDate);
     const years = [];
-    const dateCheck = cloneDate(selectedDate);
 
     for (let year = minYear; year <= maxYear; year++) {
       const selected = utils.getYear(selectedDate) === year;
