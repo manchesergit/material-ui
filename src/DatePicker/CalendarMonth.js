@@ -34,6 +34,7 @@ class CalendarMonth extends Component {
     maxDate: PropTypes.object,
     minDate: PropTypes.object,
     onTouchTapDay: PropTypes.func,
+    onKeyboardFocusDay: PropTypes.func,
     selectedDate: PropTypes.object.isRequired,
     shouldDisableDate: PropTypes.func,
     utils: PropTypes.object.isRequired,
@@ -62,12 +63,18 @@ class CalendarMonth extends Component {
 
     return weekArray.map((week, i) => {
       return (
-        <div key={i} style={styles.week}>
+        <div role="row" tabIndex="-1" key={i} style={styles.week}>
           {this.getDayElements(week, i)}
         </div>
       );
     }, this);
   }
+
+  handleTouchTapDay = (event, date) => {
+    if (this.props.onTouchTapDay) {
+      this.props.onTouchTapDay(event, date);
+    }
+  };
 
   getDayElements(week, i) {
     const {
@@ -93,15 +100,27 @@ class CalendarMonth extends Component {
           disabled={disabled}
           key={`db${(i + j)}`}
           onTouchTap={this.handleTouchTapDay}
+          onKeyboardFocus={this.props.onKeyboardFocusDay}
           selected={selected}
         />
       );
     }, this);
   }
 
+  focus = () => {
+    const gridNode = ReactDOM.findDOMNode(this.refs.grid);
+    gridNode.focus();
+  };
+
   render() {
     return (
-      <div style={styles.root}>
+      <div
+        role="grid"
+        tabIndex="0"
+        style={styles.root}
+        ref="grid"
+        aria-label="Calendar"
+      >
         {this.getWeekElements()}
       </div>
     );

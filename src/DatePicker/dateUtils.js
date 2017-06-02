@@ -1,5 +1,6 @@
 import warning from 'warning';
 
+const dayLongList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const dayAbbreviation = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const dayList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
@@ -14,12 +15,18 @@ export function dateTimeFormat(locale, options) {
   this.format = function(date) {
     if (options.month === 'short' && options.weekday === 'short' && options.day === '2-digit') {
       return `${dayList[date.getDay()]}, ${monthList[date.getMonth()]} ${date.getDate()}`;
+    } if (options.month === 'long' && options.weekday === 'long' && options.day === '2-digit') {
+      return `${dayLongList[date.getDay()]}, ${monthLongList[date.getMonth()]} ${date.getDate()}`;
     } else if (options.year === 'numeric' && options.month === 'numeric' && options.day === 'numeric') {
       return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    } else if (options.year === 'numeric' && options.month === 'long' && options.day === 'numeric') {
+      return `${date.getDate()} ${monthLongList[date.getMonth()]} ${date.getFullYear()}`;
     } else if (options.year === 'numeric' && options.month === 'long') {
       return `${monthLongList[date.getMonth()]} ${date.getFullYear()}`;
     } else if (options.weekday === 'narrow') {
       return dayAbbreviation[date.getDay()];
+    } else if (options.weekday === 'long') {
+      return dayLongList[date.getDay()];
     } else if (options.year === 'numeric') {
       return date.getFullYear().toString();
     } else if (options.day === 'numeric') {
@@ -118,8 +125,8 @@ export function getWeekArray(d, firstDayOfWeek) {
   return weekArray;
 }
 
-export function localizedWeekday(DateTimeFormat, locale, day, firstDayOfWeek) {
-  const weekdayFormatter = new DateTimeFormat(locale, {weekday: 'narrow'});
+export function localizedWeekday(DateTimeFormat, locale, day, firstDayOfWeek, format = 'narrow') {
+  const weekdayFormatter = new DateTimeFormat(locale, {weekday: format});
   const firstDayDate = getFirstDayOfWeek();
 
   return weekdayFormatter.format(addDays(firstDayDate, day + firstDayOfWeek));

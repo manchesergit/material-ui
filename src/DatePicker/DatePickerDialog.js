@@ -11,6 +11,7 @@ import {dateTimeFormat} from './dateUtils';
 class DatePickerDialog extends Component {
   static propTypes = {
     DateTimeFormat: PropTypes.func,
+    anchorEl: PropTypes.object,
     animation: PropTypes.func,
     autoOk: PropTypes.bool,
     cancelLabel: PropTypes.node,
@@ -31,7 +32,11 @@ class DatePickerDialog extends Component {
     open: PropTypes.bool,
     shouldDisableDate: PropTypes.func,
     style: PropTypes.object,
-    utils: PropTypes.object,
+    useLayerForClickAway: PropTypes.bool,
+    showTooltip: PropTypes.bool,
+    tooltipTitle: PropTypes.string,
+    tooltipShiftLabel: PropTypes.string,
+    tooltipAltShiftLabel: PropTypes.string,
   };
 
   static defaultProps = {
@@ -40,6 +45,9 @@ class DatePickerDialog extends Component {
     container: 'dialog',
     locale: 'en-US',
     okLabel: 'OK',
+    tooltipTitle: 'Hold',
+    tooltipShiftLabel: '[shift] to skip month',
+    tooltipAltShiftLabel: '[alt+shift] to skip year',
   };
 
   static contextTypes = {
@@ -102,9 +110,14 @@ class DatePickerDialog extends Component {
     }
   };
 
+  focus = () => {
+    this.refs.calendar.focus();
+  };
+
   render() {
     const {
       DateTimeFormat,
+      anchorEl,
       autoOk,
       cancelLabel,
       container,
@@ -124,7 +137,12 @@ class DatePickerDialog extends Component {
       hideCalendarDate,
       style, // eslint-disable-line no-unused-vars
       animation,
-      utils,
+      showTooltip,
+      tabIndex,
+      tooltipTitle,
+      tooltipShiftLabel,
+      tooltipAltShiftLabel,
+      useLayerForClickAway,
       ...other
     } = this.props;
 
@@ -146,13 +164,15 @@ class DatePickerDialog extends Component {
     return (
       <div {...other} ref="root">
         <Container
-          anchorEl={this.refs.root} // For Popover
+          anchorEl={anchorEl || this.refs.root} // For Popover
           animation={animation || PopoverAnimationVertical} // For Popover
           bodyStyle={styles.dialogBodyContent}
           contentStyle={styles.dialogContent}
           ref="dialog"
           repositionOnUpdate={true}
+          returnFocusOnBlur={false}
           open={open}
+          useLayerForClickAway={useLayerForClickAway}
           onRequestClose={this.handleRequestClose}
           style={Object.assign(styles.dialogBodyContent, containerStyle)}
         >
@@ -174,10 +194,17 @@ class DatePickerDialog extends Component {
             mode={mode}
             open={open}
             ref="calendar"
+            role="dialog"
+            aria-label="date picker"
             onTouchTapCancel={this.handleTouchTapCancel}
             onTouchTapOk={this.handleTouchTapOk}
             okLabel={okLabel}
             shouldDisableDate={shouldDisableDate}
+            showTooltip={showTooltip}
+            tabIndex={tabIndex}
+            tooltipTitle={tooltipTitle}
+            tooltipShiftLabel={tooltipShiftLabel}
+            tooltipAltShiftLabel={tooltipAltShiftLabel}
             hideCalendarDate={hideCalendarDate}
             utils={utils}
           />

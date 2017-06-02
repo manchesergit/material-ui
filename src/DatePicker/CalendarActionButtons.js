@@ -11,6 +11,12 @@ class CalendarActionButton extends Component {
     onTouchTapOk: PropTypes.func,
   };
 
+  focus = () => {
+    const cancelButton = ReactDOM.findDOMNode(this.cancelButton);
+    if (cancelButton)
+      ReactDOM.findDOMNode(cancelButton).focus();
+  };
+
   render() {
     const {cancelLabel, okLabel} = this.props;
 
@@ -35,6 +41,7 @@ class CalendarActionButton extends Component {
     return (
       <div style={styles.root} >
         <FlatButton
+          ref={(el) => this.cancelButton = el}
           label={cancelLabel}
           onTouchTap={this.props.onTouchTapCancel}
           primary={true}
