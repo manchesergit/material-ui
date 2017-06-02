@@ -93,6 +93,10 @@ class DayButton extends Component {
     }
   };
 
+  handleBlur = (event) => {
+    // this.setState({hover: false});
+  }
+
   handleKeyboardFocus = (event, keyboardFocused) => {
     if (!this.props.disabled && this.props.onKeyboardFocus) {
       this.props.onKeyboardFocus(event, keyboardFocused, this.props.date);
@@ -106,6 +110,7 @@ class DayButton extends Component {
       disabled,
       locale,
       onTouchTap, // eslint-disable-line no-unused-vars
+      onKeyboardFocus, // eslint-disable-line no-unused-vars
       selected, // eslint-disable-line no-unused-vars
       ...other
     } = this.props;
@@ -116,14 +121,19 @@ class DayButton extends Component {
     return date ? (
       <EnhancedButton
         {...other}
+        role="gridcell"
+        ref={(e) => this.button = e}
+        aria-selected={selected}
         disabled={disabled}
         disableFocusRipple={true}
         disableTouchRipple={true}
+        onBlur={this.handleBlur}
         onKeyboardFocus={this.handleKeyboardFocus}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
         onTouchTap={this.handleTouchTap}
         style={styles.root}
+        tabIndex={-1}
       >
         <div style={prepareStyles(styles.buttonState)} />
         <span style={prepareStyles(styles.label)}>
