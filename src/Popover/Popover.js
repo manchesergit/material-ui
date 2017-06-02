@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import EventListener from 'react-event-listener';
+import keycode from 'keycode';
 import RenderToLayer from '../internal/RenderToLayer';
 import propTypes from '../utils/propTypes';
 import Paper from '../Paper';
@@ -69,6 +70,11 @@ class Popover extends Component {
      */
     open: PropTypes.bool,
     /**
+     * If true, the popover will keep a reference to the component from which it
+     * received focus and return focus to that element when the popover closes
+     */
+    returnFocusOnBlur: PropTypes.bool,
+    /**
      * Override the inline-styles of the root element.
      */
     style: PropTypes.object,
@@ -102,6 +108,7 @@ class Popover extends Component {
     canAutoPosition: true,
     onRequestClose: () => {},
     open: false,
+    returnFocusOnBlur: true,
     style: {
       overflowY: 'auto',
     },
@@ -164,6 +171,22 @@ class Popover extends Component {
     }
   }
 
+  componentWillUpdate(nextProps) {
+    if (!nextProps.returnFocusOnBlur)
+      return;
+
+    if (nextProps.open) {
+      this.originalFocus = this.originalFocus || document.activeElement;
+    } else {
+      setTimeout(() => {
+        if (this.originalFocus) {
+          this.originalFocus.focus();
+          this.originalFocus = null;
+        }
+      }, 1);
+    }
+  }
+
   componentDidUpdate() {
     this.setPlacement();
   }
@@ -209,7 +232,10 @@ class Popover extends Component {
       }
 
       return (
-        <Paper style={Object.assign(styleRoot, style)} {...other}>
+        <Paper
+          onKeyDown={this.handleKeyDown}
+          style={Object.assign(styleRoot, style)} {...other}
+        >
           {children}
         </Paper>
       );
@@ -224,7 +250,11 @@ class Popover extends Component {
         {...other}
         open={this.state.open && !this.state.closing}
       >
+        <div
+          onKeyDown={this.handleKeyDown}
+        >
         {children}
+        </div>
       </Animation>
     );
   };
@@ -237,6 +267,19 @@ class Popover extends Component {
 
   componentClickAway = (event) => {
     event.preventDefault();
+    this.requestClose('clickAway');
+  };
+
+  handleKeyDown = (event) => {
+    const key = keycode(event);
+    switch (key) {
+      case 'esc':
+        this.handleEscKeyDownMenu(event);
+        break;
+    }
+  }
+
+  handleEscKeyDownMenu = () => {
     this.requestClose('clickAway');
   };
 
@@ -398,6 +441,19 @@ class Popover extends Component {
     }
 
     return targetPosition;
+  }
+
+ componentWillUpdate(nextProps) {
+    if (nextProps.open) {
+      this.originalFocus = this.originalFocus || document.activeElement;
+    } else {
+      setTimeout(() => {
+        if (this.originalFocus) {
+          this.originalFocus.focus();
+          this.originalFocus = null;
+        }
+      }, 1);
+    }
   }
 
   render() {
