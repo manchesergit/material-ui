@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import EventListener from 'react-event-listener';
 import keycode from 'keycode';
+import uniqueId from 'lodash.uniqueid';
 import transitions from '../styles/transitions';
 import FocusRipple from './FocusRipple';
 import TouchRipple from './TouchRipple';
@@ -117,6 +118,10 @@ class EnhancedSwitch extends Component {
       this.props.onParentShouldUpdate) {
       this.props.onParentShouldUpdate(inputNode.checked);
     }
+  }
+
+  componentWillMount() {
+    this.switchId = uniqueId(`switch_${this.props.value}`);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -293,7 +298,7 @@ class EnhancedSwitch extends Component {
     }
 
     const labelElement = label && (
-      <label style={prepareStyles(Object.assign(styles.label, labelStyle))}>
+      <label htmlFor={this.switchId} style={prepareStyles(Object.assign(styles.label, labelStyle))}>
         {label}
       </label>
     );
@@ -333,6 +338,7 @@ class EnhancedSwitch extends Component {
         ref="checkbox"
         type={inputType}
         style={prepareStyles(Object.assign(styles.input, inputStyle))}
+        id={this.switchId}
         name={name}
         value={value}
         disabled={disabled}

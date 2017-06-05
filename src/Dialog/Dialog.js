@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import EventListener from 'react-event-listener';
 import keycode from 'keycode';
+import UniqueId from 'lodash.uniqueid';
 import transitions from '../styles/transitions';
 import Overlay from '../internal/Overlay';
 import RenderToLayer from '../internal/RenderToLayer';
@@ -123,6 +124,7 @@ function getStyles(props, context) {
       width: '100%',
       textAlign: 'right',
       marginTop: autoScrollBodyContent ? -1 : 0,
+      borderTop: autoScrollBodyContent ? borderScroll : 'none',
     },
     overlay: {
       zIndex: zIndex.dialogOverlay,
@@ -135,6 +137,7 @@ function getStyles(props, context) {
       lineHeight: '32px',
       fontWeight: 400,
       marginBottom: autoScrollBodyContent ? -1 : 0,
+      borderBottom: autoScrollBodyContent ? borderScroll : 'none',
     },
     body: {
       fontSize: dialog.bodyFontSize,
@@ -177,12 +180,24 @@ class DialogInline extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
+  contentId = UniqueId("dialog");
+  contentTitleId = UniqueId("dialog_title");
+
   componentDidMount() {
     this.positionDialog();
   }
 
   componentDidUpdate() {
     this.positionDialog();
+  }
+
+  componentWillUpdate(nextProps) {
+    if (nextProps.open) {
+      this.originalFocus = document.activeElement;
+    } else if (this.originalFocus) {
+      this.originalFocus.focus();
+      this.originalFocus = null;
+    }
   }
 
   positionDialog() {
@@ -255,8 +270,19 @@ class DialogInline extends Component {
   };
 
   handleKeyUp = (event) => {
-    if (keycode(event) === 'esc') {
-      this.requestClose(false);
+    switch (keycode(event)) {
+      case 'esc':
+        this.requestClose(false);
+        break;
+      case 'tab':
+        if (!this.refs.dialogContainer.contains(document.activeElement)) {
+          const actionWrap = this.refs.dialogActions.children[0],
+          button = actionWrap.querySelector('button');
+
+          (button || actionWrap).focus();
+          event.preventDefault();
+        }
+        break;
     }
   };
 
@@ -295,8 +321,15 @@ class DialogInline extends Component {
     styles.title = Object.assign(styles.title, titleStyle);
 
     const actionsContainer = React.Children.count(actions) > 0 && (
-      <div className={actionsContainerClassName} style={prepareStyles(styles.actionsContainer)}>
-        {React.Children.toArray(actions)}
+      <div
+        ref="dialogActions"
+        className={actionsContainerClassName}
+        style={prepareStyles(styles.actionsContainer)}>
+        {React.Children.map(actions, (action) => {
+          return React.cloneElement(action, {
+            ref: `action-${action.props.key}`
+          });
+        })}
       </div>
     );
 
@@ -305,10 +338,11 @@ class DialogInline extends Component {
       titleElement = React.cloneElement(title, {
         className: title.props.className || titleClassName,
         style: prepareStyles(Object.assign(styles.title, title.props.style)),
+        id: this.contentTitleId
       });
     } else if (typeof title === 'string') {
       titleElement = (
-        <h3 className={titleClassName} style={prepareStyles(styles.title)}>
+        <h3 className={titleClassName} style={prepareStyles(styles.title)} id={this.contentTitleId}>
           {title}
         </h3>
       );
@@ -319,11 +353,16 @@ class DialogInline extends Component {
         {open &&
           <EventListener
             target="window"
+            onKeyDown={this.handleKeyDown}
             onKeyUp={this.handleKeyUp}
             onResize={this.handleResize}
           />
         }
         <ReactTransitionGroup
+          role="dialog"
+          aria-live="assertive"
+          aria-labelledby={this.contentTitleId}
+          aria-describedby={this.contentId}
           component="div"
           ref="dialogWindow"
           transitionAppear={true}
@@ -337,15 +376,18 @@ class DialogInline extends Component {
               style={styles.content}
             >
               <Paper zDepth={4}>
-                {titleElement}
-                <div
-                  ref="dialogContent"
-                  className={bodyClassName}
-                  style={prepareStyles(styles.body)}
-                >
-                  {children}
-                </div>
-                {actionsContainer}
+                <div ref="dialogContainer">
+                  {titleElement}
+                  <div
+                    ref="dialogContent"
+	            id={this.contentId}
+                    className={bodyClassName}
+                    style={prepareStyles(styles.body)}
+                  >
+                    {children}
+                  </div>
+                  {actionsContainer}
+               </div>
               </Paper>
             </TransitionItem>
           }
@@ -470,6 +512,19 @@ class Dialog extends Component {
       <DialogInline {...this.props} />
     );
   };
+
+  componentWillUpdate(nextProps) {
+    if (nextProps.open) {
+      this.originalFocus = document.activeElement;
+    } else {
+      setTimeout(() => {
+        if (this.originalFocus) {
+          this.originalFocus.focus();
+          this.originalFocus = null;
+        }
+      }, 1);
+    }
+  }
 
   render() {
     return (
