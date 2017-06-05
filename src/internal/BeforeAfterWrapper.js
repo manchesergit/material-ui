@@ -43,6 +43,7 @@ const styles = {
 
 class BeforeAfterWrapper extends Component {
   static propTypes = {
+    id: PropTypes.string,
     afterElementType: PropTypes.string,
     afterStyle: PropTypes.object,
     beforeElementType: PropTypes.string,
@@ -65,8 +66,14 @@ class BeforeAfterWrapper extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   render() {
     const {
+      id,
       beforeStyle,
       afterStyle,
       beforeElementType, // eslint-disable-line no-unused-vars
@@ -76,6 +83,7 @@ class BeforeAfterWrapper extends Component {
     } = this.props;
 
     const {prepareStyles} = this.context.muiTheme;
+    const baseId = id || this.uniqueId;
 
     let beforeElement;
     let afterElement;
@@ -85,6 +93,7 @@ class BeforeAfterWrapper extends Component {
         {
           style: prepareStyles(Object.assign({}, styles.box, beforeStyle)),
           key: '::before',
+          id: baseId + '-before',
         });
     }
 
@@ -93,6 +102,7 @@ class BeforeAfterWrapper extends Component {
         {
           style: prepareStyles(Object.assign({}, styles.box, afterStyle)),
           key: '::after',
+          id: baseId + '-after',
         });
     }
 

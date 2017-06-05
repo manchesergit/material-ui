@@ -5,6 +5,7 @@ import ScaleInChild from './ScaleInChild';
 
 class ScaleIn extends Component {
   static propTypes = {
+    id: PropTypes.string,
     childStyle: PropTypes.object,
     children: PropTypes.node,
     enterDelay: PropTypes.number,
@@ -24,8 +25,14 @@ class ScaleIn extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   render() {
     const {
+      id,
       children,
       childStyle,
       enterDelay,
@@ -35,6 +42,7 @@ class ScaleIn extends Component {
       ...other
     } = this.props;
 
+    const baseId = id || this.uniqueId;
     const {prepareStyles} = this.context.muiTheme;
 
     const mergedRootStyles = Object.assign({}, {
@@ -44,8 +52,10 @@ class ScaleIn extends Component {
     }, style);
 
     const newChildren = React.Children.map(children, (child) => {
+      const childId = baseId + '-ScaleInChild-'+ Math.floor(Math.random() * 0xFFFF);
       return (
         <ScaleInChild
+          id={childId}
           key={child.key}
           enterDelay={enterDelay}
           maxScale={maxScale}
@@ -59,6 +69,7 @@ class ScaleIn extends Component {
 
     return (
       <ReactTransitionGroup
+        id={baseId}
         {...other}
         style={prepareStyles(mergedRootStyles)}
         component="div"

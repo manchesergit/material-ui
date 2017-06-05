@@ -10,6 +10,7 @@ const pulsateDuration = 750;
 
 class FocusRipple extends Component {
   static propTypes = {
+    id: PropTypes.string,
     color: PropTypes.string,
     innerStyle: PropTypes.object,
     opacity: PropTypes.number,
@@ -20,6 +21,11 @@ class FocusRipple extends Component {
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
   };
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   componentDidMount() {
     if (this.props.show) {
@@ -48,7 +54,7 @@ class FocusRipple extends Component {
     clearTimeout(this.timeout);
   }
 
-  getRippleElement(props) {
+  getRippleElement(props, idBase) {
     const {
       color,
       innerStyle,
@@ -67,7 +73,9 @@ class FocusRipple extends Component {
       transition: transitions.easeOut(`${pulsateDuration}ms`, 'transform', null, transitions.easeInOutFunction),
     }, innerStyle);
 
-    return <div ref="innerCircle" style={prepareStyles(Object.assign({}, innerStyles))} />;
+    const innerCircleId = idBase + '-innerCircle';
+
+    return <div id={innerCircleId} ref="innerCircle" style={prepareStyles(Object.assign({}, innerStyles))} />;
   }
 
   pulsate = () => {
@@ -100,6 +108,7 @@ class FocusRipple extends Component {
 
   render() {
     const {
+      id,
       show,
       style,
     } = this.props;
@@ -112,10 +121,12 @@ class FocusRipple extends Component {
       left: 0,
     }, style);
 
-    const ripple = show ? this.getRippleElement(this.props) : null;
+    const baseId = id || this.uniqueId;
+    const ripple = show ? this.getRippleElement(this.props, baseId) : null;
 
     return (
       <ScaleInTransitionGroup
+        id={baseId}
         maxScale={0.85}
         style={mergedRootStyles}
       >

@@ -5,6 +5,7 @@ import SlideInChild from './SlideInChild';
 
 class SlideIn extends Component {
   static propTypes = {
+    id: PropTypes.string,
     childStyle: PropTypes.object,
     children: PropTypes.node,
     direction: PropTypes.oneOf(['left', 'right', 'up', 'down']),
@@ -17,6 +18,11 @@ class SlideIn extends Component {
     direction: 'left',
   };
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${this.props.direction}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
   };
@@ -27,6 +33,7 @@ class SlideIn extends Component {
 
   render() {
     const {
+      id,
       enterDelay,
       children,
       childStyle,
@@ -35,6 +42,7 @@ class SlideIn extends Component {
       ...other
     } = this.props;
 
+    const baseId = id || this.uniqueId;
     const {prepareStyles} = this.context.muiTheme;
 
     const mergedRootStyles = Object.assign({}, {
@@ -44,8 +52,10 @@ class SlideIn extends Component {
     }, style);
 
     const newChildren = React.Children.map(children, (child) => {
+      const childId = baseId + '-SlideInChild-'+ Math.floor(Math.random() * 0xFFFF);
       return (
         <SlideInChild
+          id={childId}
           key={child.key}
           direction={direction}
           enterDelay={enterDelay}
@@ -59,6 +69,7 @@ class SlideIn extends Component {
 
     return (
       <ReactTransitionGroup
+        id={baseId}
         {...other}
         style={prepareStyles(mergedRootStyles)}
         component="div"

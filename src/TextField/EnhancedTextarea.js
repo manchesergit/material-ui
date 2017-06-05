@@ -32,6 +32,7 @@ function getStyles(props, context, state) {
 
 class EnhancedTextarea extends Component {
   static propTypes = {
+    id: PropTypes.string,
     defaultValue: PropTypes.any,
     disabled: PropTypes.bool,
     hintText: PropTypes.node,
@@ -47,10 +48,14 @@ class EnhancedTextarea extends Component {
     textareaStyle: PropTypes.object,
     value: PropTypes.string,
     valueLink: PropTypes.object,
+    labelledBy: PropTypes.string,
+    describedBy: PropTypes.string,
   };
 
   static defaultProps = {
     rows: 1,
+    labelledBy: '',
+    describedBy: '',
   };
 
   static contextTypes = {
@@ -62,6 +67,9 @@ class EnhancedTextarea extends Component {
   };
 
   componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+
     this.setState({
       height: this.props.rows * rowsHeight,
     });
@@ -141,6 +149,7 @@ class EnhancedTextarea extends Component {
 
   render() {
     const {
+      id,
       onChange, // eslint-disable-line no-unused-vars
       onHeightChange, // eslint-disable-line no-unused-vars
       rows, // eslint-disable-line no-unused-vars
@@ -150,8 +159,16 @@ class EnhancedTextarea extends Component {
       hintText, // eslint-disable-line no-unused-vars
       textareaStyle,
       valueLink, // eslint-disable-line no-unused-vars
+      labelledBy,
+      describedBy,
       ...other
     } = this.props;
+
+    const baseId = id || this.uniqueId;
+    const divId = baseId + '-div';
+    const inputId = baseId + '-input';
+    const ariaLabelledBy = this.props.labelledBy.length === 0 ? null : this.props.labelledBy ;
+    const ariaDescribedBy = this.props.describedBy.length === 0 ? null : this.props.describedBy ;
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
@@ -164,9 +181,14 @@ class EnhancedTextarea extends Component {
     }
 
     return (
-      <div style={prepareStyles(rootStyles)}>
+      <div id={divId} style={prepareStyles(rootStyles)} >
         <EventListener target="window" onResize={this.handleResize} />
         <textarea
+          id={baseId}
+          role='textbox'
+          aria-multiline={(this.props.rows > 1)}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
           ref="shadow"
           style={prepareStyles(shadowStyles)}
           tabIndex="-1"
@@ -177,9 +199,13 @@ class EnhancedTextarea extends Component {
           valueLink={this.props.valueLink}
         />
         <textarea
+          id={inputId}
           {...other}
           ref="input"
           rows={this.props.rows}
+          aria-multiline={(this.props.rows > 1)}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
           style={prepareStyles(textareaStyles)}
           onChange={this.handleChange}
         />

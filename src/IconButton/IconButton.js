@@ -36,6 +36,12 @@ class IconButton extends Component {
 
   static propTypes = {
     /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
+     */
+    id: PropTypes.string,
+    /**
      * Can be used to pass a `FontIcon` element as the icon for the button.
      */
     children: PropTypes.node,
@@ -116,6 +122,21 @@ class IconButton extends Component {
      * readability on mobile devices.
      */
     touch: PropTypes.bool,
+
+    /**
+     * values to be added into aria-label on the button
+     */
+    buttonAriaLabel: PropTypes.string,
+
+    /**
+     * value to be added into aria-labelledby
+     */
+    labelledBy: PropTypes.string,
+
+    /**
+     * value to be added into aria-describedby
+     */
+    describedBy: PropTypes.string,
   };
 
   static defaultProps = {
@@ -124,11 +145,19 @@ class IconButton extends Component {
     iconStyle: {},
     tooltipPosition: 'bottom-center',
     touch: false,
+    buttonAriaLabel: '',
+    labelledBy: '',
+    describedBy: '',
   };
 
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
   };
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   state = {
     hovered: false,
@@ -230,6 +259,7 @@ class IconButton extends Component {
 
   render() {
     const {
+      id,
       disabled,
       hoveredStyle,
       disableTouchRipple,
@@ -241,9 +271,21 @@ class IconButton extends Component {
       tooltipStyles,
       touch,
       iconStyle,
+      buttonAriaLabel,
+      labelledBy,
+      describedBy,
       ...other
     } = this.props;
     let fonticon;
+
+    const baseId = id || this.uniqueId;
+
+    /* aria tags to associate this button with parent containers or nothing depending on how the call for this has been made */
+    const ariaBaseName = 'Icon Button';
+    const ariaLabel = this.props.buttonAriaLabel.length === 0 ? ariaBaseName : this.props.buttonAriaLabel + ' ' + ariaBaseName;
+    const toolTipIdValue = baseId + '-tooltip';
+    const ariaLabelledBy = this.props.labelledBy.length === 0 ? null : this.props.labelledBy ;
+    const ariaDescribedBy = this.props.describedBy.length === 0 ? null : this.props.describedBy ;
 
     const styles = getStyles(this.props, this.context);
     const tooltipPosition = tooltipPositionProp.split('-');
@@ -264,6 +306,7 @@ class IconButton extends Component {
         style={Object.assign(styles.tooltip, tooltipStyles)}
         verticalPosition={tooltipPosition[0]}
         horizontalPosition={tooltipPosition[1]}
+        id={toolTipIdValue}
       />
     ) : null;
 
@@ -293,6 +336,11 @@ class IconButton extends Component {
 
     return (
       <EnhancedButton
+        id={baseId}
+        role="button"
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
         ref={(ref) => this.button = ref}
         {...other}
         centerRipple={true}

@@ -136,6 +136,7 @@ class CardHeader extends Component {
       ...other
     } = this.props;
 
+    const altName = this.props.title;
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
 
@@ -146,7 +147,7 @@ class CardHeader extends Component {
         style: Object.assign(styles.avatar, avatar.props.style),
       });
     } else if (avatar !== null) {
-      avatar = <Avatar src={avatarProp} style={styles.avatar} />;
+      avatar = <Avatar src={avatarProp} alt={altName} style={styles.avatar} />;
     }
 
     return (

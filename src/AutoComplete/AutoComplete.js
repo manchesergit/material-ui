@@ -43,6 +43,12 @@ function getStyles(props, context, state) {
 class AutoComplete extends Component {
   static propTypes = {
     /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
+     */
+    id: PropTypes.string,
+    /**
      * Location of the anchor for the auto complete.
      */
     anchorOrigin: propTypes.origin,
@@ -220,6 +226,9 @@ class AutoComplete extends Component {
       searchText: this.props.searchText || '',
     });
     this.timerTouchTapCloseId = null;
+
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -394,6 +403,7 @@ class AutoComplete extends Component {
 
   render() {
     const {
+      id,
       anchorOrigin,
       animated,
       animation,
@@ -437,12 +447,21 @@ class AutoComplete extends Component {
       focusTextField,
     } = this.state;
 
+    const baseId = id || this.uniqueId;
+    const menuItemIdBase = baseId + '-MenuItem-';
+    const menuId = baseId + '-Menu';
+    const textFieldId = baseId + '-TextField';
+    const hintTextId = hintText ? baseId + '-HintText' : null;
+    const popOverId = baseId + '-Popover';
+
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
 
     const requestsList = [];
 
     dataSource.every((item, index) => {
+      const menuItemId = menuItemIdBase + index;
+
       switch (typeof item) {
         case 'string':
           if (filter(searchText, item, item)) {
@@ -450,6 +469,7 @@ class AutoComplete extends Component {
               text: item,
               value: (
                 <MenuItem
+                  id={menuItemId}
                   innerDivStyle={styles.innerDiv}
                   value={item}
                   primaryText={item}
@@ -480,6 +500,7 @@ class AutoComplete extends Component {
                 text: itemText,
                 value: (
                   <MenuItem
+                    id={menuItemId}
                     innerDivStyle={styles.innerDiv}
                     primaryText={itemText}
                     disableFocusRipple={disableFocusRipple}
@@ -501,6 +522,7 @@ class AutoComplete extends Component {
 
     const menu = open && requestsList.length > 0 && (
       <Menu
+        id={menuId}
         ref="menu"
         autoWidth={false}
         disableAutoFocus={focusTextField}
@@ -517,8 +539,11 @@ class AutoComplete extends Component {
     );
 
     return (
-      <div style={prepareStyles(Object.assign(styles.root, style))} >
+      <div id={baseId} style={prepareStyles(Object.assign(styles.root, style))} aria-labelledby={textFieldId} aria-describedby={hintTextId}>
         <TextField
+          id={textFieldId}
+          aria-label="textbox"
+          aria-autocomplete="none"
           ref="searchTextField"
           autoComplete="off"
           onBlur={this.handleBlur}
@@ -526,6 +551,7 @@ class AutoComplete extends Component {
           onKeyDown={this.handleKeyDown}
           floatingLabelText={floatingLabelText}
           hintText={hintText}
+          hintTextId={hintTextId}
           fullWidth={fullWidth}
           multiLine={false}
           errorStyle={errorStyle}
@@ -537,6 +563,7 @@ class AutoComplete extends Component {
           onChange={this.handleChange}
         />
         <Popover
+          id={popOverId}
           style={Object.assign({}, styles.popover, popoverStyle)}
           canAutoPosition={false}
           anchorOrigin={anchorOrigin}

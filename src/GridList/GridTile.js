@@ -111,6 +111,10 @@ class GridTile extends Component {
      */
     title: PropTypes.node,
     /**
+     * The description for any image.  Populates the alt tag.
+     */
+    imageDescription: PropTypes.node,
+    /**
      * Style used for title bar background.
      * Useful for setting custom gradients for example
      */
@@ -187,9 +191,11 @@ class GridTile extends Component {
       style,
       children,
       containerElement,
+      imageDescription,
       ...other
     } = this.props;
 
+    const altName = imageDescription || '';
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
     const mergedRootStyles = Object.assign(styles.root, style);
@@ -228,6 +234,7 @@ class GridTile extends Component {
           return React.cloneElement(child, {
             key: 'img',
             ref: 'img',
+            alt: altName,
             style: prepareStyles(Object.assign({}, styles.childImg, child.props.style)),
           });
         } else {

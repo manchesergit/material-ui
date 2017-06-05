@@ -6,6 +6,7 @@ import transitions from '../styles/transitions';
 
 class SlideInChild extends Component {
   static propTypes = {
+    id: PropTypes.string,
     children: PropTypes.node,
     direction: PropTypes.string,
     enterDelay: PropTypes.number,
@@ -25,6 +26,11 @@ class SlideInChild extends Component {
   componentWillUnmount() {
     clearTimeout(this.enterTimer);
     clearTimeout(this.leaveTimer);
+  }
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentWillEnter(callback) {
@@ -62,6 +68,7 @@ class SlideInChild extends Component {
 
   render() {
     const {
+      id,
       children,
       enterDelay, // eslint-disable-line no-unused-vars
       getLeaveDirection, // eslint-disable-line no-unused-vars
@@ -69,6 +76,7 @@ class SlideInChild extends Component {
       ...other
     } = this.props;
 
+    const baseId = id || this.uniqueId;
     const {prepareStyles} = this.context.muiTheme;
 
     const mergedRootStyles = Object.assign({}, {
@@ -81,7 +89,7 @@ class SlideInChild extends Component {
     }, style);
 
     return (
-      <div {...other} style={prepareStyles(mergedRootStyles)}>
+      <div id={baseId} {...other} style={prepareStyles(mergedRootStyles)}>
         {children}
       </div>
     );

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 class AppCanvas extends Component {
   static propTypes = {
+    id: PropTypes.string,
     children: PropTypes.node,
   };
 
@@ -10,8 +11,14 @@ class AppCanvas extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   render() {
     const {
+      id,
       baseTheme,
       prepareStyles,
     } = this.context.muiTheme;
@@ -40,8 +47,10 @@ class AppCanvas extends Component {
       }
     }, this);
 
+    const baseId = id || this.uniqueId;
+
     return (
-      <div style={prepareStyles(styles)}>
+      <div id={baseId} style={prepareStyles(styles)}>
         {newChildren}
       </div>
     );

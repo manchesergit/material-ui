@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import EventListener from 'react-event-listener';
 import keycode from 'keycode';
-import UniqueId from 'lodash.uniqueid';
 import transitions from '../styles/transitions';
 import Overlay from '../internal/Overlay';
 import RenderToLayer from '../internal/RenderToLayer';
@@ -13,6 +12,7 @@ import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 
 class TransitionItem extends Component {
   static propTypes = {
+    id: PropTypes.string,
     children: PropTypes.node,
     style: PropTypes.object,
   };
@@ -24,6 +24,11 @@ class TransitionItem extends Component {
   state = {
     style: {},
   };
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueIdTransactionItem = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   componentWillUnmount() {
     clearTimeout(this.enterTimeout);
@@ -60,15 +65,17 @@ class TransitionItem extends Component {
 
   render() {
     const {
+      id,
       style,
       children,
       ...other
     } = this.props;
 
     const {prepareStyles} = this.context.muiTheme;
+    const baseIdItem = id || this.uniqueIdTransactionItem;
 
     return (
-      <div {...other} style={prepareStyles(Object.assign({}, this.state.style, style))}>
+      <div id={baseIdItem} {...other} style={prepareStyles(Object.assign({}, this.state.style, style))}>
         {children}
       </div>
     );
@@ -153,6 +160,7 @@ function getStyles(props, context) {
 
 class DialogInline extends Component {
   static propTypes = {
+    id: PropTypes.string,
     actions: PropTypes.node,
     actionsContainerClassName: PropTypes.string,
     actionsContainerStyle: PropTypes.object,
@@ -180,8 +188,10 @@ class DialogInline extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  contentId = UniqueId("dialog");
-  contentTitleId = UniqueId("dialog_title");
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   componentDidMount() {
     this.positionDialog();
@@ -262,6 +272,8 @@ class DialogInline extends Component {
 
     if (this.props.onRequestClose) {
       this.props.onRequestClose(!!buttonClicked);
+      const ActiveElement = window.prevActiveElement;
+      ActiveElement.focus();
     }
   }
 
@@ -291,7 +303,10 @@ class DialogInline extends Component {
   };
 
   render() {
+    window.prevActiveElement = document.activeElement;
+
     const {
+      id,
       actions,
       actionsContainerClassName,
       actionsContainerStyle,
@@ -308,7 +323,12 @@ class DialogInline extends Component {
       titleStyle,
       title,
       style,
+      modal,
     } = this.props;
+
+    const baseId = id || this.uniqueId;
+    const actionsContainerId = baseId + '-actionsContainer';
+    const titleId = baseId + "-title";
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
@@ -342,14 +362,22 @@ class DialogInline extends Component {
       });
     } else if (typeof title === 'string') {
       titleElement = (
-        <h3 className={titleClassName} style={prepareStyles(styles.title)} id={this.contentTitleId}>
+        <h3 id={titleId} className={titleClassName} style={prepareStyles(styles.title)}>
           {title}
         </h3>
       );
     }
 
+    const ariaHidden = this.props.modal ? true : null;
+    const ariaLabelledBy = (typeof title === 'string') ? titleId : null;
+    const dialogGroupID = baseId + '-dialogGroup';
+    const transitionGroupId = baseId + '-transitionGroup';
+    const transitionItemId = baseId + '-transitionItem';
+    const overlayId = baseId + '-overlay';
+    const dialogContentId = baseId + '-dialogContent';
+
     return (
-      <div className={className} style={prepareStyles(styles.root)}>
+      <div id={dialogGroupID} aria-labelledby={ariaLabelledBy} className={className} style={prepareStyles(styles.root)}>
         {open &&
           <EventListener
             target="window"
@@ -361,17 +389,20 @@ class DialogInline extends Component {
         <ReactTransitionGroup
           role="dialog"
           aria-live="assertive"
-          aria-labelledby={this.contentTitleId}
-          aria-describedby={this.contentId}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={baseId}
           component="div"
           ref="dialogWindow"
           transitionAppear={true}
           transitionAppearTimeout={450}
           transitionEnter={true}
           transitionEnterTimeout={450}
+          id={transitionGroupId}
         >
           {open &&
             <TransitionItem
+              id={transitionItemId}
+              aria-hidden={ariaHidden}
               className={contentClassName}
               style={styles.content}
             >
@@ -379,8 +410,8 @@ class DialogInline extends Component {
                 <div ref="dialogContainer">
                   {titleElement}
                   <div
+                  id={dialogContentId}
                     ref="dialogContent"
-	            id={this.contentId}
                     className={bodyClassName}
                     style={prepareStyles(styles.body)}
                   >
@@ -451,6 +482,12 @@ class Dialog extends Component {
      * Overrides the inline-styles of the content container.
      */
     contentStyle: PropTypes.object,
+    /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
+     */
+    id: PropTypes.string,
     /**
      * Force the user to use one of the actions in the `Dialog`.
      * Clicking outside the `Dialog` will not trigger the `onRequestClose`.

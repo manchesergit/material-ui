@@ -41,6 +41,7 @@ function getStyles(props, context) {
 
 class Overlay extends Component {
   static propTypes = {
+    id: PropTypes.string,
     autoLockScrolling: PropTypes.bool,
     show: PropTypes.bool.isRequired,
     /**
@@ -64,8 +65,14 @@ class Overlay extends Component {
     this.refs.overlay.style.opacity = opacity;
   }
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   render() {
     const {
+      id,
       autoLockScrolling,
       show,
       style,
@@ -75,9 +82,10 @@ class Overlay extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
+    const baseId = id || this.uniqueId;
 
     return (
-      <div {...other} ref="overlay" style={prepareStyles(Object.assign(styles.root, style))}>
+      <div id={baseId} {...other} ref="overlay" style={prepareStyles(Object.assign(styles.root, style))}>
         {autoLockScrolling && <AutoLockScrolling lock={show} />}
       </div>
     );

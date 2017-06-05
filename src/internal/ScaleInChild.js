@@ -6,6 +6,7 @@ import transitions from '../styles/transitions';
 
 class ScaleInChild extends Component {
   static propTypes = {
+    id: PropTypes.string,
     children: PropTypes.node,
     enterDelay: PropTypes.number,
     maxScale: PropTypes.number,
@@ -22,6 +23,11 @@ class ScaleInChild extends Component {
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
   };
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   componentWillUnmount() {
     clearTimeout(this.enterTimer);
@@ -71,6 +77,7 @@ class ScaleInChild extends Component {
 
   render() {
     const {
+      id,
       children,
       enterDelay, // eslint-disable-line no-unused-vars
       maxScale, // eslint-disable-line no-unused-vars
@@ -80,6 +87,7 @@ class ScaleInChild extends Component {
     } = this.props;
 
     const {prepareStyles} = this.context.muiTheme;
+    const baseId = id || this.uniqueId;
 
     const mergedRootStyles = Object.assign({}, {
       position: 'absolute',
@@ -91,7 +99,7 @@ class ScaleInChild extends Component {
     }, style);
 
     return (
-      <div {...other} style={prepareStyles(mergedRootStyles)}>
+      <div id={baseId} {...other} style={prepareStyles(mergedRootStyles)}>
         {children}
       </div>
     );
