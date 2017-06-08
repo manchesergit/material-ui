@@ -1,5 +1,8 @@
+/* jshint esversion: 6 */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import EventListener from 'react-event-listener';
+import keycode from 'keycode';
 import {dateTimeFormat, formatIso, isEqualDate} from './dateUtils';
 import DatePickerDialog from './DatePickerDialog';
 import TextField from '../TextField';
@@ -70,6 +73,12 @@ class DatePicker extends Component {
      * Hide date display
      */
     hideCalendarDate: PropTypes.bool,
+    /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
+     */
+    id: PropTypes.string,
     /**
      * Locale used for formatting the `DatePicker` date strings. Other than for 'en-US', you
      * must provide a `DateTimeFormat` that supports the chosen `locale`.
@@ -168,9 +177,16 @@ class DatePicker extends Component {
   };
 
   componentWillMount() {
+    const {
+      id,
+    } = this.props;
+
     this.setState({
       date: this.isControlled() ? this.getControlledDate() : this.props.defaultDate,
     });
+
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -227,7 +243,6 @@ class DatePicker extends Component {
   };
 
   handleFocus = (event) => {
-    event.target.blur();
     if (this.props.onFocus) {
       this.props.onFocus(event);
     }
@@ -247,13 +262,13 @@ class DatePicker extends Component {
 
   isControlled() {
     return this.props.hasOwnProperty('value');
-  }
+  };
 
   getControlledDate(props = this.props) {
     if (props.value instanceof Date) {
       return props.value;
     }
-  }
+  };
 
   formatDate = (date) => {
     if (this.props.locale) {
@@ -268,8 +283,19 @@ class DatePicker extends Component {
     }
   };
 
+  /*
+   * If the user presses a key and that key is enter, popup the picker dialog.
+   * Only do this if the date picker is actually enabled though.
+   */
+  handleKeyEvent = (event) => {
+    if(!this.props.disabled && (keycode(event) === 'enter' || keycode(event) === 'space')) {
+      this.openDialog();
+    }
+  };
+
   render() {
     const {
+      id,
       DateTimeFormat,
       autoOk,
       cancelLabel,
@@ -299,18 +325,16 @@ class DatePicker extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
     const formatDate = formatDateProp || this.formatDate;
+    const inputId = id || this.uniqueId;
+    const divId = inputId + '-div';
+    const textFieldId = inputId + '-textField';
+    const datePickerId = inputId + '-datePicker';
 
     return (
-      <div className={className} style={prepareStyles(Object.assign({}, style))}>
-        <TextField
-          {...other}
-          onFocus={this.handleFocus}
-          onTouchTap={this.handleTouchTap}
-          ref="input"
-          style={textFieldStyle}
-          value={this.state.date ? formatDate(this.state.date) : ''}
-        />
+      <div id={divId} className={className} style={prepareStyles(Object.assign({}, style))} >
+        <EventListener target={divId} onKeyDown={this.handleKeyEvent}/>
         <DatePickerDialog
+          id={datePickerId}
           DateTimeFormat={DateTimeFormat}
           autoOk={autoOk}
           cancelLabel={cancelLabel}
@@ -331,6 +355,17 @@ class DatePicker extends Component {
           shouldDisableDate={shouldDisableDate}
           hideCalendarDate={hideCalendarDate}
           utils={utils}
+        />
+        <TextField
+          id={textFieldId}
+          role="textbox"
+          aria-label="Date Picker"
+          {...other}
+          onFocus={this.handleFocus}
+          onTouchTap={this.handleTouchTap}
+          ref="input"
+          style={textFieldStyle}
+          value={this.state.date ? formatDate(this.state.date) : ''}
         />
       </div>
     );

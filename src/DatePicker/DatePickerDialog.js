@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import EventListener from 'react-event-listener';
 import keycode from 'keycode';
@@ -10,6 +11,10 @@ import {dateTimeFormat} from './dateUtils';
 
 class DatePickerDialog extends Component {
   static propTypes = {
+    /**
+     * The id prop for the component.
+     */
+    id: PropTypes.string,
     DateTimeFormat: PropTypes.func,
     animation: PropTypes.func,
     autoOk: PropTypes.bool,
@@ -42,12 +47,20 @@ class DatePickerDialog extends Component {
     okLabel: 'OK',
   };
 
+  componentWillMount() {
+    const uniqueId = `DatePickerDialog-${this.props.container}-${this.props.mode}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  };
+
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
   };
 
   state = {
     open: false,
+    containerComponentId: '',
+    calendarComponentId: '',
+    divComponentId: '',
   };
 
   show = () => {
@@ -89,21 +102,26 @@ class DatePickerDialog extends Component {
       this.props.onAccept(this.refs.calendar.getSelectedDate());
     }
 
-    this.setState({
-      open: false,
-    });
+    this.dismiss();
   };
 
-  handleWindowKeyUp = (event) => {
-    switch (keycode(event)) {
-      case 'enter':
-        this.handleTouchTapOk();
-        break;
-    }
+  handleContainerKeyUp = (event) => {
+      if(this.state.open)
+      {
+        switch (keycode(event)) {
+          case 'enter':
+            this.handleTouchTapOk();
+            break;
+          case 'esc':
+            this.handleRequestClose();
+            break;
+          }
+      }
   };
 
   render() {
     const {
+      id,
       DateTimeFormat,
       autoOk,
       cancelLabel,
@@ -142,9 +160,15 @@ class DatePickerDialog extends Component {
     };
 
     const Container = (container === 'inline' ? Popover : Dialog);
+    const modal = (container === 'inline' ? null : true);
+    const componentId = id || this.uniqueId;
+    const divId = componentId + '-div';
+    const containerId = componentId + '-' + container + 'Container';
+    const calendarId = componentId + '-calendar';
+    const eventTarget = modal ? divId : 'window';
 
     return (
-      <div {...other} ref="root">
+      <div ref='root' id={divId} {...other}>
         <Container
           anchorEl={this.refs.root} // For Popover
           animation={animation || PopoverAnimationVertical} // For Popover
@@ -155,12 +179,15 @@ class DatePickerDialog extends Component {
           open={open}
           onRequestClose={this.handleRequestClose}
           style={Object.assign(styles.dialogBodyContent, containerStyle)}
+          id={containerId}
+          modal={modal}
         >
           <EventListener
-            target="window"
-            onKeyUp={this.handleWindowKeyUp}
+            target={eventTarget}
+            onKeyUp={this.handleContainerKeyUp}
           />
           <Calendar
+            id={calendarId}
             autoOk={autoOk}
             DateTimeFormat={DateTimeFormat}
             cancelLabel={cancelLabel}
@@ -173,7 +200,7 @@ class DatePickerDialog extends Component {
             minDate={minDate}
             mode={mode}
             open={open}
-            ref="calendar"
+            ref='calendar'
             onTouchTapCancel={this.handleTouchTapCancel}
             onTouchTapOk={this.handleTouchTapOk}
             okLabel={okLabel}
