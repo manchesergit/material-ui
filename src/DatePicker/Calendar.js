@@ -22,6 +22,7 @@ const daysArray = [...Array(7)];
 
 class Calendar extends Component {
   static propTypes = {
+    id: PropTypes.string,
     DateTimeFormat: PropTypes.func.isRequired,
     autoOk: PropTypes.bool,
     cancelLabel: PropTypes.node,
@@ -63,6 +64,9 @@ class Calendar extends Component {
   };
 
   componentWillMount() {
+    const uniqueId = `Calendar-${this.props.mode}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+
     this.setState({
       displayDate: this.props.utils.getFirstDayOfMonth(this.props.initialDate),
       selectedDate: this.props.initialDate,
@@ -300,6 +304,7 @@ class Calendar extends Component {
     const weekTitleDayStyle = prepareStyles(styles.weekTitleDay);
 
     const {
+      id,
       cancelLabel,
       DateTimeFormat,
       firstDayOfWeek,
@@ -310,10 +315,13 @@ class Calendar extends Component {
       utils,
     } = this.props;
 
+    const baseId = this.props.id || this.uniqueId;
+    const divId = baseId + '-div';
+
     return (
-      <div style={prepareStyles(styles.root)}>
+      <div style={prepareStyles(styles.root)} id={divId}>
         <EventListener
-          target="window"
+          target='window'
           onKeyDown={this.handleWindowKeyDown}
         />
         {!hideCalendarDate &&

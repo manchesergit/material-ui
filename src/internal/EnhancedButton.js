@@ -37,6 +37,7 @@ function listenForTabPresses() {
 
 class EnhancedButton extends Component {
   static propTypes = {
+    id: PropTypes.string,
     centerRipple: PropTypes.bool,
     children: PropTypes.node,
     containerElement: PropTypes.oneOfType([
@@ -91,6 +92,9 @@ class EnhancedButton extends Component {
     if (!disabled && keyboardFocused && !disableKeyboardFocus) {
       this.setState({isKeyboardFocused: true});
     }
+
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentDidMount() {
@@ -143,7 +147,7 @@ class EnhancedButton extends Component {
     }
   }
 
-  createButtonChildren() {
+  createButtonChildren(idBase) {
     const {
       centerRipple,
       children,
@@ -157,10 +161,13 @@ class EnhancedButton extends Component {
       touchRippleOpacity,
     } = this.props;
     const {isKeyboardFocused} = this.state;
+    const focusRippleId = idBase + '-focusRipple';
+    const touchRippleId = idBase + '-touchRipple';
 
     // Focus Ripple
     const focusRipple = isKeyboardFocused && !disabled && !disableFocusRipple && !disableKeyboardFocus ? (
       <FocusRipple
+        id={focusRippleId}
         color={focusRippleColor}
         opacity={focusRippleOpacity}
         show={isKeyboardFocused}
@@ -171,6 +178,7 @@ class EnhancedButton extends Component {
     // Touch Ripple
     const touchRipple = !disabled && !disableTouchRipple ? (
       <TouchRipple
+        id={touchRippleId}
         centerRipple={centerRipple}
         color={touchRippleColor}
         opacity={touchRippleOpacity}
@@ -249,6 +257,7 @@ class EnhancedButton extends Component {
 
   render() {
     const {
+      id,
       centerRipple, // eslint-disable-line no-unused-vars
       children,
       containerElement,
@@ -274,6 +283,9 @@ class EnhancedButton extends Component {
       type,
       ...other
     } = this.props;
+
+    const baseId = id || this.uniqueId;
+    const spanId = baseId + '-span';
 
     const {
       prepareStyles,
@@ -307,6 +319,7 @@ class EnhancedButton extends Component {
     if (disabled && href) {
       return (
         <span
+          id={spanId}
           {...other}
           style={mergedStyles}
         >
@@ -317,6 +330,7 @@ class EnhancedButton extends Component {
 
     const buttonProps = {
       ...other,
+      role: 'button',
       style: prepareStyles(mergedStyles),
       ref: (node) => this.button = node,
       disabled: disabled,
@@ -328,9 +342,10 @@ class EnhancedButton extends Component {
       onKeyDown: this.handleKeyDown,
       onTouchTap: this.handleTouchTap,
       tabIndex: disabled || disableKeyboardFocus ? -1 : tabIndex,
+      id: baseId,
     };
 
-    const buttonChildren = this.createButtonChildren();
+    const buttonChildren = this.createButtonChildren(baseId);
 
     if (React.isValidElement(containerElement)) {
       return React.cloneElement(containerElement, buttonProps, buttonChildren);

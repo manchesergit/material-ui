@@ -10,6 +10,7 @@ const shift = ([, ...newArray]) => newArray;
 
 class TouchRipple extends Component {
   static propTypes = {
+    id: PropTypes.string,
     abortOnScroll: PropTypes.bool,
     centerRipple: PropTypes.bool,
     children: PropTypes.node,
@@ -41,6 +42,11 @@ class TouchRipple extends Component {
       nextKey: 0,
       ripples: [],
     };
+  }
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   start(event, isRippleTouchGenerated) {
@@ -190,9 +196,11 @@ class TouchRipple extends Component {
   }
 
   render() {
-    const {children, style} = this.props;
+    const {id, children, style} = this.props;
     const {hasRipples, ripples} = this.state;
     const {prepareStyles} = this.context.muiTheme;
+    const baseId = id || this.uniqueId;
+    const rippleGroupId = baseId + '-rippleGroup';
 
     let rippleGroup;
 
@@ -208,7 +216,7 @@ class TouchRipple extends Component {
       }, style);
 
       rippleGroup = (
-        <ReactTransitionGroup style={prepareStyles(mergedStyles)}>
+        <ReactTransitionGroup id={rippleGroupId} style={prepareStyles(mergedStyles)}>
           {ripples}
         </ReactTransitionGroup>
       );
@@ -216,6 +224,7 @@ class TouchRipple extends Component {
 
     return (
       <div
+        id={baseId}
         onMouseUp={this.handleMouseUp}
         onMouseDown={this.handleMouseDown}
         onMouseLeave={this.handleMouseLeave}

@@ -7,12 +7,18 @@ const reflow = (elem) => elem.offsetHeight;
 
 class ExpandTransitionChild extends Component {
   static propTypes = {
+    id: PropTypes.string,
     children: PropTypes.node,
     enterDelay: PropTypes.number,
     style: PropTypes.object,
     transitionDelay: PropTypes.number,
     transitionDuration: PropTypes.number,
   };
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   static defaultProps = {
     enterDelay: 0,
@@ -78,6 +84,7 @@ class ExpandTransitionChild extends Component {
 
   render() {
     const {
+      id,
       children,
       enterDelay,  // eslint-disable-line no-unused-vars
       style,
@@ -102,9 +109,12 @@ class ExpandTransitionChild extends Component {
       ),
     }, style);
 
+    const baseId = id || this.uniqueId;
+    const wrapperId = baseId + '-wrapper';
+
     return (
-      <div {...other} style={prepareStyles(mergedRootStyles)}>
-        <div ref="wrapper">{children}</div>
+      <div id={baseId} {...other} style={prepareStyles(mergedRootStyles)}>
+        <div id={wrapperId} ref="wrapper">{children}</div>
       </div>
     );
   }

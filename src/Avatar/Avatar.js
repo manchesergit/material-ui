@@ -101,6 +101,7 @@ class Avatar extends Component {
           {...other}
           src={src}
           className={className}
+          alt="Avatar Icon"
         />
       );
     } else {

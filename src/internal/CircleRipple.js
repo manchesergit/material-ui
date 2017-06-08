@@ -7,6 +7,7 @@ import transitions from '../styles/transitions';
 
 class CircleRipple extends Component {
   static propTypes = {
+    id: PropTypes.string,
     aborted: PropTypes.bool,
     color: PropTypes.string,
     opacity: PropTypes.number,
@@ -22,6 +23,11 @@ class CircleRipple extends Component {
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
   };
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   shouldComponentUpdate(nextProps) {
     return !shallowEqual(this.props, nextProps);
@@ -73,6 +79,7 @@ class CircleRipple extends Component {
 
   render() {
     const {
+      id,
       aborted, // eslint-disable-line no-unused-vars
       color,
       opacity, // eslint-disable-line no-unused-vars
@@ -82,6 +89,7 @@ class CircleRipple extends Component {
     } = this.props;
 
     const {prepareStyles} = this.context.muiTheme;
+    const baseId = id || this.uniqueId;
 
     const mergedStyles = Object.assign({
       position: 'absolute',
@@ -94,7 +102,7 @@ class CircleRipple extends Component {
     }, style);
 
     return (
-      <div {...other} style={prepareStyles(mergedStyles)} />
+      <div id={baseId} {...other} style={prepareStyles(mergedStyles)} />
     );
   }
 }

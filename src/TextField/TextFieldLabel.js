@@ -27,6 +27,7 @@ function getStyles(props) {
 
 const TextFieldLabel = (props) => {
   const {
+    id,
     muiTheme,
     className,
     children,
@@ -37,8 +38,13 @@ const TextFieldLabel = (props) => {
   const {prepareStyles} = muiTheme;
   const styles = getStyles(props);
 
+  const uniqueId = `TextFieldLabel-${className}-${Math.floor(Math.random() * 0xFFFF)}`;
+  const baseId = id || uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+
   return (
     <label
+      id={baseId}
+      role='Tooltip'
       className={className}
       style={prepareStyles(styles.root)}
       htmlFor={htmlFor}
@@ -50,6 +56,12 @@ const TextFieldLabel = (props) => {
 };
 
 TextFieldLabel.propTypes = {
+  /**
+   * The id value used for the component.
+   * This will be used as a base for all child components also.
+   * If not provided the class name along with appropriate properties and a random number will be used.
+   */
+  id: PropTypes.string,
   /**
    * The label contents.
    */

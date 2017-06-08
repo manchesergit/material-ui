@@ -108,7 +108,7 @@ class CardMedia extends Component {
 
     const styledChildren = React.Children.map(children, (child) => {
       return React.cloneElement(child, {
-        style: prepareStyles(Object.assign({}, styles.mediaChild, child.props.style)),
+        style: prepareStyles(Object.assign({}, styles.mediaChild, child.props.style, overlay.title)),
       });
     });
 

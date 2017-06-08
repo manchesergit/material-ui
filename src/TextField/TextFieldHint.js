@@ -25,6 +25,7 @@ function getStyles(props) {
 
 const TextFieldHint = (props) => {
   const {
+    id,
     muiTheme: {
       prepareStyles,
     },
@@ -34,14 +35,23 @@ const TextFieldHint = (props) => {
 
   const styles = getStyles(props);
 
+  const uniqueId = `TextFieldHint-${text}-${Math.floor(Math.random() * 0xFFFF)}`;
+  const baseId = id || uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+
   return (
-    <div style={prepareStyles(Object.assign(styles.root, style))}>
+    <div id={baseId} style={prepareStyles(Object.assign(styles.root, style))}>
       {text}
     </div>
   );
 };
 
 TextFieldHint.propTypes = {
+  /**
+   * The id value used for the component.
+   * This will be used as a base for all child components also.
+   * If not provided the class name along with appropriate properties and a random number will be used.
+   */
+  id: PropTypes.string,
   /**
    * @ignore
    * The material-ui theme applied to this component.
