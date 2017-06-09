@@ -295,8 +295,10 @@ class DropDownMenu extends Component {
   };
 
   handleEscKeyDownMenu = (event) => {
-    event.preventDefault();
-    this.close(true);
+    if(this.state.open){
+      event.preventDefault();
+      this.close(true);
+    }
   };
 
   handleKeyDown = (event) => {
@@ -334,7 +336,7 @@ class DropDownMenu extends Component {
   };
 
   handleChange = (event, value) => {
-    if (this.props.multiple && this.props.onChange) {
+    if (this.props.multiple && this.props.onChange && this.state.open) {
       this.props.onChange(event, undefined, value);
     }
   };
@@ -434,11 +436,6 @@ class DropDownMenu extends Component {
       menuStyle = menuStyleProp;
     }
 
-    /**
-     * TODO fix the DropDownMenu.spec.js to have relivent tests for the open property in combination with the Menu child item (480)
-     * adding the "open &&" before the Menu tag causes the test 'passes expected props through to the underlying Menu' to fail as open defaults to false when the dropdown is created
-     * open is only set to true once a tap is registered on it (or whatever is similar).
-    */
     return (
       <div
         {...other}
@@ -476,8 +473,6 @@ class DropDownMenu extends Component {
           animated={animated}
           onRequestClose={this.handleRequestCloseMenu}
         >
-        {
-          open &&
           <Menu
             multiple={multiple}
             maxHeight={maxHeight}
@@ -495,7 +490,6 @@ class DropDownMenu extends Component {
           >
             {children}
           </Menu>
-        }
         </Popover>
       </div>
     );
