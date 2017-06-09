@@ -189,7 +189,7 @@ class DialogInline extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    const uniqueId = `${this.constructor.name}-${this.makeRandomNumber()}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
@@ -208,6 +208,10 @@ class DialogInline extends Component {
       this.originalFocus.focus();
       this.originalFocus = null;
     }
+  }
+
+  makeRandomNumber(){
+    return Math.floor(Math.random() * 0xFFFF);
   }
 
   positionDialog() {
@@ -346,8 +350,9 @@ class DialogInline extends Component {
         className={actionsContainerClassName}
         style={prepareStyles(styles.actionsContainer)}>
         {React.Children.map(actions, (action) => {
+          const childKey = this.makeRandomNumber();
           return React.cloneElement(action, {
-            ref: `action-${action.props.key}`
+            ref: `action-${childKey}`
           });
         })}
       </div>
