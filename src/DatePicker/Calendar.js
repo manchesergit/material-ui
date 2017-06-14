@@ -117,9 +117,11 @@ class Calendar extends Component {
 
   setDisplayDate(date, newSelectedDate) {
     const newDisplayDate = this.props.utils.getFirstDayOfMonth(date);
-    const direction = newDisplayDate > this.state.displayDate ? 'left' : 'right';
 
     if (newDisplayDate !== this.state.displayDate) {
+      const nextDirection = this.context.muiTheme.isRtl ? 'right' : 'left';
+      const prevDirection = this.context.muiTheme.isRtl ? 'left' : 'right';
+      const direction = newDisplayDate > this.state.displayDate ? nextDirection : prevDirection;
       this.setState({
         displayDate: newDisplayDate,
         transitionDirection: direction,
@@ -154,8 +156,11 @@ class Calendar extends Component {
   };
 
   handleMonthChange = (months) => {
+    const nextDirection = this.context.muiTheme.isRtl ? 'right' : 'left';
+    const prevDirection = this.context.muiTheme.isRtl ? 'left' : 'right';
+    const direction = months >= 0 ? nextDirection : prevDirection;
     this.setState({
-      transitionDirection: months >= 0 ? 'left' : 'right',
+      transitionDirection: direction,
       displayDate: this.props.utils.addMonths(this.state.displayDate, months),
     });
   };
@@ -186,6 +191,8 @@ class Calendar extends Component {
 
   handleWindowKeyDown = (event) => {
     if (this.props.open) {
+      const nextArrow = this.context.muiTheme.isRtl ? 'left' : 'right';
+      const prevArrow = this.context.muiTheme.isRtl ? 'right' : 'left';
       switch (keycode(event)) {
         case 'up':
           if (event.altKey && event.shiftKey) {
@@ -207,7 +214,7 @@ class Calendar extends Component {
           }
           break;
 
-        case 'right':
+        case nextArrow:
           if (event.altKey && event.shiftKey) {
             this.addSelectedYears(1);
           } else if (event.shiftKey) {
@@ -217,7 +224,7 @@ class Calendar extends Component {
           }
           break;
 
-        case 'left':
+        case prevArrow:
           if (event.altKey && event.shiftKey) {
             this.addSelectedYears(-1);
           } else if (event.shiftKey) {
