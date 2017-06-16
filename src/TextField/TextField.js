@@ -468,6 +468,7 @@ class TextField extends Component {
     /* if theres a floating label set the aria labelled by to it, if not set it to the hint text if that exists... otherwise null */
     const ariaLabelledBy = floatingLabelText ? textFieldLabelId : (hintText ? textFieldHintId : null);
     const roleLabel = 'textbox';
+    const wrapperId = inputId + '-div';
 
     let inputElement;
     if (children) {
@@ -516,7 +517,7 @@ class TextField extends Component {
 
     return (
       <div
-        id={inputId}
+        id={wrapperId}
         {...rootProps}
         className={className}
         style={prepareStyles(Object.assign(styles.root, style))}
