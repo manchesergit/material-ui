@@ -169,7 +169,7 @@ class EnhancedTextarea extends Component {
     } = this.props;
 
     const baseId = id || this.uniqueId;
-    const divId = baseId + '-div';
+    const divId = baseId + '-eta-div';
     const inputId = baseId + '-input';
     const ariaLabelledBy = this.props.labelledBy.length === 0 ? null : this.props.labelledBy ;
     const ariaDescribedBy = this.props.describedBy.length === 0 ? null : this.props.describedBy ;
