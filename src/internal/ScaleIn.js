@@ -47,7 +47,6 @@ class ScaleIn extends Component {
 
     const mergedRootStyles = Object.assign({}, {
       position: 'relative',
-      overflow: 'hidden',
       height: '100%',
     }, style);
 

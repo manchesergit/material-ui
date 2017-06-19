@@ -177,6 +177,8 @@ class DialogInline extends Component {
     open: PropTypes.bool.isRequired,
     overlayClassName: PropTypes.string,
     overlayStyle: PropTypes.object,
+    paperClassName: PropTypes.string,
+    paperProps: PropTypes.object,
     repositionOnUpdate: PropTypes.bool,
     style: PropTypes.object,
     title: PropTypes.node,
@@ -323,6 +325,9 @@ class DialogInline extends Component {
       overlayClassName,
       overlayStyle,
       open,
+      paperClassName,
+      paperProps,
+      style,
       titleClassName,
       titleStyle,
       title,
@@ -411,19 +416,16 @@ class DialogInline extends Component {
               className={contentClassName}
               style={styles.content}
             >
-              <Paper zDepth={4}>
-                <div ref="dialogContainer">
-                  {titleElement}
-                  <div
-                  id={dialogContentId}
-                    ref="dialogContent"
-                    className={bodyClassName}
-                    style={prepareStyles(styles.body)}
-                  >
-                    {children}
-                  </div>
-                  {actionsContainer}
-               </div>
+              <Paper className={paperClassName} zDepth={4} {...paperProps}>
+                {titleElement}
+                <div
+                  ref="dialogContent"
+                  className={bodyClassName}
+                  style={prepareStyles(styles.body)}
+                >
+                  {children}
+                </div>
+                {actionsContainer}
               </Paper>
             </TransitionItem>
           }
@@ -476,7 +478,7 @@ class Dialog extends Component {
      */
     children: PropTypes.node,
     /**
-     * The css class name of the root element.
+     * @ignore
      */
     className: PropTypes.string,
     /**
@@ -516,6 +518,14 @@ class Dialog extends Component {
      * Overrides the inline-styles of the `Overlay` component that is rendered behind the `Dialog`.
      */
     overlayStyle: PropTypes.object,
+    /**
+     * The CSS class name of the `Paper` element.
+     */
+    paperClassName: PropTypes.string,
+    /**
+     * Properties applied to the `Paper` element.
+     */
+    paperProps: PropTypes.object,
     /**
      * Determines whether the `Dialog` should be repositioned when it's contents are updated.
      */
