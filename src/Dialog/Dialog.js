@@ -327,7 +327,6 @@ class DialogInline extends Component {
       open,
       paperClassName,
       paperProps,
-      style,
       titleClassName,
       titleStyle,
       title,
