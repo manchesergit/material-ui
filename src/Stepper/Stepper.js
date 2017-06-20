@@ -31,6 +31,12 @@ class Stepper extends Component {
      */
     connector: PropTypes.node,
     /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
+     */
+    id: PropTypes.string,
+    /**
      * If set to `true`, the `Stepper` will assist in controlling steps for linear flow
      */
     linear: PropTypes.bool,
@@ -54,6 +60,11 @@ class Stepper extends Component {
 
   static childContextTypes = {stepper: PropTypes.object};
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${this.orientation}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   getChildContext() {
     const {orientation} = this.props;
     return {stepper: {orientation}};
@@ -66,10 +77,12 @@ class Stepper extends Component {
       connector,
       linear,
       style,
+      id
     } = this.props;
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
+    const baseId = id || this.uniqueId;
 
     /**
      * One day, we may be able to use real CSS tools
@@ -100,7 +113,7 @@ class Stepper extends Component {
     });
 
     return (
-      <div style={prepareStyles(Object.assign(styles.root, style))}>
+      <div id={baseId} style={prepareStyles(Object.assign(styles.root, style))}>
         {steps}
       </div>
     );
