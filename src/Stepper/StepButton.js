@@ -58,6 +58,12 @@ class StepButton extends Component {
      * Override the inline-styles of the icon container element.
      */
     iconContainerStyle: PropTypes.object,
+    /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
+     */
+    id: PropTypes.string,
     /** @ignore */
     last: PropTypes.bool,
     /** @ignore */
@@ -81,6 +87,11 @@ class StepButton extends Component {
     hovered: false,
     touched: false,
   };
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   handleMouseEnter = (event) => {
     const {onMouseEnter} = this.props;
@@ -119,6 +130,7 @@ class StepButton extends Component {
       disabled,
       icon,
       iconContainerStyle,
+      id,
       last, // eslint-disable-line no-unused-vars
       onMouseEnter, // eslint-disable-line no-unused-vars
       onMouseLeave, // eslint-disable-line no-unused-vars
@@ -127,12 +139,15 @@ class StepButton extends Component {
       ...other
     } = this.props;
 
+    const baseId = id ? `${id}-${this.constructor.name}` : this.uniqueId;
+
     const styles = getStyles(this.props, this.context, this.state);
 
     const child = isLabel(children) ? children : <StepLabel>{children}</StepLabel>;
 
     return (
       <EnhancedButton
+        id={baseId}
         disabled={disabled}
         style={Object.assign(styles.root, style)}
         onMouseEnter={this.handleMouseEnter}
