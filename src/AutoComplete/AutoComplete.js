@@ -43,12 +43,6 @@ function getStyles(props, context, state) {
 class AutoComplete extends Component {
   static propTypes = {
     /**
-     * The id value used for the component.
-     * This will be used as a base for all child components also.
-     * If not provided the class name along with appropriate properties and a random number will be used.
-     */
-    id: PropTypes.string,
-    /**
      * Location of the anchor for the auto complete.
      */
     anchorOrigin: propTypes.origin,
@@ -106,6 +100,12 @@ class AutoComplete extends Component {
      * The hint content to display.
      */
     hintText: PropTypes.node,
+    /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
+     */
+    id: PropTypes.string,
     /**
      * Override style for list.
      */
@@ -448,11 +448,11 @@ class AutoComplete extends Component {
     } = this.state;
 
     const baseId = id || this.uniqueId;
-    const menuItemIdBase = baseId + '-MenuItem-';
-    const menuId = baseId + '-Menu';
-    const textFieldId = baseId + '-TextField';
-    const hintTextId = hintText ? baseId + '-HintText' : null;
-    const popOverId = baseId + '-Popover';
+    const menuItemIdBase = `${baseId}-MenuItem-`;
+    const menuId = `${baseId}-Menu`;
+    const textFieldId = `${baseId}-TextField`;
+    const hintTextId = hintText ? `${baseId}-HintText` : null;
+    const popOverId = `${baseId}-Popover`;
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
@@ -539,7 +539,12 @@ class AutoComplete extends Component {
     );
 
     return (
-      <div id={baseId} style={prepareStyles(Object.assign(styles.root, style))} aria-labelledby={textFieldId} aria-describedby={hintTextId}>
+      <div
+        id={baseId}
+        style={prepareStyles(Object.assign(styles.root, style))}
+        aria-labelledby={textFieldId}
+        aria-describedby={hintTextId}
+      >
         <TextField
           id={textFieldId}
           aria-label="textbox"
