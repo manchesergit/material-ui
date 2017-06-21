@@ -22,13 +22,13 @@ const daysArray = [...Array(7)];
 
 class Calendar extends Component {
   static propTypes = {
-    id: PropTypes.string,
     DateTimeFormat: PropTypes.func.isRequired,
     autoOk: PropTypes.bool,
     cancelLabel: PropTypes.node,
     disableYearSelection: PropTypes.bool,
     firstDayOfWeek: PropTypes.number,
     hideCalendarDate: PropTypes.bool,
+    id: PropTypes.string,
     initialDate: PropTypes.object,
     locale: PropTypes.string.isRequired,
     maxDate: PropTypes.object,
@@ -311,10 +311,10 @@ class Calendar extends Component {
     const weekTitleDayStyle = prepareStyles(styles.weekTitleDay);
 
     const {
-      id,
       cancelLabel,
       DateTimeFormat,
       firstDayOfWeek,
+      id, // eslint-disable-line no-unused-vars
       locale,
       okLabel,
       onTouchTapCancel, // eslint-disable-line no-unused-vars
@@ -323,12 +323,12 @@ class Calendar extends Component {
     } = this.props;
 
     const baseId = this.props.id || this.uniqueId;
-    const divId = baseId + '-div';
+    const divId = `${baseId}-div`;
 
     return (
       <div style={prepareStyles(styles.root)} id={divId}>
         <EventListener
-          target='window'
+          target="window"
           onKeyDown={this.handleWindowKeyDown}
         />
         {!hideCalendarDate &&
