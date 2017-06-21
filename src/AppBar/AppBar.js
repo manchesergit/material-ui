@@ -67,12 +67,6 @@ class AppBar extends Component {
 
   static propTypes = {
     /**
-     * The id value used for the component.
-     * This will be used as a base for all child components also.
-     * If not provided the class name along with appropriate properties and a random number will be used.
-     */
-    id: PropTypes.string,
-    /**
      * Can be used to render a tab inside an app bar for instance.
      */
     children: PropTypes.node,
@@ -107,6 +101,12 @@ class AppBar extends Component {
      * Override the inline-styles of the element displayed on the right side of the app bar.
      */
     iconStyleRight: PropTypes.object,
+    /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
+     */
+    id: PropTypes.string,
     /**
      * Callback function for when the left icon is selected via a touch tap.
      *
@@ -223,7 +223,8 @@ class AppBar extends Component {
     // If the title is a string, wrap in an h1 tag.
     // If not, wrap in a div tag.
     const titleComponent = typeof title === 'string' || title instanceof String ? 'h1' : 'div';
-    const titleId = baseId + '-' + (typeof title === 'string' ? title + '-id' : 'id-title-id');
+    const titlePart = typeof title === 'string' ? `${title}-id` : 'id-title-id';
+    const titleId = `${baseId}-${titlePart}`;
 
     const titleElement = React.createElement(titleComponent, {
       onTouchTap: this.handleTitleTouchTap,
@@ -232,9 +233,9 @@ class AppBar extends Component {
     }, title);
 
     const iconLeftStyle = Object.assign({}, styles.iconButtonStyle, iconStyleLeft);
-    const iconButtonParent = this.props.title.length === 0 ? "App Bar" : this.props.title + " App Bar";
+    const iconButtonParent = this.props.title.length === 0 ? 'App Bar' : `${this.props.title} App Bar`;
     const appBarTitle = typeof title === 'string' ? title : '';
-    const appBarId= baseId + '-' + appBarTitle;
+    const appBarId = `${baseId}-${appBarTitle}`;
 
     if (showMenuIconButton) {
       if (iconElementLeft) {
@@ -269,7 +270,7 @@ class AppBar extends Component {
             iconStyle={styles.iconButtonIconStyle}
             iconClassName={iconClassNameLeft}
             onTouchTap={this.handleTouchTapLeftIconButton}
-            buttonAriaLabel={iconButtonParent + ' left side'}
+            buttonAriaLabel={`${iconButtonParent} left side`}
             labelledBy={titleId}
           >
             {iconClassNameLeft ?
@@ -327,7 +328,7 @@ class AppBar extends Component {
           iconStyle={styles.iconButtonIconStyle}
           iconClassName={iconClassNameRight}
           onTouchTap={this.handleTouchTapRightIconButton}
-          buttonAriaLabel={iconButtonParent + ' right side'}
+          buttonAriaLabel={`${iconButtonParent} right side`}
           labelledBy={titleId}
         />
       );
