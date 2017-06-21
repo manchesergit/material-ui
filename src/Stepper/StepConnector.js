@@ -12,6 +12,7 @@ const propTypes = {
 const contextTypes = {
   muiTheme: PropTypes.object.isRequired,
   stepper: PropTypes.object,
+  id: PropTypes.string,
 };
 
 const StepConnector = (props, context) => {

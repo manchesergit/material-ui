@@ -60,14 +60,18 @@ class Stepper extends Component {
 
   static childContextTypes = {stepper: PropTypes.object};
 
-  componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${this.orientation}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
-  }
-
   getChildContext() {
     const {orientation} = this.props;
     return {stepper: {orientation}};
+  }
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${this.props.orientation}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
+  makeBaseId() {
+    return this.id || this.uniqueId;
   }
 
   render() {
@@ -77,12 +81,11 @@ class Stepper extends Component {
       connector,
       linear,
       style,
-      id
+      id, // eslint-disable-line no-unused-vars
     } = this.props;
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
-    const baseId = id || this.uniqueId;
 
     /**
      * One day, we may be able to use real CSS tools
@@ -102,6 +105,8 @@ class Stepper extends Component {
         controlProps.disabled = true;
       }
 
+      controlProps.id = `${this.makeBaseId()}-Step-${index}`;
+
       if (index + 1 === numChildren) {
         controlProps.last = true;
       }
@@ -113,7 +118,7 @@ class Stepper extends Component {
     });
 
     return (
-      <div id={baseId} style={prepareStyles(Object.assign(styles.root, style))}>
+      <div id={this.makeBaseId()} style={prepareStyles(Object.assign(styles.root, style))}>
         {steps}
       </div>
     );

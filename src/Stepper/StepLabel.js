@@ -53,23 +53,35 @@ const getStyles = ({active, completed, disabled}, {muiTheme, stepper}) => {
   return styles;
 };
 
-const renderIcon = (completed, icon, styles) => {
+const renderIcon = (completed, icon, styles, baseId) => { // eslint-disable-line no-unused-vars
   const iconType = typeof icon;
 
   if (iconType === 'number' || iconType === 'string') {
     if (completed) {
+      const circleId = `${baseId}-${iconType}-CheckCircle`;
       return (
         <CheckCircle
+          id={circleId}
           color={styles.icon.color}
           style={styles.icon}
         />
       );
     }
 
+    const svgIconId = `${baseId}-Icon`;
+    const textId = `${baseId}-Text`;
+    const circleId = `${baseId}-circle`;
+
     return (
-      <SvgIcon color={styles.icon.color} style={styles.icon}>
-        <circle cx="12" cy="12" r="10" />
+      <SvgIcon id={svgIconId} color={styles.icon.color} style={styles.icon}>
+        <circle
+          id={circleId}
+          cx="12"
+          cy="12"
+          r="10"
+        />
         <text
+          id={textId}
           x="12"
           y="16"
           textAnchor="middle"
@@ -90,6 +102,7 @@ const StepLabel = (props, context) => {
     active, // eslint-disable-line no-unused-vars
     children,
     completed,
+    id,
     icon: userIcon,
     iconContainerStyle,
     last, // eslint-disable-line no-unused-vars
@@ -97,14 +110,21 @@ const StepLabel = (props, context) => {
     ...other
   } = props;
 
+  const uniqueIdBase = `StepLabel-${Math.floor(Math.random() * 0xFFFF)}`;
+  const uniqueId = uniqueIdBase.replace(/[^A-Za-z0-9-]/gi, '');
+  const baseId = id || uniqueId;
+
   const {prepareStyles} = context.muiTheme;
   const styles = getStyles(props, context);
-  const icon = renderIcon(completed, userIcon, styles);
+  const icon = renderIcon(completed, userIcon, styles, baseId);
+
+  const rootSpanId = `${baseId}-rootSpan`;
+  const iconSpanId = `${baseId}-iconSpan`;
 
   return (
-    <span style={prepareStyles(Object.assign(styles.root, style))} {...other}>
+    <span id={rootSpanId} style={prepareStyles(Object.assign(styles.root, style))} {...other}>
       {icon && (
-        <span style={prepareStyles(Object.assign(styles.iconContainer, iconContainerStyle))}>
+        <span id={iconSpanId} style={prepareStyles(Object.assign(styles.iconContainer, iconContainerStyle))}>
           {icon}
         </span>
       )}
@@ -145,6 +165,12 @@ StepLabel.propTypes = {
    */
   iconContainerStyle: PropTypes.object,
   /**
+   * The id value used for the component.
+   * This will be used as a base for all child components also.
+   * If not provided the class name along with appropriate properties and a random number will be used.
+   */
+  id: PropTypes.string,
+  /**
    * @ignore
    */
   last: PropTypes.bool,
@@ -157,6 +183,7 @@ StepLabel.propTypes = {
 StepLabel.contextTypes = {
   muiTheme: PropTypes.object.isRequired,
   stepper: PropTypes.object,
+  id: PropTypes.string,
 };
 
 export default StepLabel;

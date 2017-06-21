@@ -40,6 +40,12 @@ class Step extends Component {
      */
     disabled: PropTypes.bool,
     /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
+     */
+    id: PropTypes.string,
+    /**
      * @ignore
      * Used internally for numbering.
      */
@@ -59,6 +65,11 @@ class Step extends Component {
     stepper: PropTypes.object,
   };
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   renderChild = (child) => {
     const {
       active,
@@ -66,14 +77,20 @@ class Step extends Component {
       disabled,
       index,
       last,
+      id,
     } = this.props;
 
     const icon = index + 1;
+    const childId = this.makeBaseId() + icon;
 
     return React.cloneElement(child, Object.assign(
-      {active, completed, disabled, icon, last},
-      child.props
+      {active, completed, disabled, icon, last, id},
+      child.props, {id: childId}
     ));
+  }
+
+  makeBaseId() {
+    return this.id || this.uniqueId;
   }
 
   render() {
@@ -85,14 +102,17 @@ class Step extends Component {
       last, // eslint-disable-line no-unused-vars
       children,
       style,
+      id, // eslint-disable-line no-unused-vars
       ...other
     } = this.props;
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
+    const divId = `${this.makeBaseId()}-stepDiv`;
+
 
     return (
-      <div style={prepareStyles(Object.assign(styles.root, style))} {...other}>
+      <div id={divId} style={prepareStyles(Object.assign(styles.root, style))} {...other}>
         {React.Children.map(children, this.renderChild)}
       </div>
     );
