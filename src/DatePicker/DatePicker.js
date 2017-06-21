@@ -178,7 +178,7 @@ class DatePicker extends Component {
 
   componentWillMount() {
     const {
-      id,
+      id, // eslint-disable-line no-unused-vars
     } = this.props;
 
     this.setState({
@@ -262,13 +262,13 @@ class DatePicker extends Component {
 
   isControlled() {
     return this.props.hasOwnProperty('value');
-  };
+  }
 
   getControlledDate(props = this.props) {
     if (props.value instanceof Date) {
       return props.value;
     }
-  };
+  }
 
   formatDate = (date) => {
     if (this.props.locale) {
@@ -288,7 +288,7 @@ class DatePicker extends Component {
    * Only do this if the date picker is actually enabled though.
    */
   handleKeyEvent = (event) => {
-    if(!this.props.disabled && (keycode(event) === 'enter' || keycode(event) === 'space')) {
+    if (!this.props.disabled && (keycode(event) === 'enter' || keycode(event) === 'space')) {
       this.openDialog();
     }
   };
@@ -326,13 +326,13 @@ class DatePicker extends Component {
     const {prepareStyles} = this.context.muiTheme;
     const formatDate = formatDateProp || this.formatDate;
     const inputId = id || this.uniqueId;
-    const divId = inputId + '-div';
-    const textFieldId = inputId + '-textField';
-    const datePickerId = inputId + '-datePicker';
+    const divId = `${inputId}-div`;
+    const textFieldId = `${inputId}-textField`;
+    const datePickerId = `${inputId}-datePicker`;
 
     return (
       <div id={divId} className={className} style={prepareStyles(Object.assign({}, style))} >
-        <EventListener target={divId} onKeyDown={this.handleKeyEvent}/>
+        <EventListener target={divId} onKeyDown={this.handleKeyEvent} />
         <DatePickerDialog
           id={datePickerId}
           DateTimeFormat={DateTimeFormat}
