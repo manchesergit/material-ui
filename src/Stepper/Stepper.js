@@ -118,7 +118,11 @@ class Stepper extends Component {
     });
 
     return (
-      <div id={this.makeBaseId()} style={prepareStyles(Object.assign(styles.root, style))}>
+      <div
+        id={this.makeBaseId()}
+        style={prepareStyles(Object.assign(styles.root, style))}
+        aria-orientation={this.props.orientation}
+      >
         {steps}
       </div>
     );
