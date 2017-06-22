@@ -307,7 +307,12 @@ class Table extends Component {
       <div role="grid" style={prepareStyles(Object.assign(styles.tableWrapper, wrapperStyle))}>
         {headerTable}
         <div role="presentation" style={prepareStyles(Object.assign(styles.bodyTable, bodyStyle))} ref="tableDiv">
-          <table role="rowgroup" className={className} style={mergedTableStyle} ref="tableBody">
+          <table
+            role="rowgroup"
+            className={className}
+            style={mergedTableStyle}
+            ref="tableBody"
+          >
             {inlineHeader}
             {inlineFooter}
             {tBody}
