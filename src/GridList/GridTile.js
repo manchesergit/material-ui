@@ -91,6 +91,10 @@ class GridTile extends Component {
       PropTypes.element,
     ]),
     /**
+     * The description for any image.  Populates the alt tag.
+     */
+    imageDescription: PropTypes.node,
+    /**
      * Height of the tile in number of grid cells.
      */
     rows: PropTypes.number,
@@ -110,10 +114,6 @@ class GridTile extends Component {
      * Title to be displayed on tile.
      */
     title: PropTypes.node,
-    /**
-     * The description for any image.  Populates the alt tag.
-     */
-    imageDescription: PropTypes.node,
     /**
      * Style used for title bar background.
      * Useful for setting custom gradients for example
