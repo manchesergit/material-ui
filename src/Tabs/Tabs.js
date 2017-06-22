@@ -83,7 +83,6 @@ class Tabs extends Component {
   };
 
   state = {selectedIndex: 0};
-  tabPanelId = uniqueId('tabPanel_');
   componentWillMount() {
     const valueLink = this.getValueLink(this.props);
     const initialIndex = this.props.initialSelectedIndex;
@@ -109,6 +108,8 @@ class Tabs extends Component {
 
     this.setState(newState);
   }
+
+  tabPanelId = uniqueId('tabPanel_');
 
   getTabs(props = this.props) {
     const tabs = [];
