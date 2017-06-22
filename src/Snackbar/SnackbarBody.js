@@ -103,6 +103,10 @@ SnackbarBody.propTypes = {
    */
   action: PropTypes.node,
   /**
+  * the ID value for content section of the body.
+  */
+  contentId: PropTypes.string,
+  /**
    * Override the inline-styles of the content element.
    */
   contentStyle: PropTypes.object,
