@@ -103,7 +103,6 @@ class Snackbar extends Component {
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
   };
-  contentId = UniqueId('snackbar')
   componentWillMount() {
     this.setState({
       open: this.props.open,
@@ -162,6 +161,8 @@ class Snackbar extends Component {
     clearTimeout(this.timerOneAtTheTimeId);
   }
 
+  contentId = UniqueId('snackbar')
+
   componentClickAway = () => {
     if (this.timerTransitionId) {
       // If transitioning, don't close the snackbar.
@@ -218,11 +219,18 @@ class Snackbar extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
-    const openAttr = open ? { open } : null;
+    const openAttr = open ? {open} : null;
 
     return (
       <ClickAwayListener onClickAway={open ? this.componentClickAway : null}>
-        <div {...other} role="dialog" aria-live="polite" aria-describedby={this.contentId} {...openAttr} style={prepareStyles(Object.assign(styles.root, style))}>
+        <div
+          {...other}
+          role="dialog"
+          aria-live="polite"
+          aria-describedby={this.contentId}
+          {...openAttr}
+          style={prepareStyles(Object.assign(styles.root, style))}
+        >
           <SnackbarBody
             action={action}
             contentId={this.contentId}
