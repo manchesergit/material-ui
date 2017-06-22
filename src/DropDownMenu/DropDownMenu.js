@@ -295,7 +295,7 @@ class DropDownMenu extends Component {
   };
 
   handleEscKeyDownMenu = (event) => {
-    if(this.state.open){
+    if (this.state.open) {
       event.preventDefault();
       this.close(true);
     }
