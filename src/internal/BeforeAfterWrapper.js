@@ -43,13 +43,13 @@ const styles = {
 
 class BeforeAfterWrapper extends Component {
   static propTypes = {
-    id: PropTypes.string,
     afterElementType: PropTypes.string,
     afterStyle: PropTypes.object,
     beforeElementType: PropTypes.string,
     beforeStyle: PropTypes.object,
     children: PropTypes.node,
     elementType: PropTypes.string,
+    id: PropTypes.string,
     /**
      * Override the inline-styles of the root element.
      */
@@ -93,7 +93,7 @@ class BeforeAfterWrapper extends Component {
         {
           style: prepareStyles(Object.assign({}, styles.box, beforeStyle)),
           key: '::before',
-          id: baseId + '-before',
+          id: `${baseId}-before`,
         });
     }
 
@@ -102,7 +102,7 @@ class BeforeAfterWrapper extends Component {
         {
           style: prepareStyles(Object.assign({}, styles.box, afterStyle)),
           key: '::after',
-          id: baseId + '-after',
+          id: `${baseId}-after`,
         });
     }
 

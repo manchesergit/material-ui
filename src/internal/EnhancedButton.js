@@ -37,7 +37,6 @@ function listenForTabPresses() {
 
 class EnhancedButton extends Component {
   static propTypes = {
-    id: PropTypes.string,
     centerRipple: PropTypes.bool,
     children: PropTypes.node,
     containerElement: PropTypes.oneOfType([
@@ -51,6 +50,7 @@ class EnhancedButton extends Component {
     focusRippleColor: PropTypes.string,
     focusRippleOpacity: PropTypes.number,
     href: PropTypes.string,
+    id: PropTypes.string,
     keyboardFocused: PropTypes.bool,
     onBlur: PropTypes.func,
     onClick: PropTypes.func,
@@ -161,8 +161,8 @@ class EnhancedButton extends Component {
       touchRippleOpacity,
     } = this.props;
     const {isKeyboardFocused} = this.state;
-    const focusRippleId = idBase + '-focusRipple';
-    const touchRippleId = idBase + '-touchRipple';
+    const focusRippleId = `${idBase}-focusRipple`;
+    const touchRippleId = `${idBase}--touchRipple`;
 
     // Focus Ripple
     const focusRipple = isKeyboardFocused && !disabled && !disableFocusRipple && !disableKeyboardFocus ? (
@@ -285,7 +285,7 @@ class EnhancedButton extends Component {
     } = this.props;
 
     const baseId = id || this.uniqueId;
-    const spanId = baseId + '-span';
+    const spanId = `${baseId}-span`;
 
     const {
       prepareStyles,

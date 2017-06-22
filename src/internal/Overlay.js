@@ -41,8 +41,8 @@ function getStyles(props, context) {
 
 class Overlay extends Component {
   static propTypes = {
-    id: PropTypes.string,
     autoLockScrolling: PropTypes.bool,
+    id: PropTypes.string,
     show: PropTypes.bool.isRequired,
     /**
      * Override the inline-styles of the root element.
@@ -61,19 +61,19 @@ class Overlay extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  setOpacity(opacity) {
-    this.refs.overlay.style.opacity = opacity;
-  }
-
   componentWillMount() {
     const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
+  setOpacity(opacity) {
+    this.refs.overlay.style.opacity = opacity;
+  }
+
   render() {
     const {
-      id,
       autoLockScrolling,
+      id,
       show,
       style,
       transitionEnabled, // eslint-disable-line no-unused-vars
@@ -85,7 +85,12 @@ class Overlay extends Component {
     const baseId = id || this.uniqueId;
 
     return (
-      <div id={baseId} {...other} ref="overlay" style={prepareStyles(Object.assign(styles.root, style))}>
+      <div
+        id={baseId}
+        {...other}
+        ref="overlay"
+        style={prepareStyles(Object.assign(styles.root, style))}
+      >
         {autoLockScrolling && <AutoLockScrolling lock={show} />}
       </div>
     );

@@ -5,10 +5,10 @@ import ScaleInChild from './ScaleInChild';
 
 class ScaleIn extends Component {
   static propTypes = {
-    id: PropTypes.string,
     childStyle: PropTypes.object,
     children: PropTypes.node,
     enterDelay: PropTypes.number,
+    id: PropTypes.string,
     maxScale: PropTypes.number,
     minScale: PropTypes.number,
     /**
@@ -32,10 +32,10 @@ class ScaleIn extends Component {
 
   render() {
     const {
-      id,
       children,
       childStyle,
       enterDelay,
+      id,
       maxScale,
       minScale,
       style,
@@ -51,7 +51,7 @@ class ScaleIn extends Component {
     }, style);
 
     const newChildren = React.Children.map(children, (child) => {
-      const childId = baseId + '-ScaleInChild-'+ Math.floor(Math.random() * 0xFFFF);
+      const childId = `${baseId}-ScaleInChild-${Math.floor(Math.random() * 0xFFFF)}`;
       return (
         <ScaleInChild
           id={childId}

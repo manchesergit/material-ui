@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 class AppCanvas extends Component {
   static propTypes = {
-    id: PropTypes.string,
     children: PropTypes.node,
+    id: PropTypes.string,
   };
 
   static contextTypes = {

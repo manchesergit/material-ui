@@ -5,11 +5,11 @@ import SlideInChild from './SlideInChild';
 
 class SlideIn extends Component {
   static propTypes = {
-    id: PropTypes.string,
     childStyle: PropTypes.object,
     children: PropTypes.node,
     direction: PropTypes.oneOf(['left', 'right', 'up', 'down']),
     enterDelay: PropTypes.number,
+    id: PropTypes.string,
     style: PropTypes.object,
   };
 
@@ -18,14 +18,14 @@ class SlideIn extends Component {
     direction: 'left',
   };
 
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired,
+  };
+
   componentWillMount() {
     const uniqueId = `${this.constructor.name}-${this.props.direction}-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
-  };
 
   getLeaveDirection = () => {
     return this.props.direction;
@@ -33,11 +33,11 @@ class SlideIn extends Component {
 
   render() {
     const {
-      id,
       enterDelay,
       children,
       childStyle,
       direction,
+      id,
       style,
       ...other
     } = this.props;
@@ -52,7 +52,7 @@ class SlideIn extends Component {
     }, style);
 
     const newChildren = React.Children.map(children, (child) => {
-      const childId = baseId + '-SlideInChild-'+ Math.floor(Math.random() * 0xFFFF);
+      const childId = `${baseId}-SlideInChild-${Math.floor(Math.random() * 0xFFFF)}`;
       return (
         <SlideInChild
           id={childId}

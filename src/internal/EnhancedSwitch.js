@@ -71,7 +71,6 @@ function getStyles(props, context) {
 
 class EnhancedSwitch extends Component {
   static propTypes = {
-    id: PropTypes.string,
     checked: PropTypes.bool,
     className: PropTypes.string,
     defaultChecked: PropTypes.bool,
@@ -79,6 +78,7 @@ class EnhancedSwitch extends Component {
     disableTouchRipple: PropTypes.bool,
     disabled: PropTypes.bool,
     iconStyle: PropTypes.object,
+    id: PropTypes.string,
     inputStyle: PropTypes.object,
     inputType: PropTypes.string.isRequired,
     label: PropTypes.node,
@@ -112,17 +112,17 @@ class EnhancedSwitch extends Component {
     isKeyboardFocused: false,
   };
 
-  componentDidMount() {
-    const inputNode = this.refs.checkbox;
-    if ((!this.props.switched || inputNode.checked !== this.props.switched) &&
-      this.props.onParentShouldUpdate) {
-      this.props.onParentShouldUpdate(inputNode.checked);
-    }
-  }
-
   componentWillMount() {
     const uniqueId = `${this.constructor.name}-${this.props.labelPosition}-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
+  componentDidMount() {
+    const inputNode = this.refs.checkbox;
+    if ((!this.props.switched || inputNode.checked !== this.props.switched) &&
+    this.props.onParentShouldUpdate) {
+      this.props.onParentShouldUpdate(inputNode.checked);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -295,15 +295,14 @@ class EnhancedSwitch extends Component {
     const mergedRippleStyle = Object.assign(styles.ripple, rippleStyle);
 
     const baseId = id || this.uniqueId;
-    const labelId = baseId + '-label';
-    const touchRippleId = baseId + '-touchRipple';
-    const focusRippleId = baseId + '-focusRipple';
-    const checkBoxId = baseId + '-checkBox';
-    const thumbStyleId = baseId + '-thumbStyle';
-    const wrapStyleId = baseId + '-wrapStyle';
-    const trackStyleId = baseId + '-trackStyle';
-    const paperStyleId = baseId + '-paperStyle';
-    const styleControlId = baseId + '-styleControl';
+    const touchRippleId = `${baseId}-touchRipple`;
+    const focusRippleId = `${baseId}-focusRipple`;
+    const checkBoxId = `${baseId}-checkBox`;
+    const thumbStyleId = `${baseId}-thumbStyle`;
+    const wrapStyleId = `${baseId}-wrapStyle`;
+    const trackStyleId = `${baseId}-trackStyle`;
+    const paperStyleId = `${baseId}-paperStyle`;
+    const styleControlId = `${baseId}-styleControl`;
 
 
     if (thumbStyle) {
@@ -351,8 +350,8 @@ class EnhancedSwitch extends Component {
     const inputElement = (
       <input
         id={checkBoxId}
-        role='checkbox'
-        aria-label='checkbox'
+        role="checkbox"
+        aria-label="checkbox"
         {...other}
         ref="checkbox"
         type={inputType}
@@ -381,7 +380,14 @@ class EnhancedSwitch extends Component {
     ) : (
       <div id={wrapStyleId} style={prepareStyles(wrapStyles)}>
         <div id={trackStyleId} style={prepareStyles(Object.assign({}, trackStyle))} />
-        <Paper id={paperStyleId} style={thumbStyle} zDepth={1} circle={true}> {ripples} </Paper>
+        <Paper
+          id={paperStyleId}
+          style={thumbStyle}
+          zDepth={1}
+          circle={true}
+        >
+          {ripples}
+        </Paper>
       </div>
     );
 
@@ -398,7 +404,12 @@ class EnhancedSwitch extends Component {
     );
 
     return (
-      <div id={baseId} ref="root" className={className} style={prepareStyles(Object.assign(styles.root, style))}>
+      <div
+        id={baseId}
+        ref="root"
+        className={className}
+        style={prepareStyles(Object.assign(styles.root, style))}
+      >
         <EventListener
           target="window"
           onKeyDown={this.handleKeyDown}

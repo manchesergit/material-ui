@@ -10,11 +10,11 @@ const shift = ([, ...newArray]) => newArray;
 
 class TouchRipple extends Component {
   static propTypes = {
-    id: PropTypes.string,
     abortOnScroll: PropTypes.bool,
     centerRipple: PropTypes.bool,
     children: PropTypes.node,
     color: PropTypes.string,
+    id: PropTypes.string,
     opacity: PropTypes.number,
     style: PropTypes.object,
   };
@@ -200,7 +200,7 @@ class TouchRipple extends Component {
     const {hasRipples, ripples} = this.state;
     const {prepareStyles} = this.context.muiTheme;
     const baseId = id || this.uniqueId;
-    const rippleGroupId = baseId + '-rippleGroup';
+    const rippleGroupId = `${baseId}-rippleGroup`;
 
     let rippleGroup;
 

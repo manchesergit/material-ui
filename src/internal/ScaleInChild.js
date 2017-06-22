@@ -6,9 +6,9 @@ import transitions from '../styles/transitions';
 
 class ScaleInChild extends Component {
   static propTypes = {
-    id: PropTypes.string,
     children: PropTypes.node,
     enterDelay: PropTypes.number,
+    id: PropTypes.string,
     maxScale: PropTypes.number,
     minScale: PropTypes.number,
     style: PropTypes.object,

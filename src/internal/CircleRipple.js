@@ -7,9 +7,9 @@ import transitions from '../styles/transitions';
 
 class CircleRipple extends Component {
   static propTypes = {
-    id: PropTypes.string,
     aborted: PropTypes.bool,
     color: PropTypes.string,
+    id: PropTypes.string,
     opacity: PropTypes.number,
     style: PropTypes.object,
     touchGenerated: PropTypes.bool,

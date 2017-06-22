@@ -10,8 +10,8 @@ const pulsateDuration = 750;
 
 class FocusRipple extends Component {
   static propTypes = {
-    id: PropTypes.string,
     color: PropTypes.string,
+    id: PropTypes.string,
     innerStyle: PropTypes.object,
     opacity: PropTypes.number,
     show: PropTypes.bool,
@@ -73,7 +73,7 @@ class FocusRipple extends Component {
       transition: transitions.easeOut(`${pulsateDuration}ms`, 'transform', null, transitions.easeInOutFunction),
     }, innerStyle);
 
-    const innerCircleId = idBase + '-innerCircle';
+    const innerCircleId = `${idBase}-innerCircle`;
 
     return <div id={innerCircleId} ref="innerCircle" style={prepareStyles(Object.assign({}, innerStyles))} />;
   }

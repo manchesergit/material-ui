@@ -6,12 +6,12 @@ import transitions from '../styles/transitions';
 
 class SlideInChild extends Component {
   static propTypes = {
-    id: PropTypes.string,
     children: PropTypes.node,
     direction: PropTypes.string,
     enterDelay: PropTypes.number,
     // This callback is needed bacause the direction could change when leaving the DOM
     getLeaveDirection: PropTypes.func.isRequired,
+    id: PropTypes.string,
     style: PropTypes.object,
   };
 
@@ -23,14 +23,14 @@ class SlideInChild extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  componentWillUnmount() {
-    clearTimeout(this.enterTimer);
-    clearTimeout(this.leaveTimer);
-  }
-
   componentWillMount() {
     const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.enterTimer);
+    clearTimeout(this.leaveTimer);
   }
 
   componentWillEnter(callback) {

@@ -82,12 +82,12 @@ function getStyles(props, context, state) {
 
 class Tooltip extends Component {
   static propTypes = {
-    id: PropTypes.string,
     /**
      * The css class name of the root element.
      */
     className: PropTypes.string,
     horizontalPosition: PropTypes.oneOf(['left', 'right', 'center']),
+    id: PropTypes.string,
     label: PropTypes.node.isRequired,
     show: PropTypes.bool,
     /**
@@ -107,7 +107,8 @@ class Tooltip extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${this.props.horizontalPosition}-${this.props.verticalPosition}-${Math.floor(Math.random() * 0xFFFF)}`;
+    const positionalIndicators = `${this.props.horizontalPosition}-${this.props.verticalPosition}`;
+    const uniqueId = `${this.constructor.name}-${positionalIndicators}-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
@@ -164,8 +165,8 @@ class Tooltip extends Component {
     return (
       <div
         id={baseId}
-        role='tooltip'
-        aria-hidden='true'
+        role="tooltip"
+        aria-hidden="true"
         {...other}
         ref="tooltip"
         style={prepareStyles(Object.assign(
