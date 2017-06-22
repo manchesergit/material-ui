@@ -32,10 +32,12 @@ function getStyles(props, context, state) {
 
 class EnhancedTextarea extends Component {
   static propTypes = {
-    id: PropTypes.string,
     defaultValue: PropTypes.any,
+    describedBy: PropTypes.string,
     disabled: PropTypes.bool,
     hintText: PropTypes.node,
+    id: PropTypes.string,
+    labelledBy: PropTypes.string,
     onChange: PropTypes.func,
     onHeightChange: PropTypes.func,
     rows: PropTypes.number,
@@ -48,8 +50,6 @@ class EnhancedTextarea extends Component {
     textareaStyle: PropTypes.object,
     value: PropTypes.string,
     valueLink: PropTypes.object,
-    labelledBy: PropTypes.string,
-    describedBy: PropTypes.string,
   };
 
   static defaultProps = {
@@ -163,14 +163,14 @@ class EnhancedTextarea extends Component {
       hintText, // eslint-disable-line no-unused-vars
       textareaStyle,
       valueLink, // eslint-disable-line no-unused-vars
-      labelledBy,
-      describedBy,
+      labelledBy, // eslint-disable-line no-unused-vars
+      describedBy, // eslint-disable-line no-unused-vars
       ...other
     } = this.props;
 
     const baseId = id || this.uniqueId;
-    const divId = baseId + '-eta-div';
-    const inputId = baseId + '-input';
+    const divId = `${baseId}-eta-div`;
+    const inputId = `${baseId}-input`;
     const ariaLabelledBy = this.props.labelledBy.length === 0 ? null : this.props.labelledBy ;
     const ariaDescribedBy = this.props.describedBy.length === 0 ? null : this.props.describedBy ;
 
@@ -189,7 +189,7 @@ class EnhancedTextarea extends Component {
         <EventListener target="window" onResize={this.handleResize} />
         <textarea
           id={baseId}
-          role='textbox'
+          role="textbox"
           aria-multiline={(this.props.rows > 1)}
           aria-labelledby={ariaLabelledBy}
           aria-describedby={ariaDescribedBy}
