@@ -36,11 +36,9 @@ class IconButton extends Component {
 
   static propTypes = {
     /**
-     * The id value used for the component.
-     * This will be used as a base for all child components also.
-     * If not provided the class name along with appropriate properties and a random number will be used.
+     * values to be added into aria-label on the button
      */
-    id: PropTypes.string,
+    buttonAriaLabel: PropTypes.string,
     /**
      * Can be used to pass a `FontIcon` element as the icon for the button.
      */
@@ -49,6 +47,10 @@ class IconButton extends Component {
      * The CSS class name of the root element.
      */
     className: PropTypes.string,
+    /**
+     * value to be added into aria-describedby
+     */
+    describedBy: PropTypes.string,
     /**
      * If true, the element's ripple effect will be disabled.
      */
@@ -74,6 +76,16 @@ class IconButton extends Component {
      * Note: you can specify iconHoverColor as a String inside this object.
      */
     iconStyle: PropTypes.object,
+    /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
+     */
+    id: PropTypes.string,
+    /**
+     * value to be added into aria-labelledby
+     */
+    labelledBy: PropTypes.string,
     /** @ignore */
     onBlur: PropTypes.func,
     /** @ignore */
@@ -122,21 +134,6 @@ class IconButton extends Component {
      * readability on mobile devices.
      */
     touch: PropTypes.bool,
-
-    /**
-     * values to be added into aria-label on the button
-     */
-    buttonAriaLabel: PropTypes.string,
-
-    /**
-     * value to be added into aria-labelledby
-     */
-    labelledBy: PropTypes.string,
-
-    /**
-     * value to be added into aria-describedby
-     */
-    describedBy: PropTypes.string,
   };
 
   static defaultProps = {
@@ -154,11 +151,6 @@ class IconButton extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
-  }
-
   state = {
     hovered: false,
     isKeyboardFocused: false,
@@ -167,6 +159,11 @@ class IconButton extends Component {
     touch: false,
     tooltipShown: false,
   };
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.disabled) {
@@ -259,31 +256,33 @@ class IconButton extends Component {
 
   render() {
     const {
-      id,
+      buttonAriaLabel, // eslint-disable-line no-unused-vars
       disabled,
-      hoveredStyle,
+      describedBy, // eslint-disable-line no-unused-vars
       disableTouchRipple,
       children,
+      hoveredStyle,
       iconClassName,
+      iconStyle,
+      id,
+      labelledBy, // eslint-disable-line no-unused-vars
       style,
       tooltip,
       tooltipPosition: tooltipPositionProp,
       tooltipStyles,
       touch,
-      iconStyle,
-      buttonAriaLabel,
-      labelledBy,
-      describedBy,
       ...other
     } = this.props;
     let fonticon;
 
     const baseId = id || this.uniqueId;
 
-    /* aria tags to associate this button with parent containers or nothing depending on how the call for this has been made */
+    /* aria tags to associate this button with parent containers or
+     * nothing depending on how the call for this has been made */
     const ariaBaseName = 'Icon Button';
-    const ariaLabel = this.props.buttonAriaLabel.length === 0 ? ariaBaseName : this.props.buttonAriaLabel + ' ' + ariaBaseName;
-    const toolTipIdValue = baseId + '-tooltip';
+    const ariaLabelPrefix = this.props.buttonAriaLabel.length === 0 ? '' : `${this.props.buttonAriaLabel} `;
+    const ariaLabel = `${ariaLabelPrefix}${ariaBaseName}`;
+    const toolTipIdValue = `${baseId}-tooltip`;
     const ariaLabelledBy = this.props.labelledBy.length === 0 ? null : this.props.labelledBy ;
     const ariaDescribedBy = this.props.describedBy.length === 0 ? null : this.props.describedBy ;
 
