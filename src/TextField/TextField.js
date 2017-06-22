@@ -425,10 +425,10 @@ class TextField extends Component {
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
     const inputId = id || this.uniqueId;
-    const textFieldLabelId = inputId + '-TextFieldLabel';
-    const textFieldHintId = hintTextId || inputId + '-TextFieldHint';
-    const textFieldUnderlineId = inputId + '-TextFieldUnderline';
-    const enhancedTextareaId = inputId + '-EnhancedTextarea';
+    const textFieldLabelId = `${inputId}-TextFieldLabel`;
+    const textFieldHintId = hintTextId || `${inputId}-TextFieldHint`;
+    const textFieldUnderlineId = `${inputId}-TextFieldUnderline`;
+    const enhancedTextareaId = `${inputId}-EnhancedTextarea`;
 
     const errorTextElement = this.state.errorText && (
       <div style={prepareStyles(Object.assign(styles.error, errorStyle))}>
@@ -464,11 +464,15 @@ class TextField extends Component {
     };
 
     const childStyleMerged = Object.assign(styles.input, inputStyle);
-    const ariaLabel = (multiLine ? 'Multi Line ' : '') + 'Text Field';
-    /* if theres a floating label set the aria labelled by to it, if not set it to the hint text if that exists... otherwise null */
+    const ariaLabelPrefix = multiLine ? 'Multi Line ' : '';
+    const ariaLabel = `${ariaLabelPrefix}Text Field`;
+
+    /* if theres a floating label set the aria labelled by to it,
+     * if not set it to the hint text if that exists... otherwise null
+     */
     const ariaLabelledBy = floatingLabelText ? textFieldLabelId : (hintText ? textFieldHintId : null);
     const roleLabel = 'textbox';
-    const wrapperId = inputId + '-div';
+    const wrapperId = `${inputId}-div`;
 
     let inputElement;
     if (children) {
@@ -479,7 +483,6 @@ class TextField extends Component {
           style: Object.assign(childStyleMerged, children.props.style),
         });
     } else {
-
       inputElement = multiLine ? (
         <EnhancedTextarea
           id={enhancedTextareaId}
