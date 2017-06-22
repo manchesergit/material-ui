@@ -441,14 +441,14 @@ class TableBody extends Component {
       stripedRows, // eslint-disable-line no-unused-vars
       displayRowCheckbox, // eslint-disable-line no-unused-vars
       preScanRows, // eslint-disable-line no-unused-vars
-      ...other
+      ...other // eslint-disable-line no-unused-vars
     } = this.props;
 
     const {prepareStyles} = this.context.muiTheme;
 
     return (
       <ClickAwayListener onClickAway={this.handleClickAway}>
-        <tbody role='presentation' className={this.props.className} style={prepareStyles(Object.assign({}, style))}>
+        <tbody role="presentation" className={this.props.className} style={prepareStyles(Object.assign({}, style))}>
           {this.createRows()}
         </tbody>
       </ClickAwayListener>
