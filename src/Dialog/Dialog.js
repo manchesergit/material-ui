@@ -12,8 +12,8 @@ import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 
 class TransitionItem extends Component {
   static propTypes = {
-    id: PropTypes.string,
     children: PropTypes.node,
+    id: PropTypes.string,
     style: PropTypes.object,
   };
 
@@ -160,7 +160,6 @@ function getStyles(props, context) {
 
 class DialogInline extends Component {
   static propTypes = {
-    id: PropTypes.string,
     actions: PropTypes.node,
     actionsContainerClassName: PropTypes.string,
     actionsContainerStyle: PropTypes.object,
@@ -172,6 +171,7 @@ class DialogInline extends Component {
     className: PropTypes.string,
     contentClassName: PropTypes.string,
     contentStyle: PropTypes.object,
+    id: PropTypes.string,
     modal: PropTypes.bool,
     onRequestClose: PropTypes.func,
     open: PropTypes.bool.isRequired,
@@ -199,10 +199,6 @@ class DialogInline extends Component {
     this.positionDialog();
   }
 
-  componentDidUpdate() {
-    this.positionDialog();
-  }
-
   componentWillUpdate(nextProps) {
     if (nextProps.open) {
       this.originalFocus = document.activeElement;
@@ -212,7 +208,11 @@ class DialogInline extends Component {
     }
   }
 
-  makeRandomNumber(){
+  componentDidUpdate() {
+    this.positionDialog();
+  }
+
+  makeRandomNumber() {
     return Math.floor(Math.random() * 0xFFFF);
   }
 
@@ -294,8 +294,8 @@ class DialogInline extends Component {
         break;
       case 'tab':
         if (!this.refs.dialogContainer.contains(document.activeElement)) {
-          const actionWrap = this.refs.dialogActions.children[0],
-          button = actionWrap.querySelector('button');
+          const actionWrap = this.refs.dialogActions.children[0];
+          const button = actionWrap.querySelector('button');
 
           (button || actionWrap).focus();
           event.preventDefault();
@@ -322,6 +322,7 @@ class DialogInline extends Component {
       className,
       contentClassName,
       contentStyle,
+      modal,  // eslint-disable-line no-unused-vars
       overlayClassName,
       overlayStyle,
       open,
@@ -331,12 +332,10 @@ class DialogInline extends Component {
       titleStyle,
       title,
       style,
-      modal,
     } = this.props;
 
     const baseId = id || this.uniqueId;
-    const actionsContainerId = baseId + '-actionsContainer';
-    const titleId = baseId + "-title";
+    const titleId = `${baseId}-title`;
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
@@ -352,11 +351,12 @@ class DialogInline extends Component {
       <div
         ref="dialogActions"
         className={actionsContainerClassName}
-        style={prepareStyles(styles.actionsContainer)}>
+        style={prepareStyles(styles.actionsContainer)}
+      >
         {React.Children.map(actions, (action) => {
           const childKey = this.makeRandomNumber();
           return React.cloneElement(action, {
-            ref: `action-${childKey}`
+            ref: `action-${childKey}`,
           });
         })}
       </div>
@@ -367,7 +367,7 @@ class DialogInline extends Component {
       titleElement = React.cloneElement(title, {
         className: title.props.className || titleClassName,
         style: prepareStyles(Object.assign(styles.title, title.props.style)),
-        id: this.contentTitleId
+        id: this.contentTitleId,
       });
     } else if (typeof title === 'string') {
       titleElement = (
@@ -379,14 +379,17 @@ class DialogInline extends Component {
 
     const ariaHidden = this.props.modal ? true : null;
     const ariaLabelledBy = (typeof title === 'string') ? titleId : null;
-    const dialogGroupID = baseId + '-dialogGroup';
-    const transitionGroupId = baseId + '-transitionGroup';
-    const transitionItemId = baseId + '-transitionItem';
-    const overlayId = baseId + '-overlay';
-    const dialogContentId = baseId + '-dialogContent';
+    const dialogGroupID = `${baseId}-dialogGroup`;
+    const transitionGroupId = `${baseId}-transitionGroup`;
+    const transitionItemId = `${baseId}-transitionItem`;
 
     return (
-      <div id={dialogGroupID} aria-labelledby={ariaLabelledBy} className={className} style={prepareStyles(styles.root)}>
+      <div
+        id={dialogGroupID}
+        aria-labelledby={ariaLabelledBy}
+        className={className}
+        style={prepareStyles(styles.root)}
+      >
         {open &&
           <EventListener
             target="window"
@@ -558,12 +561,6 @@ class Dialog extends Component {
     repositionOnUpdate: true,
   };
 
-  renderLayer = () => {
-    return (
-      <DialogInline {...this.props} />
-    );
-  };
-
   componentWillUpdate(nextProps) {
     if (nextProps.open) {
       this.originalFocus = document.activeElement;
@@ -576,6 +573,12 @@ class Dialog extends Component {
       }, 1);
     }
   }
+
+  renderLayer = () => {
+    return (
+      <DialogInline {...this.props} />
+    );
+  };
 
   render() {
     return (
