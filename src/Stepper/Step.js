@@ -90,7 +90,7 @@ class Step extends Component {
   }
 
   makeBaseId() {
-    return this.id || this.uniqueId;
+    return this.props.id || this.uniqueId;
   }
 
   render() {
