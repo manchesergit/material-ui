@@ -143,7 +143,8 @@ class StepButton extends Component {
 
     const styles = getStyles(this.props, this.context, this.state);
 
-    const child = isLabel(children) ? children : <StepLabel>{children}</StepLabel>;
+    const childLabelId = `${baseId}-stepLabel`;
+    const child = isLabel(children) ? children : <StepLabel id={childLabelId}>{children}</StepLabel>;
 
     return (
       <EnhancedButton

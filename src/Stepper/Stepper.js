@@ -120,8 +120,8 @@ class Stepper extends Component {
     return (
       <div
         id={this.makeBaseId()}
-        style={prepareStyles(Object.assign(styles.root, style))}
-        aria-orientation={this.props.orientation}
+        style={prepareStyles(Object.assign(styles.root, style))}        
+        role="list"
       >
         {steps}
       </div>

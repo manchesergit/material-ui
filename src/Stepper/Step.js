@@ -112,7 +112,7 @@ class Step extends Component {
 
 
     return (
-      <div id={divId} style={prepareStyles(Object.assign(styles.root, style))} {...other}>
+      <div id={divId} role="listitem" style={prepareStyles(Object.assign(styles.root, style))} {...other}>
         {React.Children.map(children, this.renderChild)}
       </div>
     );
