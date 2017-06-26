@@ -222,7 +222,12 @@ class Master extends Component {
           <p style={prepareStyles(styles.browserstack)}>
             {'Thank you to '}
             <a href="https://www.browserstack.com" style={prepareStyles(styles.browserstackLogo)} target="_blank">
-              <img src="http://www.browserstack.com/images/layout/logo.png" height="25" width="auto" alt="browser stack logo"/>
+              <img
+                src="http://www.browserstack.com/images/layout/logo.png"
+                height="25"
+                width="auto"
+                alt="browser stack logo"
+              />
             </a>
             {' for providing real browser testing infrastructure.'}
           </p>
