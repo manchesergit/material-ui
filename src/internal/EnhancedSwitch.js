@@ -113,8 +113,13 @@ class EnhancedSwitch extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${this.props.labelPosition}-${Math.floor(Math.random() * 0xFFFF)}`;
+    const generatedId = Math.floor(Math.random() * 0xFFFF);
+    const uniqueId = `${this.constructor.name}-${this.props.labelPosition}-${generatedId}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+
+    const uniqueLabelId = `${this.constructor.name}-${this.props.labelPosition}
+      -label-${generatedId}`;
+    this.uniqueLabelId = uniqueLabelId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentDidMount() {
@@ -311,7 +316,7 @@ class EnhancedSwitch extends Component {
     }
 
     const labelElement = label && (
-      <label htmlFor={baseId} style={prepareStyles(Object.assign(styles.label, labelStyle))}>
+      <label htmlFor={baseId} style={prepareStyles(Object.assign(styles.label, labelStyle))} id={this.uniqueLabelId}>
         {label}
       </label>
     );
@@ -352,6 +357,7 @@ class EnhancedSwitch extends Component {
         id={checkBoxId}
         role="checkbox"
         aria-label="checkbox"
+        aria-labelledby={this.uniqueLabelId}
         {...other}
         ref="checkbox"
         type={inputType}
