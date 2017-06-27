@@ -98,6 +98,7 @@ class FontIcon extends Component {
         onMouseLeave={this.handleMouseLeave}
         onMouseEnter={this.handleMouseEnter}
         style={prepareStyles(Object.assign(styles.root, style))}
+        role="presentation"
       />
     );
   }
