@@ -386,7 +386,6 @@ class DialogInline extends Component {
     return (
       <div
         id={dialogGroupID}
-        aria-labelledby={ariaLabelledBy}
         className={className}
         style={prepareStyles(styles.root)}
       >
@@ -401,8 +400,6 @@ class DialogInline extends Component {
         <ReactTransitionGroup
           role="dialog"
           aria-live="assertive"
-          aria-labelledby={ariaLabelledBy}
-          aria-describedby={baseId}
           component="div"
           ref="dialogWindow"
           transitionAppear={true}
