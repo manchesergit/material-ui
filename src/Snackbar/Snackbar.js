@@ -132,7 +132,7 @@ class Snackbar extends Component {
           action: nextProps.action,
           open: true,
         });
-      }, 400);
+      }, 500);
     } else {
       const open = nextProps.open;
 
@@ -176,10 +176,13 @@ class Snackbar extends Component {
     }
   };
 
-  // Timer that controls delay before snackbar auto hides
+  /* Timer that controls delay before snackbar auto hides
+  has a minimum length of 10 seconds - for accessibility reasons*/
   setAutoHideTimer() {
-    const autoHideDuration = this.props.autoHideDuration;
-
+    let autoHideDuration = this.props.autoHideDuration;
+    if (autoHideDuration < 10000) {
+      autoHideDuration = 10000;
+    }
     if (autoHideDuration > 0) {
       clearTimeout(this.timerAutoHideId);
       this.timerAutoHideId = setTimeout(() => {
@@ -196,7 +199,7 @@ class Snackbar extends Component {
   setTransitionTimer() {
     this.timerTransitionId = setTimeout(() => {
       this.timerTransitionId = undefined;
-    }, 400);
+    }, 1000);
   }
 
   render() {
