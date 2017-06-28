@@ -62,6 +62,10 @@ class Step extends Component {
     style: PropTypes.object,
   };
 
+  static defaultProps = {
+    children: [],
+  }
+
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
     stepper: PropTypes.object,
@@ -71,7 +75,6 @@ class Step extends Component {
     const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
-
 
   renderChild = (child) => {
     const {
