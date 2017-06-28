@@ -216,7 +216,7 @@ class GridTile extends Component {
             ) : null}
           </div>
           {actionIcon ? (
-            <div style={prepareStyles(styles.actionIcon)}>
+            <div style={prepareStyles(styles.actionIcon)} alt="Action Icon">
               {actionIcon}
             </div>
           ) : null}
