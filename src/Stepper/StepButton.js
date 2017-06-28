@@ -64,6 +64,11 @@ class StepButton extends Component {
      * If not provided the class name along with appropriate properties and a random number will be used.
      */
     id: PropTypes.string,
+    /**
+    * The id to use for the text in children.
+    * If this is not provided a value will be generated based on the ID for this object.
+    */
+    labelledById: PropTypes.string,
     /** @ignore */
     last: PropTypes.bool,
     /** @ignore */
@@ -131,6 +136,7 @@ class StepButton extends Component {
       icon,
       iconContainerStyle,
       id,
+      labelledById,
       last, // eslint-disable-line no-unused-vars
       onMouseEnter, // eslint-disable-line no-unused-vars
       onMouseLeave, // eslint-disable-line no-unused-vars
@@ -143,7 +149,8 @@ class StepButton extends Component {
 
     const styles = getStyles(this.props, this.context, this.state);
 
-    const child = isLabel(children) ? children : <StepLabel>{children}</StepLabel>;
+    const childLabelId = `${baseId}-stepLabel`;
+    const child = isLabel(children) ? children : <StepLabel id={childLabelId} labelledById={labelledById}>{children}</StepLabel>; // eslint-disable-line max-len
 
     return (
       <EnhancedButton

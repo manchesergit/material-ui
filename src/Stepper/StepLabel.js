@@ -105,6 +105,7 @@ const StepLabel = (props, context) => {
     id,
     icon: userIcon,
     iconContainerStyle,
+    labelledById,
     last, // eslint-disable-line no-unused-vars
     style,
     ...other
@@ -118,17 +119,25 @@ const StepLabel = (props, context) => {
   const styles = getStyles(props, context);
   const icon = renderIcon(completed, userIcon, styles, baseId);
 
-  const rootSpanId = `${baseId}-rootSpan`;
-  const iconSpanId = `${baseId}-iconSpan`;
+  const rootSpanId = `${baseId}-labelRootSpan`;
+  const iconSpanId = `${baseId}-labelIconSpan`;
+  const labelledBy = labelledById || `${baseId}-label`;
 
   return (
-    <span id={rootSpanId} style={prepareStyles(Object.assign(styles.root, style))} {...other}>
+    <span
+      id={rootSpanId}
+      aria-labelledby={labelledBy}
+      style={prepareStyles(Object.assign(styles.root, style))}
+      {...other}
+    >
       {icon && (
         <span id={iconSpanId} style={prepareStyles(Object.assign(styles.iconContainer, iconContainerStyle))}>
           {icon}
         </span>
       )}
-      {children}
+      <div id={labelledBy}>
+        {children}
+      </div>
     </span>
   );
 };
@@ -170,6 +179,11 @@ StepLabel.propTypes = {
    * If not provided the class name along with appropriate properties and a random number will be used.
    */
   id: PropTypes.string,
+  /**
+  * The id to use for the text in children.
+  * If this is not provided a value will be generated based on the ID for this object.
+  */
+  labelledById: PropTypes.string,
   /**
    * @ignore
    */

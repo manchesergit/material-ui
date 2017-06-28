@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import StepLabel from './StepLabel';
+import StepButton from './StepButton';
 
 const getStyles = ({index}, {stepper}) => {
   const {orientation} = stepper;
@@ -70,6 +72,7 @@ class Step extends Component {
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
+
   renderChild = (child) => {
     const {
       active,
@@ -83,14 +86,48 @@ class Step extends Component {
     const icon = index + 1;
     const childId = this.makeBaseId() + icon;
 
-    return React.cloneElement(child, Object.assign(
-      {active, completed, disabled, icon, last, id},
-      child.props, {id: childId}
-    ));
+    if (this.classCanBeLabelled(child)) {
+      const ariaLabelledBy = this.makeLabelId();
+
+      return React.cloneElement(child, Object.assign(
+        {active, completed, disabled, icon, last, id},
+        child.props, {id: childId}, {labelledById: ariaLabelledBy}
+      ));
+    } else {
+      return React.cloneElement(child, Object.assign(
+        {active, completed, disabled, icon, last, id},
+        child.props, {id: childId}
+      ));
+    }
+  }
+
+  /**
+   * check if any of the children of this object can be used as
+   */
+  canBeLabelled() {
+    for (let i = 0; i < this.props.children.length; i++) {
+      if (this.classCanBeLabelled(this.props.children[i])) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+  * check if the given child object can be used as a labelled by id for this object
+  */
+  classCanBeLabelled(child) {
+    const labelledByClasses = [StepLabel, StepButton]; // if any other class can be used for labelled by, add it here
+    return labelledByClasses.indexOf(child.type) !== -1;
   }
 
   makeBaseId() {
-    return this.id || this.uniqueId;
+    return this.props.id || this.uniqueId;
+  }
+
+  makeLabelId() {
+    return `${this.makeBaseId()}-LabelledBy`;
   }
 
   render() {
@@ -109,10 +146,16 @@ class Step extends Component {
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
     const divId = `${this.makeBaseId()}-stepDiv`;
-
+    const labelId = this.canBeLabelled() ? this.makeLabelId() : null;
 
     return (
-      <div id={divId} style={prepareStyles(Object.assign(styles.root, style))} {...other}>
+      <div
+        id={divId}
+        role="listitem"
+        aria-labelledby={labelId}
+        style={prepareStyles(Object.assign(styles.root, style))}
+        {...other}
+      >
         {React.Children.map(children, this.renderChild)}
       </div>
     );
