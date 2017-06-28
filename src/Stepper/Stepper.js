@@ -71,7 +71,7 @@ class Stepper extends Component {
   }
 
   makeBaseId() {
-    return this.id || this.uniqueId;
+    return this.props.id || this.uniqueId;
   }
 
   render() {
@@ -105,7 +105,7 @@ class Stepper extends Component {
         controlProps.disabled = true;
       }
 
-      controlProps.id = `${this.makeBaseId()}-Step-${index}`;
+      const childId = `${this.makeBaseId()}-Step-${index + 1}`;   // add 1 so the index isn't zero based
 
       if (index + 1 === numChildren) {
         controlProps.last = true;
@@ -113,12 +113,16 @@ class Stepper extends Component {
 
       return [
         index > 0 && connector,
-        React.cloneElement(step, Object.assign(controlProps, step.props)),
+        React.cloneElement(step, Object.assign(controlProps, step.props, {id: childId})),
       ];
     });
 
     return (
-      <div id={this.makeBaseId()} style={prepareStyles(Object.assign(styles.root, style))}>
+      <div
+        id={this.makeBaseId()}
+        style={prepareStyles(Object.assign(styles.root, style))}        
+        role="list"
+      >
         {steps}
       </div>
     );
