@@ -162,7 +162,7 @@ class EnhancedButton extends Component {
     } = this.props;
     const {isKeyboardFocused} = this.state;
     const focusRippleId = `${idBase}-focusRipple`;
-    const touchRippleId = `${idBase}--touchRipple`;
+    const touchRippleId = `${idBase}-touchRipple`;
 
     // Focus Ripple
     const focusRipple = isKeyboardFocused && !disabled && !disableFocusRipple && !disableKeyboardFocus ? (
