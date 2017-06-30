@@ -37,6 +37,7 @@ const TextFieldLabel = (props) => {
 
   const {prepareStyles} = muiTheme;
   const styles = getStyles(props);
+  const roleLabel = 'textbox';
 
   const uniqueId = `TextFieldLabel-${className}-${Math.floor(Math.random() * 0xFFFF)}`;
   const baseId = id || uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
@@ -44,7 +45,7 @@ const TextFieldLabel = (props) => {
   return (
     <label
       id={baseId}
-      role="Tooltip"
+      role={roleLabel}
       className={className}
       style={prepareStyles(styles.root)}
       htmlFor={htmlFor}
