@@ -150,7 +150,7 @@ class EnhancedSwitch extends Component {
   }
 
   isSwitched() {
-    return this.refs.checkbox.checked;
+    return this.props.hasOwnProperty('checked') ? this.refs.checkbox.checked : false;
   }
 
   // no callback here because there is no event
@@ -358,6 +358,7 @@ class EnhancedSwitch extends Component {
         role="checkbox"
         aria-label="checkbox"
         aria-labelledby={this.uniqueLabelId}
+        aria-checked={this.isSwitched()}
         {...other}
         ref="checkbox"
         type={inputType}
