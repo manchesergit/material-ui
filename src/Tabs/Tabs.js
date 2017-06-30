@@ -225,7 +225,6 @@ class Tabs extends Component {
         onTouchTap: this.handleTabTouchTap,
         role: 'tab',
         'aria-controls': tabContentId,
-        'aria-selected': isSelected,
       });
     });
 
