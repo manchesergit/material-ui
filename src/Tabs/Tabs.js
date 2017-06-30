@@ -1,7 +1,6 @@
 import React, {Component, createElement, cloneElement, Children, isValidElement} from 'react';
 import PropTypes from 'prop-types';
 import warning from 'warning';
-import uniqueId from 'lodash.uniqueid';
 import TabTemplate from './TabTemplate';
 import InkBar from './InkBar';
 
@@ -94,6 +93,9 @@ class Tabs extends Component {
         initialIndex :
         0,
     });
+
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentWillReceiveProps(newProps, nextContext) {
@@ -108,8 +110,6 @@ class Tabs extends Component {
 
     this.setState(newState);
   }
-
-  tabPanelId = uniqueId('tabPanel_');
 
   getTabs(props = this.props) {
     const tabs = [];
@@ -201,8 +201,8 @@ class Tabs extends Component {
         does not have a value prop. Needs value if Tabs is going
         to be a controlled component.`);
 
-      const tabId = `${this.tabPanelId}_tab_${index}`;
-      const tabContentId = `${this.tabPanelId}_tabContent_${index}`;
+      const tabId = `${this.uniqueId}_tab_${index}`;
+      const tabContentId = `${this.uniqueId}_tabContent_${index}`;
       const isSelected = this.getSelected(tab, index);
 
       tabContent.push(tab.props.children ?
@@ -224,7 +224,7 @@ class Tabs extends Component {
         width: `${width}%`,
         onTouchTap: this.handleTabTouchTap,
         role: 'tab',
-        'aria-controls': tabContentId,
+        tabContainerId: this.uniqueId,
       });
     });
 
@@ -241,7 +241,11 @@ class Tabs extends Component {
 
     return (
       <div style={prepareStyles(Object.assign({}, style))} {...other}>
-        <div role="tablist" style={prepareStyles(Object.assign(styles.tabItemContainer, tabItemContainerStyle))}>
+        <div
+          id={this.uniqueId}
+          role="tablist"
+          style={prepareStyles(Object.assign(styles.tabItemContainer, tabItemContainerStyle))}
+        >
           {tabs}
         </div>
         <div style={{width: inkBarContainerWidth}}>
