@@ -110,6 +110,7 @@ class EnhancedSwitch extends Component {
 
   state = {
     isKeyboardFocused: false,
+    isChecked: false,
   };
 
   componentWillMount() {
@@ -149,10 +150,6 @@ class EnhancedSwitch extends Component {
     }
   }
 
-  isSwitched() {
-    return this.props.hasOwnProperty('checked') ? this.refs.checkbox.checked : false;
-  }
-
   // no callback here because there is no event
   setSwitched(newSwitchedValue) {
     if (!this.props.hasOwnProperty('checked') || this.props.checked === false) {
@@ -176,6 +173,7 @@ class EnhancedSwitch extends Component {
     });
 
     const isInputChecked = this.refs.checkbox.checked;
+    this.setState({isChecked: isInputChecked});
 
     if (!this.props.hasOwnProperty('checked') && this.props.onParentShouldUpdate) {
       this.props.onParentShouldUpdate(isInputChecked);
@@ -358,6 +356,7 @@ class EnhancedSwitch extends Component {
         role="checkbox"
         aria-label="checkbox"
         aria-labelledby={this.uniqueLabelId}
+        aria-checked={this.state.isChecked}
         {...other}
         ref="checkbox"
         type={inputType}
