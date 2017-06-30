@@ -358,7 +358,6 @@ class EnhancedSwitch extends Component {
         role="checkbox"
         aria-label="checkbox"
         aria-labelledby={this.uniqueLabelId}
-        aria-checked={this.isSwitched()}
         {...other}
         ref="checkbox"
         type={inputType}
