@@ -40,6 +40,7 @@ class TimePicker extends Component {
      * Tells the component to display the picker in `ampm` (12hr) format or `24hr` format.
      */
     format: PropTypes.oneOf(['ampm', '24hr']),
+    id: PropTypes.string,
     /**
      * How many minutes should be added/subtracted when moving the clock pointer.
      */
@@ -118,6 +119,13 @@ class TimePicker extends Component {
     this.setState({
       time: this.isControlled() ? this.getControlledTime() : this.props.defaultTime,
     });
+    const generatedId = Math.floor(Math.random() * 0xFFFF);
+    const uniqueId = `${this.constructor.name}-${generatedId}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+
+    const uniqueLabelId = `${this.constructor.name}-label-${generatedId}`;
+    this.uniqueLabelId = uniqueLabelId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -202,12 +210,18 @@ class TimePicker extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
     const {time} = this.state;
+    const baseId = this.uniqueId;
+    const timePickerHintTextId = `${baseId}-timePickerHintText`;
+    const timePickerDialogId = `${baseId}-timePickerDialog`;
 
     return (
       <div style={prepareStyles(Object.assign({}, style))}>
         <TextField
           {...other}
+          hintTextId={timePickerHintTextId}
           style={textFieldStyle}
+          aria-label="Time Picker"
+          aria-labelledby={timePickerHintTextId}
           ref="input"
           value={time === emptyTime ? null : formatTime(time, format, pedantic)}
           onFocus={this.handleFocusInput}
@@ -215,6 +229,7 @@ class TimePicker extends Component {
         />
         <TimePickerDialog
           ref="dialogWindow"
+          id={timePickerDialogId}
           bodyStyle={dialogBodyStyle}
           initialTime={this.state.dialogTime}
           onAccept={this.handleAcceptDialog}
