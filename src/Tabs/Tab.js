@@ -126,7 +126,6 @@ class Tab extends Component {
 
     return (
       <EnhancedButton
-        role="button"
         aria-label="Tab Button"
         {...other}
         style={Object.assign(styles.root, style)}
@@ -135,6 +134,7 @@ class Tab extends Component {
         focusRippleOpacity={rippleOpacity}
         touchRippleOpacity={rippleOpacity}
         onTouchTap={this.handleTouchTap}
+        overrideRole='tab'
       >
         <div style={Object.assign(styles.button, buttonStyle)} >
           {iconElement}

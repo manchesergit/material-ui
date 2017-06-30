@@ -59,6 +59,7 @@ class EnhancedButton extends Component {
     onKeyUp: PropTypes.func,
     onKeyboardFocus: PropTypes.func,
     onTouchTap: PropTypes.func,
+    overrideRole: PropTypes.string,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     touchRippleColor: PropTypes.string,
@@ -281,6 +282,7 @@ class EnhancedButton extends Component {
       onKeyDown, // eslint-disable-line no-unused-vars
       onKeyboardFocus, // eslint-disable-line no-unused-vars
       onTouchTap, // eslint-disable-line no-unused-vars
+      overrideRole,
       style,
       tabIndex,
       type,
@@ -331,9 +333,11 @@ class EnhancedButton extends Component {
       );
     }
 
+    const ariaRole = overrideRole || 'button';
+
     const buttonProps = {
       ...other,
-      role: 'button',
+      role: ariaRole,
       style: prepareStyles(mergedStyles),
       ref: (node) => this.button = node,
       disabled: disabled,
