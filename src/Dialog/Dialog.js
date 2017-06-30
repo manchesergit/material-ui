@@ -378,7 +378,6 @@ class DialogInline extends Component {
     }
 
     const ariaHidden = this.props.modal ? true : null;
-    const ariaLabelledBy = (typeof title === 'string') ? titleId : null;
     const dialogGroupID = `${baseId}-dialogGroup`;
     const transitionGroupId = `${baseId}-transitionGroup`;
     const transitionItemId = `${baseId}-transitionItem`;

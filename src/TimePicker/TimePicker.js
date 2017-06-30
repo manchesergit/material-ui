@@ -122,7 +122,6 @@ class TimePicker extends Component {
     const generatedId = Math.floor(Math.random() * 0xFFFF);
     const uniqueId = `${this.constructor.name}-${generatedId}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
 
     const uniqueLabelId = `${this.constructor.name}-label-${generatedId}`;
     this.uniqueLabelId = uniqueLabelId.replace(/[^A-Za-z0-9-]/gi, '');
