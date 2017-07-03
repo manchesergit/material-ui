@@ -47,6 +47,10 @@ class DatePicker extends Component {
      */
     dialogContainerStyle: PropTypes.object,
     /**
+     * Disable the ability to use the escape key to dismiss the date picker when opened in dialog mode.
+     */
+    disableDismissWithEscapeOnDialog: PropTypes.bool,
+    /**
      * Disables the year selection in the date picker.
      */
     disableYearSelection: PropTypes.bool,
@@ -162,6 +166,7 @@ class DatePicker extends Component {
     autoOk: false,
     container: 'dialog',
     disabled: false,
+    disableDismissWithEscapeOnDialog: false,
     disableYearSelection: false,
     firstDayOfWeek: 1,
     hideCalendarDate: false,
@@ -303,6 +308,7 @@ class DatePicker extends Component {
       container,
       defaultDate, // eslint-disable-line no-unused-vars
       dialogContainerStyle,
+      disableDismissWithEscapeOnDialog,
       disableYearSelection,
       firstDayOfWeek,
       formatDate: formatDateProp,
@@ -340,6 +346,7 @@ class DatePicker extends Component {
           cancelLabel={cancelLabel}
           container={container}
           containerStyle={dialogContainerStyle}
+          disableEscapeKeyForDialogs={disableDismissWithEscapeOnDialog}
           disableYearSelection={disableYearSelection}
           firstDayOfWeek={firstDayOfWeek}
           initialDate={this.state.dialogDate}
