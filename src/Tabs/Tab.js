@@ -112,7 +112,6 @@ class Tab extends Component {
       ...other
     } = this.props;
 
-    console.log(tabContainerId);
     const styles = getStyles(this.props, this.context);
 
     let iconElement;
@@ -140,7 +139,7 @@ class Tab extends Component {
         focusRippleOpacity={rippleOpacity}
         touchRippleOpacity={rippleOpacity}
         onTouchTap={this.handleTouchTap}
-        overrideRole='tab'
+        overrideRole="tab"
         aria-controls={tabContainerId}
       >
         <div style={Object.assign(styles.button, buttonStyle)} >
