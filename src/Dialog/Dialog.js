@@ -177,6 +177,7 @@ class DialogInline extends Component {
     open: PropTypes.bool.isRequired,
     overlayClassName: PropTypes.string,
     overlayStyle: PropTypes.object,
+    overrideModalEscKey: PropTypes.bool,
     paperClassName: PropTypes.string,
     paperProps: PropTypes.object,
     repositionOnUpdate: PropTypes.bool,
@@ -272,7 +273,7 @@ class DialogInline extends Component {
   }
 
   requestClose(buttonClicked) {
-    if (!buttonClicked && this.props.modal) {
+    if (!buttonClicked && (this.props.modal && this.props.overrideModalEscKey)) {
       return;
     }
 
@@ -517,6 +518,10 @@ class Dialog extends Component {
      */
     overlayStyle: PropTypes.object,
     /**
+    * Overrides the use of the escape key for cancelling a modal dialog
+    */
+    overrideModalEscKey: PropTypes.bool,
+    /**
      * The CSS class name of the `Paper` element.
      */
     paperClassName: PropTypes.string,
@@ -554,6 +559,7 @@ class Dialog extends Component {
     autoDetectWindowHeight: true,
     autoScrollBodyContent: false,
     modal: false,
+    overrideModalEscKey: false,
     repositionOnUpdate: true,
   };
 
