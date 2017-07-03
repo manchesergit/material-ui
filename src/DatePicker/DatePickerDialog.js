@@ -16,6 +16,7 @@ class DatePickerDialog extends Component {
     cancelLabel: PropTypes.node,
     container: PropTypes.oneOf(['dialog', 'inline']),
     containerStyle: PropTypes.object,
+    disableEscapeKeyForDialogs: PropTypes.bool,
     disableYearSelection: PropTypes.bool,
     firstDayOfWeek: PropTypes.number,
     hideCalendarDate: PropTypes.bool,
@@ -37,6 +38,7 @@ class DatePickerDialog extends Component {
 
   static defaultProps = {
     DateTimeFormat: dateTimeFormat,
+    disableEscapeKeyForDialogs: false,
     cancelLabel: 'Cancel',
     container: 'dialog',
     locale: 'en-US',
@@ -123,6 +125,7 @@ class DatePickerDialog extends Component {
       cancelLabel,
       container,
       containerStyle,
+      disableEscapeKeyForDialogs,
       disableYearSelection,
       initialDate,
       firstDayOfWeek,
@@ -162,6 +165,7 @@ class DatePickerDialog extends Component {
     const containerId = `${componentId}-${container}Container`;
     const calendarId = `${componentId}-calendar`;
     const eventTarget = modal ? divId : 'window';
+    const escOverride = modal ? disableEscapeKeyForDialogs : null
 
     return (
       <div ref="root" id={divId} {...other}>
@@ -174,6 +178,7 @@ class DatePickerDialog extends Component {
           repositionOnUpdate={true}
           open={open}
           onRequestClose={this.handleRequestClose}
+          overrideModalEscKey={escOverride}
           style={Object.assign(styles.dialogBodyContent, containerStyle)}
           id={containerId}
           modal={modal}

@@ -71,6 +71,10 @@ class Tab extends Component {
      */
     style: PropTypes.object,
     /**
+     * The ID of the container that holds this tab
+     */
+    tabContainerId: PropTypes.string,
+    /**
      * If value prop passed to Tabs component, this value prop is also required.
      * It assigns a value to the tab so that it can be selected by the Tabs.
      */
@@ -103,10 +107,12 @@ class Tab extends Component {
       buttonStyle,
       style,
       value, // eslint-disable-line no-unused-vars
+      tabContainerId,
       width, // eslint-disable-line no-unused-vars
       ...other
     } = this.props;
 
+    console.log(tabContainerId);
     const styles = getStyles(this.props, this.context);
 
     let iconElement;
@@ -126,7 +132,6 @@ class Tab extends Component {
 
     return (
       <EnhancedButton
-        role="button"
         aria-label="Tab Button"
         {...other}
         style={Object.assign(styles.root, style)}
@@ -135,6 +140,8 @@ class Tab extends Component {
         focusRippleOpacity={rippleOpacity}
         touchRippleOpacity={rippleOpacity}
         onTouchTap={this.handleTouchTap}
+        overrideRole='tab'
+        aria-controls={tabContainerId}
       >
         <div style={Object.assign(styles.button, buttonStyle)} >
           {iconElement}
