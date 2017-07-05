@@ -119,7 +119,7 @@ class EnhancedSwitch extends Component {
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
 
     const uniqueLabelId = `${this.constructor.name}-${this.props.labelPosition}
-      -label-${generatedId}`;
+      -${generatedId}`;
     this.uniqueLabelId = uniqueLabelId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
@@ -306,6 +306,7 @@ class EnhancedSwitch extends Component {
     const trackStyleId = `${baseId}-trackStyle`;
     const paperStyleId = `${baseId}-paperStyle`;
     const styleControlId = `${baseId}-styleControl`;
+    const labelId = `${baseId}-label`;
 
 
     if (thumbStyle) {
@@ -314,7 +315,7 @@ class EnhancedSwitch extends Component {
     }
 
     const labelElement = label && (
-      <label htmlFor={baseId} style={prepareStyles(Object.assign(styles.label, labelStyle))} id={this.uniqueLabelId}>
+      <label htmlFor={baseId} style={prepareStyles(Object.assign(styles.label, labelStyle))} id={labelId}>
         {label}
       </label>
     );
@@ -361,7 +362,7 @@ class EnhancedSwitch extends Component {
         ref="checkbox"
         type={inputType}
         style={prepareStyles(Object.assign(styles.input, inputStyle))}
-        name={name}
+        name={name, checkBoxId}
         value={value}
         disabled={disabled}
         onBlur={this.handleBlur}

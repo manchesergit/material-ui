@@ -312,6 +312,7 @@ class FloatingActionButton extends Component {
           {...buttonEventHandlers}
           ref="container"
           disabled={disabled}
+          aria-label="Floating Action Button"
           style={Object.assign(
             styles.container,
             this.props.mini && styles.containerWhenMini,

@@ -7,6 +7,7 @@ import transitions from '../styles/transitions';
 import Overlay from '../internal/Overlay';
 import RenderToLayer from '../internal/RenderToLayer';
 import Paper from '../Paper';
+import DomUtils from '../utils/dom'; // used for working out if the current focus is a child of this
 
 import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 
@@ -294,19 +295,39 @@ class DialogInline extends Component {
         this.requestClose(false);
         break;
       case 'tab':
-        if (!this.refs.dialogContainer.contains(document.activeElement)) {
-          const actionWrap = this.refs.dialogActions.children[0];
-          const button = actionWrap.querySelector('button');
-
-          (button || actionWrap).focus();
-          event.preventDefault();
-        }
+        this.moveActive();
         break;
     }
   };
 
   handleResize = () => {
     this.positionDialog();
+  };
+
+  // this is to make sure we can get the id no matter where in the code we are
+  makeIdValue() {
+    return this.props.id || this.uniqueId;
+  }
+
+  // this is to make sure we have the id for the paper element (the actual dialog) so we know where to focus to
+  makePaperId() {
+    const id = this.makeIdValue();
+    return `${id}-paper`;
+  }
+
+  /**
+   * check if the currently focused element is a child of this
+   * if its not, then move the focus back to the paper element that makes the base of the dialog
+   */
+  moveActive() {
+    const id = this.makePaperId();
+    const dialogWindow = document.getElementById(id);
+    const insideWindow = DomUtils.isDescendant(dialogWindow, document.activeElement);
+
+    if (!insideWindow) {
+      setTimeout(() => document.activeElement.blur(), 1);
+      setTimeout(() => dialogWindow.focus(), 1);
+    }
   };
 
   render() {
@@ -335,7 +356,8 @@ class DialogInline extends Component {
       style,
     } = this.props;
 
-    const baseId = id || this.uniqueId;
+
+    const baseId = this.makeIdValue();
     const titleId = `${baseId}-title`;
 
     const {prepareStyles} = this.context.muiTheme;
@@ -382,6 +404,7 @@ class DialogInline extends Component {
     const dialogGroupID = `${baseId}-dialogGroup`;
     const transitionGroupId = `${baseId}-transitionGroup`;
     const transitionItemId = `${baseId}-transitionItem`;
+    const paperId = this.makePaperId();
 
     return (
       <div
@@ -415,7 +438,13 @@ class DialogInline extends Component {
               className={contentClassName}
               style={styles.content}
             >
-              <Paper className={paperClassName} zDepth={4} {...paperProps}>
+              <Paper
+                id={paperId}
+                className={paperClassName}
+                zDepth={4}
+                tabIndex="0"
+                {...paperProps}
+              >
                 {titleElement}
                 <div
                   ref="dialogContent"
