@@ -8,6 +8,7 @@ import propTypes from '../utils/propTypes';
 import Paper from '../Paper';
 import throttle from 'lodash.throttle';
 import PopoverAnimationDefault from './PopoverAnimationDefault';
+import DomUtils from '../utils/dom'; // used for working out if the current focus is a child of this
 
 const styles = {
   root: {
@@ -140,6 +141,11 @@ class Popover extends Component {
     };
   }
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   componentDidMount() {
     this.setPlacement();
   }
@@ -255,7 +261,7 @@ class Popover extends Component {
         {...other}
         open={this.state.open && !this.state.closing}
       >
-        <div
+        <div id={this.uniqueId} tabIndex="0"
           onKeyDown={this.handleKeyDown}
         >
           {children}
@@ -440,6 +446,30 @@ class Popover extends Component {
     return targetPosition;
   }
 
+  handleKeyUp = (event) => {
+    switch (keycode(event)) {
+      case 'tab':
+        if (this.props.modal && this.state.open) {
+          this.moveActive();
+        }
+        break;
+    }
+  };
+
+  /**
+   * check if the currently focused element is a child of this
+   * if its not, then move the focus back to the paper element that makes the base of the dialog
+   * TODO : this is shared code with the dialog, its should be a common function
+   */
+  moveActive() {
+    const dialogWindow = document.getElementById(this.uniqueId);
+    const insideWindow = DomUtils.isDescendant(dialogWindow, document.activeElement);
+
+    if (!insideWindow) {
+      setTimeout(() => document.activeElement.blur(), 1);
+      setTimeout(() => dialogWindow.focus(), 1);
+    }
+  };
 
   render() {
     return (
@@ -448,6 +478,7 @@ class Popover extends Component {
           target="window"
           onScroll={this.handleScroll}
           onResize={this.handleResize}
+          onKeyUp={this.handleKeyUp}
         />
         <RenderToLayer
           ref="layer"
