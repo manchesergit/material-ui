@@ -165,7 +165,7 @@ class DatePickerDialog extends Component {
     const containerId = `${componentId}-${container}Container`;
     const calendarId = `${componentId}-calendar`;
     const eventTarget = modal ? divId : 'window';
-    const escOverride = modal ? disableEscapeKeyForDialogs : null
+    const escOverride = modal ? disableEscapeKeyForDialogs : null;
 
     return (
       <div ref="root" id={divId} {...other}>
