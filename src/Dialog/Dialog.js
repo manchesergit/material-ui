@@ -328,13 +328,12 @@ class DialogInline extends Component {
       setTimeout(() => document.activeElement.blur(), 1);
       setTimeout(() => dialogWindow.focus(), 1);
     }
-  };
+  }
 
   render() {
     window.prevActiveElement = document.activeElement;
 
     const {
-      id,
       actions,
       actionsContainerClassName,
       actionsContainerStyle,
