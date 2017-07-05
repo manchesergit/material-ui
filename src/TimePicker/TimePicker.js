@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import TimePickerDialog from './TimePickerDialog';
 import TextField from '../TextField';
 import {formatTime} from './timeUtils';
+import EventListener from 'react-event-listener';
+import keycode from 'keycode';
 
 const emptyTime = new Date();
 emptyTime.setHours(0);
@@ -157,7 +159,6 @@ class TimePicker extends Component {
   };
 
   handleFocusInput = (event) => {
-    event.target.blur();
     if (this.props.onFocus) {
       this.props.onFocus(event);
     }
@@ -187,6 +188,12 @@ class TimePicker extends Component {
     return result;
   }
 
+  handleKeyEvent = (event) => {
+    if (!this.props.disabled && (keycode(event) === 'enter' || keycode(event) === 'space')) {
+      this.openDialog();
+    }
+  };
+
   render() {
     const {
       autoOk,
@@ -210,11 +217,13 @@ class TimePicker extends Component {
     const {prepareStyles} = this.context.muiTheme;
     const {time} = this.state;
     const baseId = this.uniqueId;
+    const divId = `${baseId}-div`;
     const timePickerHintTextId = `${baseId}-timePickerHintText`;
     const timePickerDialogId = `${baseId}-timePickerDialog`;
 
     return (
-      <div style={prepareStyles(Object.assign({}, style))}>
+      <div id={divId} style={prepareStyles(Object.assign({}, style))}>
+        <EventListener target={divId} onKeyDown={this.handleKeyEvent} />
         <TextField
           {...other}
           hintTextId={timePickerHintTextId}
