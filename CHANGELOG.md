@@ -1,5 +1,27 @@
 ## HEAD
 
+## 0.18.6
+###### _Jul 4, 2017_
+
+Big thanks to the 7 contributors who made this release possible.
+As always, we are focusing on bug fixes.
+
+##### Component Fixes / Enhancements
+
+- [Chip] Support overriding Delete Icon Style (#7320) @zentron
+- [AutoComplete] Fix issue with popover positioning on iOS (#7333) @mattp94
+- [ListItem] Apply paddingRight to automatic expand icon (#7313) @thehig
+- [DatePicker] Use the same background color as the TimePicker (#7295) @R4DIC4L
+- [TextField] Fix unfocused state when disabled (#7283) @xaviergonz
+
+##### Docs
+
+- [docs] Fix v1 promo styling (#7289) @KenLSM
+
+##### Core
+
+N.A
+
 ## 0.18.5
 ###### _Jun 28, 2017_
 
