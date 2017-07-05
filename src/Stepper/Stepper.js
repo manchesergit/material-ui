@@ -120,7 +120,7 @@ class Stepper extends Component {
     return (
       <div
         id={this.makeBaseId()}
-        style={prepareStyles(Object.assign(styles.root, style))}        
+        style={prepareStyles(Object.assign(styles.root, style))}
         role="list"
       >
         {steps}
