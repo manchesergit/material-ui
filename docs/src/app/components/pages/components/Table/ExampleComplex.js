@@ -96,7 +96,7 @@ export default class TableExampleComplex extends Component {
             enableSelectAll={this.state.enableSelectAll}
           >
             <TableRow>
-              <TableHeaderColumn colSpan="3" tooltip="Super Header" style={{textAlign: 'center'}}>
+              <TableHeaderColumn colSpan="4" tooltip="Super Header" style={{textAlign: 'center'}}>
                 Super Header
               </TableHeaderColumn>
             </TableRow>

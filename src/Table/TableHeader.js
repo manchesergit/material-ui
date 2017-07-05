@@ -94,9 +94,6 @@ class TableHeader extends Component {
 
   createSuperHeaderRow(child, props) {
     const children = [];
-    if (this.props.adjustForCheckbox) {
-      children.push(this.getCheckboxPlaceholder(props));
-    }
     React.Children.forEach(child.props.children, (child) => {
       children.push(child);
     });
