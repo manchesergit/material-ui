@@ -140,7 +140,7 @@ class TimePickerDialog extends Component {
         onRequestClose={this.handleRequestClose}
       >
         {open &&
-          <EventListener target="window" onKeyUp={this.handleKeyUp} />
+          <EventListener target="window" />
         }
         {open &&
           <Clock
