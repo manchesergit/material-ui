@@ -58,6 +58,11 @@ class Popover extends Component {
      */
     className: PropTypes.string,
     /**
+     * Should this popover behave like a modal dialog.
+     * Setting this to true will confine the next selectable control to children of this.
+     */
+    modal: PropTypes.bool,
+    /**
      * Callback function fired when the popover is requested to be closed.
      *
      * @param {string} reason The reason for the close request. Possibles values
@@ -105,6 +110,7 @@ class Popover extends Component {
     animated: true,
     autoCloseWhenOffScreen: true,
     canAutoPosition: true,
+    modal: false,
     onRequestClose: () => {},
     open: false,
     returnFocusOnBlur: true,

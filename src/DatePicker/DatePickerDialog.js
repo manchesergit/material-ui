@@ -159,7 +159,7 @@ class DatePickerDialog extends Component {
     };
 
     const Container = (container === 'inline' ? Popover : Dialog);
-    const modal = (container === 'inline' ? null : true);
+    const modal = true;
     const componentId = id || this.uniqueId;
     const divId = `${componentId}-div`;
     const containerId = `${componentId}-${container}Container`;
