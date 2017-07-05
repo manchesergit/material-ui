@@ -261,7 +261,9 @@ class Popover extends Component {
         {...other}
         open={this.state.open && !this.state.closing}
       >
-        <div id={this.uniqueId} tabIndex="0"
+        <div
+          id={this.uniqueId}
+          tabIndex="0"
           onKeyDown={this.handleKeyDown}
         >
           {children}
@@ -469,7 +471,7 @@ class Popover extends Component {
       setTimeout(() => document.activeElement.blur(), 1);
       setTimeout(() => dialogWindow.focus(), 1);
     }
-  };
+  }
 
   render() {
     return (
