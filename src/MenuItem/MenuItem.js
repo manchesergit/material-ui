@@ -112,6 +112,9 @@ class MenuItem extends Component {
      * The `SvgIcon` or `FontIcon` to be displayed on the left side.
      */
     leftIcon: PropTypes.element,
+    /**
+     * The aria-label for the menu button which will be a string
+     */
     menuAriaLabel: PropTypes.string,
     /**
      * `MenuItem` elements to nest within the menu item.
