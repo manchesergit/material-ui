@@ -8,6 +8,7 @@ import propTypes from '../utils/propTypes';
 import Paper from '../Paper';
 import throttle from 'lodash.throttle';
 import PopoverAnimationDefault from './PopoverAnimationDefault';
+import DomUtils from '../utils/dom'; // used for working out if the current focus is a child of this
 
 const styles = {
   root: {
@@ -58,6 +59,11 @@ class Popover extends Component {
      */
     className: PropTypes.string,
     /**
+     * Should this popover behave like a modal dialog.
+     * Setting this to true will confine the next selectable control to children of this.
+     */
+    modal: PropTypes.bool,
+    /**
      * Callback function fired when the popover is requested to be closed.
      *
      * @param {string} reason The reason for the close request. Possibles values
@@ -105,6 +111,7 @@ class Popover extends Component {
     animated: true,
     autoCloseWhenOffScreen: true,
     canAutoPosition: true,
+    modal: false,
     onRequestClose: () => {},
     open: false,
     returnFocusOnBlur: true,
@@ -132,6 +139,11 @@ class Popover extends Component {
       open: props.open,
       closing: false,
     };
+  }
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentDidMount() {
@@ -250,6 +262,8 @@ class Popover extends Component {
         open={this.state.open && !this.state.closing}
       >
         <div
+          id={this.uniqueId}
+          tabIndex="0"
           onKeyDown={this.handleKeyDown}
         >
           {children}
@@ -434,6 +448,30 @@ class Popover extends Component {
     return targetPosition;
   }
 
+  handleKeyUp = (event) => {
+    switch (keycode(event)) {
+      case 'tab':
+        if (this.props.modal && this.state.open) {
+          this.moveActive();
+        }
+        break;
+    }
+  };
+
+  /**
+   * check if the currently focused element is a child of this
+   * if its not, then move the focus back to the paper element that makes the base of the dialog
+   * TODO : this is shared code with the dialog, its should be a common function
+   */
+  moveActive() {
+    const dialogWindow = document.getElementById(this.uniqueId);
+    const insideWindow = DomUtils.isDescendant(dialogWindow, document.activeElement);
+
+    if (!insideWindow) {
+      setTimeout(() => document.activeElement.blur(), 1);
+      setTimeout(() => dialogWindow.focus(), 1);
+    }
+  }
 
   render() {
     return (
@@ -442,6 +480,7 @@ class Popover extends Component {
           target="window"
           onScroll={this.handleScroll}
           onResize={this.handleResize}
+          onKeyUp={this.handleKeyUp}
         />
         <RenderToLayer
           ref="layer"
