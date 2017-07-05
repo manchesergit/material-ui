@@ -90,10 +90,14 @@ class DatePickerDialog extends Component {
 
   handleTouchTapCancel = () => {
     this.dismiss();
+    const ActiveElement = window.prevActiveElement;
+    ActiveElement.focus();
   };
 
   handleRequestClose = () => {
     this.dismiss();
+    const ActiveElement = window.prevActiveElement;
+    ActiveElement.focus();
   };
 
   handleTouchTapOk = () => {
@@ -102,6 +106,8 @@ class DatePickerDialog extends Component {
     }
 
     this.dismiss();
+    const ActiveElement = window.prevActiveElement;
+    ActiveElement.focus();
   };
 
   handleContainerKeyUp = (event) => {
@@ -118,6 +124,7 @@ class DatePickerDialog extends Component {
   };
 
   render() {
+    window.prevActiveElement = document.activeElement;
     const {
       id,
       DateTimeFormat,
