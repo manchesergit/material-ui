@@ -50,10 +50,14 @@ class TimePickerDialog extends Component {
 
   handleRequestClose = () => {
     this.dismiss();
+    const ActiveElement = window.prevActiveElement;
+    ActiveElement.focus();
   };
 
   handleTouchTapCancel = () => {
     this.dismiss();
+    const ActiveElement = window.prevActiveElement;
+    ActiveElement.focus();
   };
 
   handleTouchTapOK = () => {
@@ -63,6 +67,8 @@ class TimePickerDialog extends Component {
     this.setState({
       open: false,
     });
+    const ActiveElement = window.prevActiveElement;
+    ActiveElement.focus();
   };
 
   handleKeyUp = (event) => {
@@ -70,10 +76,14 @@ class TimePickerDialog extends Component {
       case 'enter':
         this.handleTouchTapOK();
         break;
+      case 'esc':
+        this.handleTouchTapCancel();
+        break;
     }
   };
 
   render() {
+    window.prevActiveElement = document.activeElement;
     const {
       bodyStyle,
       initialTime,
