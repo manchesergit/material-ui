@@ -149,13 +149,11 @@ class TableHeader extends Component {
   getSelectAllCheckboxColumn(props) {
     if (!this.props.displaySelectAll) return this.getCheckboxPlaceholder(props);
 
-    const disabled = !this.props.enableSelectAll;
     const checkbox = (
       <Checkbox
         key="selectallcb"
         name="selectallcb"
         value="selected"
-        disabled={disabled}
         checked={this.props.selectAllSelected}
         onCheck={this.handleCheckAll}
       />
@@ -165,11 +163,19 @@ class TableHeader extends Component {
     return (
       <TableHeaderColumn
         key={key}
+        aria-hidden={true}
+        label="Select All"
         style={{
           width: 24,
-          cursor: disabled ? 'not-allowed' : 'inherit',
         }}
       >
+        <span
+          style={{
+            display: 'none',
+          }}
+        >
+          Select All
+        </span>
         {checkbox}
       </TableHeaderColumn>
     );
