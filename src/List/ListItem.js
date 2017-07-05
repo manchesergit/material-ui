@@ -217,6 +217,15 @@ class ListItem extends Component {
      */
     leftIcon: PropTypes.element,
     /**
+     * Prop that passes the value for menuBarRole from MenuItem script to ListItem
+     */
+    menuBarRole: PropTypes.string,
+    /**
+     * Prop that passes the value for menuItemRole from MenuItem script to ListItem
+     */
+    menuButtonAriaLabel: PropTypes.string,
+    menuItemRole: PropTypes.string,
+    /**
      * An array of `ListItem`s to nest underneath the current `ListItem`.
      */
     nestedItems: PropTypes.arrayOf(PropTypes.element),
@@ -568,6 +577,9 @@ class ListItem extends Component {
       leftAvatar,
       leftCheckbox,
       leftIcon,
+      menuBarRole,
+      menuButtonAriaLabel,
+      menuItemRole,
       nestedItems,
       nestedLevel,
       nestedListStyle,
@@ -708,11 +720,12 @@ class ListItem extends Component {
     const simpleLabel = !primaryTogglesNestedList && (leftCheckbox || rightToggle);
 
     return (
-      <div>
+      <div role={menuItemRole}>
         {
           simpleLabel ? this.createLabelElement(styles, contentChildren, other) :
           disabled ? this.createDisabledElement(styles, contentChildren, other) : (
             <EnhancedButton
+              aria-label={menuButtonAriaLabel}
               containerElement={containerElement}
               {...other}
               disableKeyboardFocus={disableKeyboardFocus || this.state.rightIconButtonKeyboardFocused}
@@ -725,7 +738,7 @@ class ListItem extends Component {
               ref={(node) => this.button = node}
               style={Object.assign({}, styles.root, style)}
             >
-              <div style={prepareStyles(Object.assign(styles.innerDiv, innerDivStyle))}>
+              <div role={menuBarRole} style={prepareStyles(Object.assign(styles.innerDiv, innerDivStyle))}>
                 {contentChildren}
               </div>
             </EnhancedButton>
@@ -736,5 +749,4 @@ class ListItem extends Component {
     );
   }
 }
-
 export default ListItem;

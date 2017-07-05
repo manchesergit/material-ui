@@ -112,6 +112,7 @@ class MenuItem extends Component {
      * The `SvgIcon` or `FontIcon` to be displayed on the left side.
      */
     leftIcon: PropTypes.element,
+    menuAriaLabel: PropTypes.string,
     /**
      * `MenuItem` elements to nest within the menu item.
      */
@@ -130,6 +131,14 @@ class MenuItem extends Component {
      * The `SvgIcon` or `FontIcon` to be displayed on the right side.
      */
     rightIcon: PropTypes.element,
+    /**
+    * The prop 'menubar' used as child for its parent div role menuitem
+    */
+    roleBar: PropTypes.string,
+    /**
+    * The prop 'menuitem' used as child for its parent div role menu
+    */
+    roleItem: PropTypes.string,
     /**
      * Can be used to render secondary text within the menu item.
      */
@@ -159,6 +168,9 @@ class MenuItem extends Component {
     disabled: false,
     focusState: 'none',
     insetChildren: false,
+    menuAriaLabel: 'Menu Button',
+    roleBar: 'menubar',
+    roleItem: 'menuitem',
     targetOrigin: {horizontal: 'left', vertical: 'top'},
   };
 
@@ -248,8 +260,11 @@ class MenuItem extends Component {
       innerDivStyle,
       insetChildren,
       leftIcon,
+      menuAriaLabel,
       menuItems,
       rightIcon,
+      roleBar,
+      roleItem,
       secondaryText,
       style,
       animation,
@@ -319,9 +334,11 @@ class MenuItem extends Component {
         innerDivStyle={mergedInnerDivStyles}
         insetChildren={insetChildren}
         leftIcon={leftIconElement}
+        menuButtonAriaLabel={menuAriaLabel}
+        menuBarRole={roleBar}
+        menuItemRole={roleItem}
         ref="listItem"
         rightIcon={rightIconElement}
-        role="menuitem"
         style={mergedRootStyles}
       >
         {children}
