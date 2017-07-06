@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import TimeDisplay from './TimeDisplay';
 import ClockHours from './ClockHours';
 import ClockMinutes from './ClockMinutes';
+import EventListener from 'react-event-listener';   // for the keyboard listener
+import keycode from 'keycode';  // to work out the name of the key on the keyboadrd listener
 
 class Clock extends Component {
   static propTypes = {
@@ -90,9 +92,7 @@ class Clock extends Component {
 
     if (finished) {
       setTimeout(() => {
-        this.setState({
-          mode: 'minute',
-        });
+        this.modeChange();
 
         const {onChangeHours} = this.props;
         if (onChangeHours) {
@@ -117,9 +117,68 @@ class Clock extends Component {
     }
   };
 
+  /**
+   * check if the current clock is showing hours or not.
+   * if true is returned then its in hour mode, if false its in minute mode.
+   */
+  isInHourMode() {
+    return this.state.mode === 'hour';
+  }
+
+  /**
+   * take whatever mode the current clock is showing in (hour / minute)
+   * then flip it to the other mode
+   */
+  modeChange() {
+    setTimeout(() => {
+      this.setState({
+        mode: this.isInHourMode() ? 'minute' : 'hour',
+      });
+    }, 100);
+  }
+
   getSelectedTime() {
     return this.state.selectedTime;
   }
+
+  /**
+   * handle keypresses for this class only.
+   * up or right are move the clock hands clockwise
+   * down or left are move the clock hands anit-clockwise
+   * space is for switching between hour and minute modes.
+   * =====================================================
+   * Don't switch this to key down, as that would make it much more difficult to work with for the user
+   */
+  handleKeyUp = (event) => {
+    let changeValue = 0;
+    let done = false;
+
+    switch (keycode(event)) {
+      case 'up':
+      case 'right':
+        changeValue = 1;
+        break;
+      case 'down':
+      case 'left':
+        changeValue = -1;
+        break;
+      case 'space' :
+        done = true;
+        break;
+    }
+
+    if (!done) {
+      /* TODO : work out how to get to the selectedTime.x as an alias and make all this generic,
+                should be able to have the getHours / getMinutes as an alias and the handleChangexxx */
+      if (this.isInHourMode()) {
+        this.handleChangeHours(this.state.selectedTime.getHours() + changeValue, false);
+      } else {
+        this.handleChangeMinutes(this.state.selectedTime.getMinutes() + changeValue, false);
+      }
+    } else {
+      this.modeChange();
+    }
+  };
 
   render() {
     let clock = null;
@@ -149,7 +208,7 @@ class Clock extends Component {
       },
     };
 
-    if (this.state.mode === 'hour') {
+    if (this.isInHourMode()) {
       clock = (
         <ClockHours
           key="hours"
@@ -169,6 +228,11 @@ class Clock extends Component {
       );
     }
 
+    /**
+     * the id of the div containing the clock has been hard coded to "clockface".
+     * should anyone ever want to reuse this code so they can have n clocks on screan at once,
+     * then the name will have to change to something more random (but you can't do this in the current framework)
+     */
     return (
       <div style={prepareStyles(styles.root)}>
         <TimeDisplay
@@ -181,7 +245,8 @@ class Clock extends Component {
           onSelectMin={this.setMode.bind(this, 'minute')}
         />
         <div style={prepareStyles(styles.container)} >
-          <div style={prepareStyles(styles.circle)} />
+          <div id="clockface" tabIndex="0" style={prepareStyles(styles.circle)} />
+          <EventListener target="clockface" onKeyUp={this.handleKeyUp} />
           {clock}
         </div>
       </div>
