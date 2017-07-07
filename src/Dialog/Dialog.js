@@ -403,6 +403,7 @@ class DialogInline extends Component {
     const dialogGroupID = `${baseId}-dialogGroup`;
     const transitionGroupId = `${baseId}-transitionGroup`;
     const transitionItemId = `${baseId}-transitionItem`;
+    const overlayId = `${baseId}-overlay`;
     const paperId = this.makePaperId();
 
     return (
@@ -458,6 +459,7 @@ class DialogInline extends Component {
           }
         </ReactTransitionGroup>
         <Overlay
+          id={overlayId}
           show={open}
           className={overlayClassName}
           style={styles.overlay}
