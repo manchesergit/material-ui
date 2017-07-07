@@ -84,8 +84,8 @@
     "eslint": "^3.19.0",
     "eslint-find-rules": "^3.0.0",
     "eslint-plugin-babel": "^4.1.1",
-    "eslint-plugin-flowtype": "^2.30.4",
-    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-flowtype": "^2.34.1",
+    "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-material-ui": "./packages/eslint-plugin-material-ui",
     "eslint-plugin-mocha": "^4.9.0",
     "eslint-plugin-react": "^7.0.0",
@@ -106,11 +106,11 @@
     "phantomjs-prebuilt": "^2.1.14",
     "react": "^15.5.0",
     "react-dom": "^15.5.0",
-    "react-test-renderer": "^15.5.0",
     "react-tap-event-plugin": "^2.0.0",
+    "react-test-renderer": "^15.5.0",
     "recursive-readdir-sync": "^1.0.6",
     "rimraf": "^2.6.1",
-    "sinon": "^2.1.0",
+    "sinon": "^2.3.6",
     "webpack": "^1.13.3"
   }
 }
