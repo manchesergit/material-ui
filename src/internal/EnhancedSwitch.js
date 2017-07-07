@@ -117,22 +117,18 @@ class EnhancedSwitch extends Component {
     const generatedId = Math.floor(Math.random() * 0xFFFF);
     const uniqueId = `${this.constructor.name}-${this.props.labelPosition}-${generatedId}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
-
-    const uniqueLabelId = `${this.constructor.name}-${this.props.labelPosition}
-      -${generatedId}`;
-    this.uniqueLabelId = uniqueLabelId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueLabelId = this.uniqueId;
   }
 
   componentDidMount() {
     const inputNode = this.refs.checkbox;
-    if ((!this.props.switched || inputNode.checked !== this.props.switched) &&
-    this.props.onParentShouldUpdate) {
+    if ((!this.props.switched || inputNode.checked !== this.props.switched) && this.props.onParentShouldUpdate) {
       this.props.onParentShouldUpdate(inputNode.checked);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const hasCheckedProp = nextProps.hasOwnProperty('checked');
+    const hasCheckedProp = this.continsCheckedProperty(nextProps);
     const hasNewDefaultProp =
       (nextProps.hasOwnProperty('defaultChecked') &&
       (nextProps.defaultChecked !== this.props.defaultChecked));
@@ -150,9 +146,14 @@ class EnhancedSwitch extends Component {
     }
   }
 
+  // check that theres a checked property in the provided object
+  continsCheckedProperty(propsToCheck) {
+    return propsToCheck.hasOwnProperty('checked');
+  }
+
   // no callback here because there is no event
   setSwitched(newSwitchedValue) {
-    if (!this.props.hasOwnProperty('checked') || this.props.checked === false) {
+    if (!this.continsCheckedProperty(this.props) || this.props.checked === false) {
       if (this.props.onParentShouldUpdate) {
         this.props.onParentShouldUpdate(newSwitchedValue);
       }
@@ -356,7 +357,7 @@ class EnhancedSwitch extends Component {
         id={checkBoxId}
         role="checkbox"
         aria-label="checkbox"
-        aria-labelledby={this.uniqueLabelId}
+        aria-labelledby={baseId}
         aria-checked={this.state.isChecked}
         {...other}
         ref="checkbox"
