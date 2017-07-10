@@ -108,16 +108,21 @@ class EnhancedSwitch extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  state = {
-    isKeyboardFocused: false,
-    isChecked: false,
-  };
+  constructor(props) {
+    super(props);
+    /* We need to know the value of checked if its been passed as it will populated the aria-checked
+     * property of the input element.  It needs to be copied from the params as we can't cleanly do a
+     * state check and a pram check at render time */
+    this.state = {
+      isKeyboardFocused: false,
+      isChecked: ('checked' in props) ? props.checked : ('defaultChecked' in props) ? props.defaultChecked : false,
+    };
+  }
 
   componentWillMount() {
     const generatedId = Math.floor(Math.random() * 0xFFFF);
     const uniqueId = `${this.constructor.name}-${this.props.labelPosition}-${generatedId}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
-    this.uniqueLabelId = this.uniqueId;
   }
 
   componentDidMount() {
@@ -138,6 +143,7 @@ class EnhancedSwitch extends Component {
 
       this.setState({
         switched: switched,
+        isChecked: nextProps.checked,
       });
 
       if (this.props.onParentShouldUpdate && switched !== this.props.switched) {
@@ -308,7 +314,6 @@ class EnhancedSwitch extends Component {
     const paperStyleId = `${baseId}-paperStyle`;
     const styleControlId = `${baseId}-styleControl`;
     const labelId = `${baseId}-label`;
-
 
     if (thumbStyle) {
       wrapStyles.marginLeft /= 2;
