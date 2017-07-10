@@ -38,8 +38,13 @@ class Drawer extends Component {
      * clicking on a menu item will not close the `Drawer`.
      */
     docked: PropTypes.bool,
-
+    /**
+     * Property which is used to pass 'menu' string to ARIA role tag
+     */
     drawerroleMenu: propTypes.string,
+    /**
+     * Property which is used to pass 'menuitem' string to ARIA role tag
+     */
     drawerroleMenuItem: propTypes.string,
     /**
      * Callback function fired when the `open` state of the `Drawer` is requested to be changed.
