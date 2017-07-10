@@ -115,7 +115,8 @@ class EnhancedSwitch extends Component {
      * state check and a pram check at render time */
     this.state = {
       isKeyboardFocused: false,
-      isChecked: ('checked' in props) ? props.checked : ('defaultChecked' in props) ? props.defaultChecked : false,
+      isChecked: this.continsCheckedProperty(props) ? props.checked :
+        this.containsDefaultCheckedProperty(props) ? props.defaultChecked : false,
     };
   }
 
@@ -135,7 +136,7 @@ class EnhancedSwitch extends Component {
   componentWillReceiveProps(nextProps) {
     const hasCheckedProp = this.continsCheckedProperty(nextProps);
     const hasNewDefaultProp =
-      (nextProps.hasOwnProperty('defaultChecked') &&
+      (this.containsDefaultCheckedProperty(nextProps) &&
       (nextProps.defaultChecked !== this.props.defaultChecked));
 
     if (hasCheckedProp || hasNewDefaultProp) {
@@ -143,7 +144,7 @@ class EnhancedSwitch extends Component {
 
       this.setState({
         switched: switched,
-        isChecked: nextProps.checked,
+        isChecked: switched,
       });
 
       if (this.props.onParentShouldUpdate && switched !== this.props.switched) {
@@ -152,9 +153,14 @@ class EnhancedSwitch extends Component {
     }
   }
 
-  // check that theres a checked property in the provided object
+  // check that theres a checked property in the provided propterties object
   continsCheckedProperty(propsToCheck) {
-    return propsToCheck.hasOwnProperty('checked');
+    return ('checked' in propsToCheck);
+  }
+
+  // check that theres a defaultChecked property in the provided propterties object
+  containsDefaultCheckedProperty(propsToCheck) {
+    return ('defaultChecked' in propsToCheck);
   }
 
   // no callback here because there is no event
