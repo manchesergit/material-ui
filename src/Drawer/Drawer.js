@@ -38,6 +38,9 @@ class Drawer extends Component {
      * clicking on a menu item will not close the `Drawer`.
      */
     docked: PropTypes.bool,
+
+    drawerroleMenu: propTypes.string,
+    drawerroleMenuItem: propTypes.string,
     /**
      * Callback function fired when the `open` state of the `Drawer` is requested to be changed.
      *
@@ -93,6 +96,8 @@ class Drawer extends Component {
   static defaultProps = {
     disableSwipeToOpen: false,
     docked: true,
+    drawerroleMenu: 'menu',
+    drawerroleMenuItem: 'menuitem',
     open: null,
     openSecondary: false,
     swipeAreaWidth: 30,
@@ -376,6 +381,8 @@ class Drawer extends Component {
       containerClassName,
       containerStyle,
       docked,
+      drawerroleMenu,
+      drawerroleMenuItem,
       openSecondary,
       overlayClassName,
       overlayStyle,
@@ -402,6 +409,7 @@ class Drawer extends Component {
     return (
       <div
         className={className}
+        role={drawerroleMenu}
         style={style}
       >
         <EventListener target="window" onKeyUp={this.handleKeyUp} />
@@ -410,6 +418,7 @@ class Drawer extends Component {
           ref="clickAwayableElement"
           zDepth={zDepth}
           rounded={false}
+          role={drawerroleMenuItem}
           transitionEnabled={!this.state.swiping}
           className={containerClassName}
           style={Object.assign(styles.root, openSecondary && styles.rootWhenOpenRight, containerStyle)}
