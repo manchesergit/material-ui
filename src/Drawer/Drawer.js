@@ -39,14 +39,6 @@ class Drawer extends Component {
      */
     docked: PropTypes.bool,
     /**
-     * Property which is used to pass 'menu' string to ARIA role tag
-     */
-    drawerroleMenu: PropTypes.string,
-    /**
-     * Property which is used to pass 'menuitem' string to ARIA role tag
-     */
-    drawerroleMenuItem: PropTypes.string,
-    /**
      * Callback function fired when the `open` state of the `Drawer` is requested to be changed.
      *
      * @param {boolean} open If true, the `Drawer` was requested to be opened.
@@ -101,8 +93,6 @@ class Drawer extends Component {
   static defaultProps = {
     disableSwipeToOpen: false,
     docked: true,
-    drawerroleMenu: 'menu',
-    drawerroleMenuItem: 'menuitem',
     open: null,
     openSecondary: false,
     swipeAreaWidth: 30,
@@ -386,8 +376,6 @@ class Drawer extends Component {
       containerClassName,
       containerStyle,
       docked,
-      drawerroleMenu,
-      drawerroleMenuItem,
       openSecondary,
       overlayClassName,
       overlayStyle,
@@ -414,7 +402,6 @@ class Drawer extends Component {
     return (
       <div
         className={className}
-        role={drawerroleMenu}
         style={style}
       >
         <EventListener target="window" onKeyUp={this.handleKeyUp} />
@@ -423,7 +410,6 @@ class Drawer extends Component {
           ref="clickAwayableElement"
           zDepth={zDepth}
           rounded={false}
-          role={drawerroleMenuItem}
           transitionEnabled={!this.state.swiping}
           className={containerClassName}
           style={Object.assign(styles.root, openSecondary && styles.rootWhenOpenRight, containerStyle)}

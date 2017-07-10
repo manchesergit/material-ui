@@ -108,33 +108,35 @@ class EnhancedSwitch extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  state = {
-    isKeyboardFocused: false,
-    isChecked: false,
-  };
+  constructor(props) {
+    super(props);
+    /* We need to know the value of checked if its been passed as it will populated the aria-checked
+     * property of the input element.  It needs to be copied from the params as we can't cleanly do a
+     * state check and a pram check at render time */
+    this.state = {
+      isKeyboardFocused: false,
+      isChecked: this.continsCheckedProperty(props) ? props.checked :
+        this.containsDefaultCheckedProperty(props) ? props.defaultChecked : false,
+    };
+  }
 
   componentWillMount() {
     const generatedId = Math.floor(Math.random() * 0xFFFF);
     const uniqueId = `${this.constructor.name}-${this.props.labelPosition}-${generatedId}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
-
-    const uniqueLabelId = `${this.constructor.name}-${this.props.labelPosition}
-      -${generatedId}`;
-    this.uniqueLabelId = uniqueLabelId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentDidMount() {
     const inputNode = this.refs.checkbox;
-    if ((!this.props.switched || inputNode.checked !== this.props.switched) &&
-    this.props.onParentShouldUpdate) {
+    if ((!this.props.switched || inputNode.checked !== this.props.switched) && this.props.onParentShouldUpdate) {
       this.props.onParentShouldUpdate(inputNode.checked);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const hasCheckedProp = nextProps.hasOwnProperty('checked');
+    const hasCheckedProp = this.continsCheckedProperty(nextProps);
     const hasNewDefaultProp =
-      (nextProps.hasOwnProperty('defaultChecked') &&
+      (this.containsDefaultCheckedProperty(nextProps) &&
       (nextProps.defaultChecked !== this.props.defaultChecked));
 
     if (hasCheckedProp || hasNewDefaultProp) {
@@ -142,6 +144,7 @@ class EnhancedSwitch extends Component {
 
       this.setState({
         switched: switched,
+        isChecked: switched,
       });
 
       if (this.props.onParentShouldUpdate && switched !== this.props.switched) {
@@ -150,9 +153,19 @@ class EnhancedSwitch extends Component {
     }
   }
 
+  // check that theres a checked property in the provided propterties object
+  continsCheckedProperty(propsToCheck) {
+    return ('checked' in propsToCheck);
+  }
+
+  // check that theres a defaultChecked property in the provided propterties object
+  containsDefaultCheckedProperty(propsToCheck) {
+    return ('defaultChecked' in propsToCheck);
+  }
+
   // no callback here because there is no event
   setSwitched(newSwitchedValue) {
-    if (!this.props.hasOwnProperty('checked') || this.props.checked === false) {
+    if (!this.continsCheckedProperty(this.props) || this.props.checked === false) {
       if (this.props.onParentShouldUpdate) {
         this.props.onParentShouldUpdate(newSwitchedValue);
       }
@@ -308,7 +321,6 @@ class EnhancedSwitch extends Component {
     const styleControlId = `${baseId}-styleControl`;
     const labelId = `${baseId}-label`;
 
-
     if (thumbStyle) {
       wrapStyles.marginLeft /= 2;
       wrapStyles.marginRight /= 2;
@@ -356,7 +368,7 @@ class EnhancedSwitch extends Component {
         id={checkBoxId}
         role="checkbox"
         aria-label="checkbox"
-        aria-labelledby={this.uniqueLabelId}
+        aria-labelledby={baseId}
         aria-checked={this.state.isChecked}
         {...other}
         ref="checkbox"
