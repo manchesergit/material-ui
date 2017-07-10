@@ -333,8 +333,30 @@ class EnhancedButton extends Component {
       );
     }
 
-    const ariaRole = overrideRole || 'button';
+    const warning = require('warning');
+    React.Children.forEach(children, (child) => {
+      if (child !== null) {
+        // if (child.props.hasOwnProperty('style')) {
+        //   console.log("yes");
+        // }
+        if (child.type === 'input') {
+          if (!child.props.hasOwnProperty('aria-labelledby')) {
+            warning(false,
+              'Material-UI: <FlatButton /> is meant to have an \'aria-labelledby\' attribute inside the input tag.');
+          }
+          if (!child.props.hasOwnProperty('aria-describedby')) {
+            warning(false,
+               'Material-UI: <FlatButton /> is meant to have an \'aria-describedby\' attribute inside the input tag.');
+          }
+        }
+        // 
+        // if (child.type === 'label') {
+        //     console.log('yes');
+        // }
+      }
+    });
 
+    const ariaRole = overrideRole || 'button';
     const buttonProps = {
       ...other,
       role: ariaRole,
