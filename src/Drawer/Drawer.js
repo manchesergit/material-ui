@@ -41,11 +41,11 @@ class Drawer extends Component {
     /**
      * Property which is used to pass 'menu' string to ARIA role tag
      */
-    drawerroleMenu: propTypes.string,
+    drawerroleMenu: PropTypes.string,
     /**
      * Property which is used to pass 'menuitem' string to ARIA role tag
      */
-    drawerroleMenuItem: propTypes.string,
+    drawerroleMenuItem: PropTypes.string,
     /**
      * Callback function fired when the `open` state of the `Drawer` is requested to be changed.
      *
