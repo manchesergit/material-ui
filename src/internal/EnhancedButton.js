@@ -339,11 +339,11 @@ class EnhancedButton extends Component {
         if (child.type === 'input') {
           if (!child.props.hasOwnProperty('aria-labelledby')) {
             warning(false,
-              'Material-UI: <FlatButton /> is meant to have an \'aria-labelledby\' attribute inside the input tag.');
+              'Material-UI: <FlatButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
           }
           if (!child.props.hasOwnProperty('aria-describedby')) {
             warning(false,
-               'Material-UI: <FlatButton /> is meant to have an \'aria-describedby\' attribute inside the input tag.');
+               'Material-UI: <FlatButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
           }
         }
       }
