@@ -232,7 +232,7 @@ class SelectField extends Component {
         onFocus={onFocus}
         onBlur={onBlur}
         id={id}
-        role="menu"
+        role="menubar"
         aria-label={floatingLabelText || hintText}
         underlineDisabledStyle={underlineDisabledStyle}
         underlineFocusStyle={underlineFocusStyle}

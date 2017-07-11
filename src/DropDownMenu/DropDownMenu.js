@@ -436,6 +436,8 @@ class DropDownMenu extends Component {
       menuStyle = menuStyleProp;
     }
 
+    const ariaLabel = displayValue.length > 0 ? displayValue : 'menu expansion button';
+
     return (
       <div
         {...other}
@@ -456,7 +458,7 @@ class DropDownMenu extends Component {
               this.arrowNode = node;
             }}
             role="menuitem"
-            aria-label={displayValue}
+            aria-label={ariaLabel}
             style={Object.assign({}, styles.icon, iconStyle)}
             iconStyle={styles.iconChildren}
           >
