@@ -49,6 +49,7 @@ class EnhancedButton extends Component {
     disabled: PropTypes.bool,
     focusRippleColor: PropTypes.string,
     focusRippleOpacity: PropTypes.number,
+    forInLabel: PropTypes.bool,
     href: PropTypes.string,
     id: PropTypes.string,
     keyboardFocused: PropTypes.bool,
@@ -271,6 +272,7 @@ class EnhancedButton extends Component {
       disableTouchRipple, // eslint-disable-line no-unused-vars
       focusRippleColor, // eslint-disable-line no-unused-vars
       focusRippleOpacity, // eslint-disable-line no-unused-vars
+      forInLabel,
       href,
       keyboardFocused, // eslint-disable-line no-unused-vars
       touchRippleColor, // eslint-disable-line no-unused-vars
@@ -337,6 +339,12 @@ class EnhancedButton extends Component {
     React.Children.forEach(children, (child) => {
       if (child !== null) {
         if (child.type === 'input') {
+          if (forInLabel !== undefined) {
+            if (forInLabel === true) {
+              warning(false,
+              'Material-UI: <FlatButton /> should contain a \'for\' attribute inside the label tag.');
+            }
+          }
           if (!child.props.hasOwnProperty('aria-labelledby')) {
             warning(false,
               'Material-UI: <FlatButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');

@@ -286,6 +286,8 @@ class FlatButton extends Component {
       labelElement,
     ];
 
+    const noFor = (!this.props.hasOwnProperty('htmlFor'));
+
     return (
       <EnhancedButton
         aria-label="Flat Button"
@@ -293,6 +295,7 @@ class FlatButton extends Component {
         disabled={disabled}
         focusRippleColor={buttonRippleColor}
         focusRippleOpacity={0.3}
+        forInLabel={noFor}
         onKeyboardFocus={this.handleKeyboardFocus}
         onMouseLeave={this.handleMouseLeave}
         onMouseEnter={this.handleMouseEnter}
