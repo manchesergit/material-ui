@@ -313,7 +313,7 @@ class EnhancedSwitch extends Component {
     const baseId = id || this.uniqueId;
     const touchRippleId = `${baseId}-touchRipple`;
     const focusRippleId = `${baseId}-focusRipple`;
-    const checkBoxId = `${baseId}-checkBox`;
+    const inputId = `${baseId}-input`;
     const thumbStyleId = `${baseId}-thumbStyle`;
     const wrapStyleId = `${baseId}-wrapStyle`;
     const trackStyleId = `${baseId}-trackStyle`;
@@ -327,7 +327,7 @@ class EnhancedSwitch extends Component {
     }
 
     const labelElement = label && (
-      <label htmlFor={baseId} style={prepareStyles(Object.assign(styles.label, labelStyle))} id={labelId}>
+      <label htmlFor={inputId} style={prepareStyles(Object.assign(styles.label, labelStyle))} id={labelId}>
         {label}
       </label>
     );
@@ -365,16 +365,16 @@ class EnhancedSwitch extends Component {
 
     const inputElement = (
       <input
-        id={checkBoxId}
+        id={inputId}
         role="checkbox"
         aria-label="checkbox"
-        aria-labelledby={baseId}
+        aria-labelledby={labelId}
         aria-checked={this.state.isChecked}
         {...other}
         ref="checkbox"
         type={inputType}
         style={prepareStyles(Object.assign(styles.input, inputStyle))}
-        name={name, checkBoxId}
+        name={name, inputId}
         value={value}
         disabled={disabled}
         onBlur={this.handleBlur}
