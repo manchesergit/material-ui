@@ -414,6 +414,27 @@ class RaisedButton extends Component {
       labelElement,
     ];
 
+    //Code duplication can be reduced in milestone 3
+    const warning = require('warning');
+    React.Children.forEach(children, (child) => {
+      if (child !== null) {
+        if (child.type === 'input') {
+          if (!this.props.hasOwnProperty('htmlFor')) {
+            warning(false,
+            'Material-UI: <RaisedButton /> should contain a \'for\' attribute inside the label tag.');
+          }
+          if (!child.props.hasOwnProperty('aria-labelledby')) {
+            warning(false,
+              'Material-UI: <RaisedButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
+          }
+          if (!child.props.hasOwnProperty('aria-describedby')) {
+            warning(false,
+               'Material-UI: <RaisedButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
+          }
+        }
+      }
+    });
+
     return (
       <Paper
         className={className}
