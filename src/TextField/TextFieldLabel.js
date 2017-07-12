@@ -42,8 +42,10 @@ const TextFieldLabel = (props) => {
   const uniqueId = `TextFieldLabel-${className}-${Math.floor(Math.random() * 0xFFFF)}`;
   const baseId = id || uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
 
+  const Container = React.Children.count > 1 ? 'label' : 'span';
+
   return (
-    <label
+    <Container
       id={baseId}
       role={roleLabel}
       className={className}
@@ -52,7 +54,7 @@ const TextFieldLabel = (props) => {
       onTouchTap={onTouchTap}
     >
       {children}
-    </label>
+    </Container>
   );
 };
 

@@ -435,6 +435,8 @@ class TextField extends Component {
     const textFieldHintId = hintTextId || `${inputId}-TextFieldHint`;
     const textFieldUnderlineId = `${inputId}-TextFieldUnderline`;
     const enhancedTextareaId = `${inputId}-EnhancedTextarea`;
+    const wrapperId = `${inputId}-div`;
+    const floatingTextFor = children ? null : inputId;
 
     const errorTextElement = this.state.errorText && (
       <div style={prepareStyles(Object.assign(styles.error, errorStyle))}>
@@ -452,7 +454,7 @@ class TextField extends Component {
           this.state.isFocused ? floatingLabelFocusStyle : null
         )}
         shrinkStyle={floatingLabelShrinkStyle}
-        htmlFor={inputId}
+        htmlFor={floatingTextFor}
         shrink={this.state.hasValue || this.state.isFocused || floatingLabelFixed}
         disabled={disabled}
       >
@@ -478,7 +480,6 @@ class TextField extends Component {
      */
     const ariaLabelledBy = floatingLabelText ? textFieldLabelId : (hintText ? textFieldHintId : null);
     const roleLabel = 'textbox';
-    const wrapperId = `${inputId}-div`;
 
     let inputElement;
     if (children) {
@@ -524,12 +525,15 @@ class TextField extends Component {
       rootProps = other;
     }
 
+    const divLabelledBy = children ? ariaLabelledBy : null;
+
     return (
       <div
         id={wrapperId}
         {...rootProps}
         className={className}
         style={prepareStyles(Object.assign(styles.root, style))}
+        aria-labelledby={divLabelledBy}
       >
         {floatingLabelTextElement}
         {hintText ?
