@@ -414,7 +414,7 @@ class RaisedButton extends Component {
       labelElement,
     ];
 
-    //Code duplication can be reduced in milestone 3
+    // Code duplication can be reduced in milestone 3
     const warning = require('warning');
     React.Children.forEach(children, (child) => {
       if (child !== null) {
