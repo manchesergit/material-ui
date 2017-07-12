@@ -81,7 +81,9 @@ class SelectField extends Component {
      */
     iconStyle: PropTypes.object,
     /**
-     * The id prop for the text field.
+    * The id value used for the component.
+    * This will be used as a base for all child components also.
+    * If not provided the class name along with appropriate properties and a random number will be used.
      */
     id: PropTypes.string,
     /**
@@ -178,6 +180,11 @@ class SelectField extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   render() {
     const {
       autoWidth,
@@ -214,6 +221,7 @@ class SelectField extends Component {
     } = this.props;
 
     const styles = getStyles(this.props, this.context);
+    const baseId = id || this.uniqueId;
 
     return (
       <TextField
@@ -231,7 +239,7 @@ class SelectField extends Component {
         errorStyle={errorStyle}
         onFocus={onFocus}
         onBlur={onBlur}
-        id={id}
+        id={baseId}
         role="menubar"
         aria-label={floatingLabelText || hintText}
         underlineDisabledStyle={underlineDisabledStyle}
