@@ -435,6 +435,8 @@ class RaisedButton extends Component {
       }
     });
 
+    const ariaLabel = label ? null : icon ? 'Button with an icon' : 'Button';
+
     return (
       <Paper
         className={className}
@@ -451,6 +453,7 @@ class RaisedButton extends Component {
           touchRippleColor={mergedRippleStyles.color}
           focusRippleOpacity={mergedRippleStyles.opacity}
           touchRippleOpacity={mergedRippleStyles.opacity}
+          aria-label={ariaLabel}
         >
           <div
             ref="overlay"
