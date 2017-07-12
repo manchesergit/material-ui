@@ -442,6 +442,7 @@ class RaisedButton extends Component {
         zDepth={this.state.zDepth}
       >
         <EnhancedButton
+          aria-label="Raised Button"
           {...other}
           {...buttonEventHandlers}
           ref="container"
