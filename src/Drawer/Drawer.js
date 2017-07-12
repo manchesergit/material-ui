@@ -399,10 +399,20 @@ class Drawer extends Component {
       );
     }
 
+    let hasMenuItem = false;
+    React.Children.forEach(children, function(child) {
+      if (child.type.name === 'MenuItem') {
+        hasMenuItem = true;
+      }
+    });
+
+    const role = hasMenuItem ? 'menu' : null;
+
     return (
       <div
         className={className}
         style={style}
+        role={role}
       >
         <EventListener target="window" onKeyUp={this.handleKeyUp} />
         {overlay}
