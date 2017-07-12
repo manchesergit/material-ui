@@ -60,6 +60,12 @@ class Avatar extends Component {
      */
     icon: PropTypes.element,
     /**
+     * A description for the image presented.
+     * If an image is added to the avatar this is the description that will be added to its alt tag.
+     * If no description is provided then the alt tag will read "Uncharacterised icon ID #" followed by a random number.
+     */
+    imageDescription: PropTypes.string,
+    /**
      * This is the size of the avatar in pixels.
      */
     size: PropTypes.number,
@@ -85,6 +91,7 @@ class Avatar extends Component {
     const {
       backgroundColor, // eslint-disable-line no-unused-vars
       icon,
+      imageDescription,
       src,
       style,
       className,
@@ -93,6 +100,7 @@ class Avatar extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
+    const altValue = imageDescription || `Uncharacterised icon ID #${Math.floor(Math.random() * 0xFFFF)}`;
 
     if (src) {
       return (
@@ -101,7 +109,7 @@ class Avatar extends Component {
           {...other}
           src={src}
           className={className}
-          alt="Avatar Icon"
+          alt={altValue}
         />
       );
     } else {
