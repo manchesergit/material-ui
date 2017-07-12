@@ -42,8 +42,6 @@ const TextFieldLabel = (props) => {
   const uniqueId = `TextFieldLabel-${className}-${Math.floor(Math.random() * 0xFFFF)}`;
   const baseId = id || uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
 
-  /* we only want this to be a label if it is actually encapulating other elements,
-    if theres only one child then its the text nothing else */
   const Container = React.Children.count > 1 ? 'label' : 'span';
 
   return (
