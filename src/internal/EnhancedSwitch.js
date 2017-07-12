@@ -319,7 +319,8 @@ class EnhancedSwitch extends Component {
     const trackStyleId = `${baseId}-trackStyle`;
     const paperStyleId = `${baseId}-paperStyle`;
     const styleControlId = `${baseId}-styleControl`;
-    const labelId = `${baseId}-label`;
+    // if theres no label make sure the label id is null so no aria-labelledby is generated
+    const labelId = label ? `${baseId}-label` : null;
 
     if (thumbStyle) {
       wrapStyles.marginLeft /= 2;
