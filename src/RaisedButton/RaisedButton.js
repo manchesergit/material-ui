@@ -120,6 +120,10 @@ class RaisedButton extends Component {
      */
     backgroundColor: PropTypes.string,
     /**
+     * values to be added into aria-label on the button
+     */
+    buttonAriaLabel: PropTypes.string,
+    /**
      * Override the inline-styles of the button element.
      */
     buttonStyle: PropTypes.object,
@@ -240,6 +244,7 @@ class RaisedButton extends Component {
     disabled: false,
     labelPosition: 'after',
     fullWidth: false,
+    buttonAriaLabel: '',
     primary: false,
     secondary: false,
   };
@@ -356,6 +361,7 @@ class RaisedButton extends Component {
   render() {
     const {
       backgroundColor, // eslint-disable-line no-unused-vars
+      buttonAriaLabel, // eslint-disable-line no-unused-vars
       buttonStyle,
       children,
       className,
@@ -375,6 +381,10 @@ class RaisedButton extends Component {
       style,
       ...other
     } = this.props;
+
+    const ariaBaseName = 'Raised Button';
+    const ariaLabelPrefix = this.props.buttonAriaLabel.length === 0 ? '' : `${this.props.buttonAriaLabel} `;
+    const ariaLabel = `${ariaLabelPrefix}${ariaBaseName}`;
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
@@ -442,7 +452,7 @@ class RaisedButton extends Component {
         zDepth={this.state.zDepth}
       >
         <EnhancedButton
-          aria-label="Raised Button"
+          aria-label={ariaLabel}
           {...other}
           {...buttonEventHandlers}
           ref="container"
