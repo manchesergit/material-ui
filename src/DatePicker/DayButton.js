@@ -56,6 +56,7 @@ class DayButton extends Component {
     DateTimeFormat: PropTypes.func.isRequired,
     date: PropTypes.object,
     disabled: PropTypes.bool,
+    id: PropTypes.string,
     locale: PropTypes.string.isRequired,
     onKeyboardFocus: PropTypes.func,
     onTouchTap: PropTypes.func,
@@ -104,6 +105,7 @@ class DayButton extends Component {
       DateTimeFormat,
       date,
       disabled,
+      id,
       locale,
       onTouchTap, // eslint-disable-line no-unused-vars
       selected, // eslint-disable-line no-unused-vars
@@ -115,6 +117,7 @@ class DayButton extends Component {
 
     return date ? (
       <EnhancedButton
+        id={id}
         {...other}
         disabled={disabled}
         disableFocusRipple={true}
