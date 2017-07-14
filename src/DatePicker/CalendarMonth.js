@@ -85,6 +85,7 @@ class CalendarMonth extends Component {
         this.selectedDateDisabled = disabled;
       }
 
+      const tabIndex = selected ? 0 : -1;
       return (
         <DayButton
           DateTimeFormat={DateTimeFormat}
@@ -94,6 +95,7 @@ class CalendarMonth extends Component {
           key={`db${(i + j)}`}
           onTouchTap={this.handleTouchTapDay}
           selected={selected}
+          tabIndex={tabIndex}
         />
       );
     }, this);
