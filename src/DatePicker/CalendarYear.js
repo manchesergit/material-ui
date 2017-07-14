@@ -37,14 +37,19 @@ class CalendarYear extends Component {
       utils,
     } = this.props;
 
+    const yearButtonIdBase = 'YearButton-';
     const minYear = utils.getYear(minDate);
     const maxYear = utils.getYear(maxDate);
     const years = [];
+    let selectedYear;
 
     for (let year = minYear; year <= maxYear; year++) {
       const selected = utils.getYear(selectedDate) === year;
+      const id = `${yearButtonIdBase}${year}`;
       const selectedProps = {};
+
       if (selected) {
+        selectedYear = id;
         selectedProps.ref = 'selectedYearButton';
       }
 
@@ -52,20 +57,31 @@ class CalendarYear extends Component {
         year: 'numeric',
       }).format(utils.setYear(selectedDate, year));
 
+      const tabIndex = selected ? 0 : -1;
+
       const yearButton = (
         <YearButton
+          id={id}
           key={`yb${year}`}
           onTouchTap={this.handleTouchTapYear}
           selected={selected}
           year={year}
           utils={utils}
           {...selectedProps}
+          tabIndex={tabIndex}
         >
           {yearFormated}
         </YearButton>
       );
 
       years.push(yearButton);
+    }
+
+    if (selectedYear) {
+      const yearButton = document.getElementById(selectedYear);
+      if (yearButton) {
+        yearButton.focus();
+      }
     }
 
     return years;

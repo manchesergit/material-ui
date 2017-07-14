@@ -37,6 +37,7 @@ class YearButton extends Component {
      * The css class name of the root element.
      */
     className: PropTypes.string,
+    id: PropTypes.string,
     onTouchTap: PropTypes.func,
     selected: PropTypes.bool,
     utils: PropTypes.object.isRequired,
@@ -73,6 +74,7 @@ class YearButton extends Component {
     const {
       children,
       className, // eslint-disable-line no-unused-vars
+      id,
       onTouchTap, // eslint-disable-line no-unused-vars
       selected, // eslint-disable-line no-unused-vars
       year, // eslint-disable-line no-unused-vars
@@ -88,6 +90,7 @@ class YearButton extends Component {
         {...other}
         disableFocusRipple={true}
         disableTouchRipple={true}
+        id={id}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
         onTouchTap={this.handleTouchTap}

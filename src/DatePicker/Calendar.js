@@ -235,9 +235,30 @@ class Calendar extends Component {
             this.addSelectedDays(-1);
           }
           break;
+        case 'esc' :
+          if (!this.state.displayMonthDay) {
+            event.stopPropagation();
+          }
+          break;
       }
     }
   };
+
+  handleYearChangeByKeyboard = (event) => {
+    switch (keycode(event)) {
+      case 'up' :
+        this.addSelectedYears(-1);
+        break;
+      case 'down' :
+        this.addSelectedYears(1);
+        break;
+      case 'esc' :
+        //this.handleTouchTapDateDisplayYear();
+        event.stopPropagation();
+        this.setState({displayMonthDay: true});
+        break;
+    }
+  }
 
   yearSelector() {
     if (!this.props.disableYearSelection) {
@@ -382,7 +403,7 @@ class Calendar extends Component {
             </div>
           }
           {!this.state.displayMonthDay &&
-            <div style={prepareStyles(styles.yearContainer)}>
+            <div style={prepareStyles(styles.yearContainer)} onKeyUp={this.handleYearChangeByKeyboard}>
               {this.yearSelector()}
             </div>
           }
