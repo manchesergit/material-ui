@@ -253,7 +253,6 @@ class Calendar extends Component {
         this.addSelectedYears(1);
         break;
       case 'esc' :
-        //this.handleTouchTapDateDisplayYear();
         event.stopPropagation();
         this.setState({displayMonthDay: true});
         break;
