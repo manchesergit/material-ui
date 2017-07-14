@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import transitions from '../styles/transitions';
 import SlideInTransitionGroup from '../internal/SlideIn';
+import keycode from 'keycode';
 
 function getStyles(props, context, state) {
   const {datePicker} = context.muiTheme;
@@ -81,6 +82,7 @@ class DateDisplay extends Component {
   state = {
     selectedYear: false,
     transitionDirection: 'up',
+    focusedYear: false,
   };
 
   componentWillMount() {
@@ -122,6 +124,18 @@ class DateDisplay extends Component {
     }
   };
 
+  handleFocus = () => {
+    this.setState({focusedYear: !this.state.focusedYear});
+  };
+
+  handleKeyUp = (event) => {
+    if (!this.props.disableYearSelection) {
+      if ((keycode(event) === 'enter' || keycode(event) === 'space')) {
+        this.handleTouchTapYear();
+      }
+    }
+  };
+
   render() {
     const {
       DateTimeFormat,
@@ -143,6 +157,8 @@ class DateDisplay extends Component {
       year: 'numeric',
     }).format(selectedDate);
 
+    const styledYear = this.state.focusedYear ? <b>{year}</b> : year;
+
     const dateTime = new DateTimeFormat(locale, {
       month: 'short',
       weekday: 'short',
@@ -152,8 +168,17 @@ class DateDisplay extends Component {
     return (
       <div {...other} style={prepareStyles(styles.root, style)}>
         <SlideInTransitionGroup style={styles.year} direction={this.state.transitionDirection}>
-          <div key={year} style={styles.yearTitle} onTouchTap={this.handleTouchTapYear}>
-            {year}
+          <div
+            id="displayYear"
+            tabIndex="0"
+            key={year}
+            style={styles.yearTitle}
+            onTouchTap={this.handleTouchTapYear}
+            onFocus={this.handleFocus}
+            onBlur={this.handleFocus}
+            onKeyUp={this.handleKeyUp}
+          >
+            {styledYear}
           </div>
         </SlideInTransitionGroup>
         <SlideInTransitionGroup style={styles.monthDay} direction={this.state.transitionDirection}>
