@@ -100,6 +100,38 @@ class DayButton extends Component {
     }
   };
 
+  /*
+   * get a suffix for a number so it can be read aloud
+   * this will only work for numbers between 1 and 31
+   * anything outside that range will cause a return of 'th'
+   */
+  getNumberSuffix(number) {
+    let suffix = null;
+
+    if (number) {
+      switch (number) {
+        case 1 :
+        case 21 :
+        case 31 :
+          suffix = 'st';
+          break;
+        case 2 :
+        case 22 :
+          suffix = 'nd';
+          break;
+        case 3 :
+        case 23 :
+          suffix = 'rd';
+          break;
+        default :
+          suffix = 'th';
+          break;
+      }
+    }
+
+    return suffix;
+  }
+
   render() {
     const {
       DateTimeFormat,
@@ -114,10 +146,12 @@ class DayButton extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
+    const dayLabel = date ? new DateTimeFormat(locale, {day: 'numeric'}).format(date) : null;
+    const buttonId = id || `${dayLabel}${this.getNumberSuffix(dayLabel)}`;
 
     return date ? (
       <EnhancedButton
-        id={id}
+        id={buttonId}
         {...other}
         disabled={disabled}
         disableFocusRipple={true}
@@ -130,9 +164,7 @@ class DayButton extends Component {
       >
         <div style={prepareStyles(styles.buttonState)} />
         <span style={prepareStyles(styles.label)}>
-          {new DateTimeFormat(locale, {
-            day: 'numeric',
-          }).format(date)}
+          {dayLabel}
         </span>
       </EnhancedButton>
     ) : (
