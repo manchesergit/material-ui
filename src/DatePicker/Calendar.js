@@ -59,6 +59,7 @@ class Calendar extends Component {
   state = {
     displayDate: undefined,
     displayMonthDay: undefined,
+    initalDisplayYear: undefined,
     selectedDate: undefined,
     transitionDirection: 'left',
     transitionEnter: true,
@@ -70,6 +71,7 @@ class Calendar extends Component {
 
     this.setState({
       displayDate: this.props.utils.getFirstDayOfMonth(this.props.initialDate),
+      initalDisplayYear: this.props.utils.getYear(this.props.initialDate),
       selectedDate: this.props.initialDate,
       displayMonthDay: !this.props.openToYearSelection,
     });
@@ -80,6 +82,7 @@ class Calendar extends Component {
       const date = nextProps.initialDate || new Date();
       this.setState({
         displayDate: this.props.utils.getFirstDayOfMonth(date),
+        initalDisplayYear: this.props.utils.getYear(date),
         selectedDate: date,
       });
     }
@@ -188,6 +191,7 @@ class Calendar extends Component {
   handleTouchTapDateDisplayYear = () => {
     this.setState({
       displayMonthDay: false,
+      initalDisplayYear: this.props.utils.getYear(this.getSelectedDate()),
     });
   };
 
@@ -253,8 +257,14 @@ class Calendar extends Component {
         this.addSelectedYears(1);
         break;
       case 'esc' :
+        // restore the year back to how it was when the year picker started
         event.stopPropagation();
-        this.setState({displayMonthDay: true});
+        this.handleTouchTapYear(event, this.state.initalDisplayYear);
+        break;
+      case 'space' :
+        // accept the current year on the picker as the one needed
+        event.stopPropagation();
+        this.handleTouchTapYear(event, this.props.utils.getYear(this.state.selectedDate));
         break;
     }
   }
