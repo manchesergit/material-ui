@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import transitions from '../styles/transitions';
 import SlideInTransitionGroup from '../internal/SlideIn';
 import keycode from 'keycode';
+import ToolTip from '../internal/Tooltip';
 
 function getStyles(props, context, state) {
   const {datePicker} = context.muiTheme;
@@ -52,6 +53,9 @@ function getStyles(props, context, state) {
     yearTitle: {
       cursor: props.disableYearSelection || selectedYear ? 'default' : 'pointer',
     },
+    yearTooltip: {
+      boxSizing: 'border-box',
+    },
   };
 
   return styles;
@@ -68,11 +72,15 @@ class DateDisplay extends Component {
     onTouchTapYear: PropTypes.func,
     selectedDate: PropTypes.object.isRequired,
     style: PropTypes.object,
+    yearToolTipDisabled: PropTypes.bool,
+    yearToolTipStyles: PropTypes.object,
+    yearToolTipText: PropTypes.string,
   };
 
   static defaultProps = {
     disableYearSelection: false,
     monthDaySelected: true,
+    yearToolTipDisabled: false,
   };
 
   static contextTypes = {
@@ -80,9 +88,9 @@ class DateDisplay extends Component {
   };
 
   state = {
+    focusedYear: false,
     selectedYear: false,
     transitionDirection: 'up',
-    focusedYear: false,
   };
 
   componentWillMount() {
@@ -147,6 +155,9 @@ class DateDisplay extends Component {
       onTouchTapYear, // eslint-disable-line no-unused-vars
       selectedDate, // eslint-disable-line no-unused-vars
       style,
+      yearToolTipStyles, // eslint-disable-line no-unused-vars
+      yearToolTipDisabled,
+      yearToolTipText,
       ...other
     } = this.props;
 
@@ -157,6 +168,7 @@ class DateDisplay extends Component {
       year: 'numeric',
     }).format(selectedDate);
 
+    const tooltip = yearToolTipText || 'Select to change the calendar year';
     const styledYear = this.state.focusedYear ? <b>{year}</b> : year;
 
     const dateTime = new DateTimeFormat(locale, {
@@ -165,8 +177,20 @@ class DateDisplay extends Component {
       day: '2-digit',
     }).format(selectedDate);
 
+    const yearTooltipElement = ( !yearToolTipDisabled &&
+      <ToolTip
+        label={tooltip}
+        show={this.state.focusedYear}
+        verticalPosition="bottom"
+        horizontalPosition="right"
+        style={Object.assign(styles.tooltip, yearToolTipStyles)}
+        id="displayYear-YearTooltip"
+      />
+    );
+
     return (
       <div {...other} style={prepareStyles(styles.root, style)}>
+        {yearTooltipElement}
         <SlideInTransitionGroup style={styles.year} direction={this.state.transitionDirection}>
           <div
             id="displayYear"
@@ -176,6 +200,8 @@ class DateDisplay extends Component {
             onTouchTap={this.handleTouchTapYear}
             onFocus={this.handleFocus}
             onBlur={this.handleFocus}
+            onMouseEnter={this.handleFocus}
+            onMouseLeave={this.handleFocus}
             onKeyUp={this.handleKeyUp}
           >
             {styledYear}
