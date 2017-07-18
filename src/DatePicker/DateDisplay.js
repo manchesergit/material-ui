@@ -152,7 +152,7 @@ class DateDisplay extends Component {
     }
   };
 
-  setYearShouldBeHighlighted(isFocused){
+  setYearShouldBeHighlighted(isFocused) {
     this.setState({
       focusedYear: isFocused,
       highlightYear: isFocused && !this.state.selectedYear,
