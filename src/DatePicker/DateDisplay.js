@@ -8,6 +8,7 @@ import ToolTip from '../internal/Tooltip';
 function getStyles(props, context, state) {
   const {datePicker} = context.muiTheme;
   const {selectedYear} = state;
+  const {highlightYear} = state;
   const isLandscape = props.mode === 'landscape';
 
   const styles = {
@@ -52,6 +53,7 @@ function getStyles(props, context, state) {
     },
     yearTitle: {
       cursor: props.disableYearSelection || selectedYear ? 'default' : 'pointer',
+      fontWeight: highlightYear ? '700' : '500',
     },
     yearTooltip: {
       boxSizing: 'border-box',
@@ -81,6 +83,7 @@ class DateDisplay extends Component {
     disableYearSelection: false,
     monthDaySelected: true,
     yearToolTipDisabled: false,
+    yearToolTipText: null,
   };
 
   static contextTypes = {
@@ -89,6 +92,7 @@ class DateDisplay extends Component {
 
   state = {
     focusedYear: false,
+    highlightYear: false,
     selectedYear: false,
     transitionDirection: 'up',
   };
@@ -132,8 +136,12 @@ class DateDisplay extends Component {
     }
   };
 
-  handleFocus = () => {
-    this.setState({focusedYear: !this.state.focusedYear});
+  handleBlurYear = () => {
+    this.setYearShouldBeHighlighted(false);
+  };
+
+  handleFocusYear = () => {
+    this.setYearShouldBeHighlighted(true);
   };
 
   handleKeyUp = (event) => {
@@ -143,6 +151,13 @@ class DateDisplay extends Component {
       }
     }
   };
+
+  setYearShouldBeHighlighted(isFocused){
+    this.setState({
+      focusedYear: isFocused,
+      highlightYear: isFocused && !this.state.selectedYear,
+    });
+  }
 
   render() {
     const {
@@ -169,7 +184,6 @@ class DateDisplay extends Component {
     }).format(selectedDate);
 
     const tooltip = yearToolTipText || 'Select to change the calendar year';
-    const styledYear = this.state.focusedYear ? <b>{year}</b> : year;
 
     const dateTime = new DateTimeFormat(locale, {
       month: 'short',
@@ -180,7 +194,7 @@ class DateDisplay extends Component {
     const yearTooltipElement = ( !yearToolTipDisabled &&
       <ToolTip
         label={tooltip}
-        show={this.state.focusedYear}
+        show={this.state.highlightYear}
         verticalPosition="bottom"
         horizontalPosition="right"
         style={Object.assign(styles.tooltip, yearToolTipStyles)}
@@ -198,13 +212,13 @@ class DateDisplay extends Component {
             key={year}
             style={styles.yearTitle}
             onTouchTap={this.handleTouchTapYear}
-            onFocus={this.handleFocus}
-            onBlur={this.handleFocus}
-            onMouseEnter={this.handleFocus}
-            onMouseLeave={this.handleFocus}
+            onFocus={this.handleFocusYear}
+            onBlur={this.handleBlurYear}
+            onMouseEnter={this.handleFocusYear}
+            onMouseLeave={this.handleBlurYear}
             onKeyUp={this.handleKeyUp}
           >
-            {styledYear}
+            {year}
           </div>
         </SlideInTransitionGroup>
         <SlideInTransitionGroup style={styles.monthDay} direction={this.state.transitionDirection}>
