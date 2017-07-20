@@ -193,8 +193,9 @@ class DialogInline extends Component {
   };
 
   state = {
-    forceMove: false, // should the current focus be moved forceably
+    forceMove: true, // should the current focus be moved forceably (we want to force this initally)
     lastElement: null,  // what was the last element that had focus
+    open: false,  // is the dialog open or not
   };
 
   componentWillMount() {
@@ -210,13 +211,18 @@ class DialogInline extends Component {
     if (nextProps.open) {
       this.originalFocus = document.activeElement;
     } else if (this.originalFocus) {
-      this.originalFocus.focus();
+      this.setFocus(this.originalFocus);
       this.originalFocus = null;
     }
   }
 
   componentDidUpdate() {
     this.positionDialog();
+
+    if (!this.state.open && this.props.open) {
+      this.setFocus(this.getDialogElement());
+      this.setState({open: true});
+    }
   }
 
   makeRandomNumber() {
@@ -285,9 +291,10 @@ class DialogInline extends Component {
 
     if (this.props.onRequestClose) {
       this.props.onRequestClose(!!buttonClicked);
-      const ActiveElement = window.prevActiveElement;
-      ActiveElement.focus();
+      this.setFocus(window.prevActiveElement);
     }
+
+    this.setState({open: false});
   }
 
   handleTouchTapOverlay = () => {
@@ -327,24 +334,38 @@ class DialogInline extends Component {
     return `${id}-paper`;
   }
 
+  // get the element that is the dialog on screen
+  getDialogElement() {
+    return document.getElementById(this.makePaperId());
+  }
+
   /**
    * check if the currently focused element is a child of this
    * if its not, then move the focus back to the last element that was in focus
    */
   moveActive() {
-    const id = this.makePaperId();
-    const dialogWindow = document.getElementById(id);
-    const insideWindow = DomUtils.isDescendant(dialogWindow, document.activeElement) ||
-                          dialogWindow === document.activeElement;
+    if (this.props.open) {
+      const dialogWindow = this.getDialogElement();
+      const insideWindow = DomUtils.isDescendant(dialogWindow, document.activeElement) ||
+                            dialogWindow === document.activeElement;
 
-    this.setState({forceMove: !insideWindow});
+      this.setState({forceMove: !insideWindow});
 
-    if (!insideWindow) {
-      const focusOn = this.state.lastElement || dialogWindow; // if theres something pushed to state use that
-      setTimeout(() => document.activeElement.blur(), 10);
-      setTimeout(() => focusOn.focus(), 10);
-    } else {
-      this.setState({lastElement: document.activeElement}); // save this element incase we go out of foucs
+      if (!insideWindow) {
+        this.setFocus(this.state.lastElement || dialogWindow); // if theres something pushed to state use that
+      } else {
+        this.setState({lastElement: document.activeElement}); // save this element incase we go out of foucs
+      }
+    }
+  }
+
+  // set the focus on a given element
+  setFocus(element) {
+    if (element !== null) {
+      // timeout to allow the browser to do its stuff before we do ours
+      const waitTime = 1;
+      setTimeout(() => document.activeElement.blur(), waitTime);
+      setTimeout(() => element.focus(), waitTime);
     }
   }
 
@@ -376,6 +397,7 @@ class DialogInline extends Component {
 
     const baseId = this.makeIdValue();
     const titleId = `${baseId}-title`;
+    const actionsContainerId = `${baseId}-actionContiner`;
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
@@ -388,7 +410,7 @@ class DialogInline extends Component {
     styles.title = Object.assign(styles.title, titleStyle);
 
     const actionsContainer = React.Children.count(actions) > 0 && (
-      <div
+      <div id={actionsContainerId}
         ref="dialogActions"
         className={actionsContainerClassName}
         style={prepareStyles(styles.actionsContainer)}
@@ -422,8 +444,14 @@ class DialogInline extends Component {
     const transitionGroupId = `${baseId}-transitionGroup`;
     const transitionItemId = `${baseId}-transitionItem`;
     const overlayId = `${baseId}-overlay`;
+    const tabstopTopId = `${baseId}-tabstopTop`;
+    const tabstopBottomId = `${baseId}-tabstopBottom`;
     const paperId = this.makePaperId();
-    const tabIndex = this.state.forceMove ? -1 : null;  // if we are in the dialog we don't need a tabIndex
+
+    // the tab indexes are used to tell the browser where it can get to
+    const paperTabIndex = this.state.forceMove ? -1 : null;  // if we are in the dialog we don't need a tabIndex
+    const tabStopTabIndexTop = 0;
+    const tapStopTabIndexBottom = 0;
 
     return (
       <div
@@ -459,12 +487,12 @@ class DialogInline extends Component {
               className={contentClassName}
               style={styles.content}
             >
-              <div id="dialog-Tabstart" tabIndex="0" />
+              <div id={tabstopTopId} tabIndex={tabStopTabIndexTop} />
               <Paper
                 id={paperId}
                 className={paperClassName}
                 zDepth={4}
-                tabIndex={tabIndex}
+                tabIndex={paperTabIndex}
                 {...paperProps}
               >
                 {titleElement}
@@ -477,7 +505,7 @@ class DialogInline extends Component {
                 </div>
                 {actionsContainer}
               </Paper>
-              <div id="dialog-Tabstop" tabIndex="0" />
+              <div id={tabstopBottomId} tabIndex={tapStopTabIndexBottom} />
             </TransitionItem>
           }
         </ReactTransitionGroup>
