@@ -195,12 +195,12 @@ class DialogInline extends Component {
   state = {
     forceMove: true, // should the current focus be moved forceably (we want to force this initally)
     lastElement: null,  // what was the last element that had focus
-    open: false,  // is the dialog open or not
   };
 
   componentWillMount() {
     const uniqueId = `${this.constructor.name}-${this.makeRandomNumber()}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.opened = false;
   }
 
   componentDidMount() {
@@ -219,9 +219,9 @@ class DialogInline extends Component {
   componentDidUpdate() {
     this.positionDialog();
 
-    if (!this.state.open && this.props.open) {
+    if (!this.opened && this.props.open) {
       this.setFocus(this.getDialogElement());
-      this.setState({open: true});
+      this.opened = true;
     }
   }
 
@@ -294,7 +294,7 @@ class DialogInline extends Component {
       this.setFocus(window.prevActiveElement);
     }
 
-    this.setState({open: false});
+    this.opened = false;
   }
 
   handleTouchTapOverlay = () => {
@@ -410,7 +410,8 @@ class DialogInline extends Component {
     styles.title = Object.assign(styles.title, titleStyle);
 
     const actionsContainer = React.Children.count(actions) > 0 && (
-      <div id={actionsContainerId}
+      <div
+        id={actionsContainerId}
         ref="dialogActions"
         className={actionsContainerClassName}
         style={prepareStyles(styles.actionsContainer)}
