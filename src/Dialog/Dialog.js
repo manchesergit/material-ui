@@ -433,7 +433,7 @@ class DialogInline extends Component {
       >
         {open &&
           <EventListener
-            target="window"
+            target={dialogGroupID}
             onKeyDown={this.handleKeyDown}
             onKeyUp={this.handleKeyUp}
             onResize={this.handleResize}
