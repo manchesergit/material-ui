@@ -210,4 +210,32 @@ describe('<AutoComplete />', () => {
       assert.strictEqual(wrapper.state().searchText, 'f');
     });
   });
+  describe('prop: id', () => {
+    it('should not be overridden', () => {
+      const autoCompleteId = 'test-autocomplete-id';
+      const wrapper = shallowWithContext(
+        <AutoComplete
+          value={{name: 'foo'}}
+          dataSource={['foo', 'bar']}
+          searchText="f"
+          menuCloseDelay={10}
+          id={autoCompleteId}
+        />
+      );
+
+      assert.strictEqual(wrapper.prop('id'), autoCompleteId);
+    });
+    it('should generate id if one not supplied', () => {
+      const wrapper = shallowWithContext(
+        <AutoComplete
+          value={{name: 'foo'}}
+          dataSource={['foo', 'bar']}
+          searchText="f"
+          menuCloseDelay={10}
+        />
+      );
+
+      assert.ok(wrapper.prop('id'), 'should generate id if one not supplied');
+    });
+  });
 });
