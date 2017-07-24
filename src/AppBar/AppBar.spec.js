@@ -260,4 +260,23 @@ describe('<AppBar />', () => {
     const expectedStyle = Object.assign({}, iconButtonStyle, {marginTop: 99, muiPrepared: true});
     assert.deepEqual(style, expectedStyle, 'should be change style.marginTop/muiPrepared only');
   });
+  it('renders AppBar with supplied ID', () => {
+    const appBarId = 'test-appbarID';
+    const wrapper = shallowWithContext(
+      <AppBar id={appBarId} />
+    );
+
+    assert.strictEqual(wrapper.find('Paper').get(0).props.id, appBarId,
+      'should have the supplied id');
+  });
+  it('renders AppBar and generates an id', () => {
+    const wrapper = shallowWithContext(
+      <AppBar />
+      );
+
+    assert.ok(wrapper.find('Paper').get(0).props.id,
+          'should have a generated  id');
+    assert.ok(wrapper.find('Paper').get(0).props.id.length > 0,
+              'should have a generated  id');
+  });
 });
