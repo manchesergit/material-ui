@@ -22,4 +22,25 @@ describe('<DatePicker />', () => {
         'should format the date to ISO 8601 (YYYY-MM-DD)');
     });
   });
+  describe('id handling', () => {
+    it('should use the supplied id without overridding', () => {
+      const date = new Date(1448967059892); // Tue, 01 Dec 2015 10:50:59 GMT
+      const datePickerId = 'test-datePickerId';
+      const wrapper = shallowWithContext(
+        <DatePicker value={date} id={datePickerId} />
+      );
+
+      assert.strictEqual(wrapper.prop('id'), datePickerId,
+        'should use supplied id');
+    });
+    it('should generate an id if one not supplied', () => {
+      const date = new Date(1448967059892); // Tue, 01 Dec 2015 10:50:59 GMT
+      const wrapper = shallowWithContext(
+        <DatePicker value={date} />
+      );
+
+      assert.ok(wrapper.prop('id'),
+        'should generate an id if one not supplied');
+    });
+  });
 });
