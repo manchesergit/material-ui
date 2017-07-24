@@ -234,8 +234,7 @@ class AppBar extends Component {
 
     const iconLeftStyle = Object.assign({}, styles.iconButtonStyle, iconStyleLeft);
     const iconButtonParent = this.props.title.length === 0 ? 'App Bar' : `${this.props.title} App Bar`;
-    const appBarTitle = typeof title === 'string' ? title : '';
-    const appBarId = `${baseId}-${appBarTitle}`;
+    const appBarId = `${baseId}`;
 
     if (showMenuIconButton) {
       if (iconElementLeft) {
