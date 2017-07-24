@@ -42,4 +42,20 @@ describe('<Avatar />', () => {
     wrapper.setProps({src: 'meow.jpg'});
     assert.ok(wrapper.is({src: 'meow.jpg'}), 'should have changed the src');
   });
+  it('imageDescription added to alt tag', () => {
+    const imageDescription = 'test-image-description';
+    const wrapper = shallowWithContext(
+      <Avatar src="test.jpg" imageDescription={imageDescription} >{testChildren}</Avatar>
+    );
+    assert.equal(wrapper.prop('alt'), imageDescription,
+      'alt should be imageDescription supplied ');
+  });
+  it('alt tag generated if no imageDescription supplied', () => {
+    const wrapper = shallowWithContext(
+      <Avatar src="test.jpg" >{testChildren}</Avatar>
+    );
+
+    assert.ok(wrapper.prop('alt'), 'should generate an alt tag');
+    assert.ok(wrapper.prop('alt').startsWith('Uncharacterised icon ID #'), 'should generate an alt tag');
+  });
 });
