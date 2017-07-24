@@ -42,7 +42,7 @@ const TextFieldLabel = (props) => {
   const uniqueId = `TextFieldLabel-${className}-${Math.floor(Math.random() * 0xFFFF)}`;
   const baseId = id || uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
 
-  const Container = React.Children.count > 1 ? 'label' : 'span';
+  const Container = React.Children.count(children) > 1 ? 'label' : 'span';
 
   return (
     <Container
