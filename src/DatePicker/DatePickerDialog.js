@@ -171,14 +171,13 @@ class DatePickerDialog extends Component {
     const Container = (container === 'inline' ? Popover : Dialog);
     const modal = true;
     const componentId = id || this.uniqueId;
-    const divId = `${componentId}-div`;
     const containerId = `${componentId}-${container}Container`;
     const calendarId = `${componentId}-calendar`;
-    const eventTarget = modal ? divId : 'window';
+    const eventTarget = modal ? componentId : 'window';
     const escOverride = modal ? disableEscapeKeyForDialogs : null;
 
     return (
-      <div ref="root" id={divId} {...other}>
+      <div ref="root" id={componentId} {...other}>
         <Container
           anchorEl={this.refs.root} // For Popover
           animation={animation || PopoverAnimationVertical} // For Popover
