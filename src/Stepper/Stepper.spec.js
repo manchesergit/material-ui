@@ -145,4 +145,14 @@ describe('<Stepper />', () => {
       assert.strictEqual(wrapper.find(StepConnector).length, 0, 'should not contain a <StepConnector /> child');
     });
   });
+
+  describe('id handling', () => {
+    it('should use the supplied id without overridding', () => {
+      const id = '12345';
+      const wrapper = shallowWithContext(
+        <Stepper id={id} />
+      );
+      assert.strictEqual(wrapper.prop('id'), id, 'should use supplied id');
+    });
+  });
 });
