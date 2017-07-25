@@ -355,10 +355,9 @@ class Calendar extends Component {
     } = this.props;
 
     const baseId = this.props.id || this.uniqueId;
-    const divId = `${baseId}-div`;
 
     return (
-      <div style={prepareStyles(styles.root)} id={divId}>
+      <div style={prepareStyles(styles.root)} id={baseId}>
         <EventListener
           target="window"
           onKeyDown={this.handleWindowKeyDown}
