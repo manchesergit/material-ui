@@ -250,28 +250,30 @@ describe('<Calendar />', () => {
       assert.strictEqual(wrapper.find(CalendarYear).length, 1, 'should have the year select');
     });
 
-    it('should produce an ID when one has not been provided', () => {
-      const wrapper = shallowWithContext(
-        <Calendar
-          DateTimeFormat={dateTimeFormat}
-          locale="en-US"
-        />
-      );
+    describe('ID handling', () => {
+      it('should produce an ID when one has not been provided', () => {
+        const wrapper = shallowWithContext(
+          <Calendar
+            DateTimeFormat={dateTimeFormat}
+            locale="en-US"
+          />
+        );
 
-      assert.ok(wrapper.prop('id'), 'an ID value should be generated');
-    });
+        assert.ok(wrapper.prop('id'), 'an ID value should be generated');
+      });
 
-    it('should use the given ID', () => {
-      const id = 'methuselah';
-      const wrapper = shallowWithContext(
-        <Calendar
-          DateTimeFormat={dateTimeFormat}
-          locale="en-US"
-          id={id}
-        />
-      );
+      it('should use the given ID', () => {
+        const id = 'methuselah';
+        const wrapper = shallowWithContext(
+          <Calendar
+            DateTimeFormat={dateTimeFormat}
+            locale="en-US"
+            id={id}
+          />
+        );
 
-      assert.strictEqual(wrapper.prop('id'), id, `the provided id ${id} was not used`);
+        assert.strictEqual(wrapper.prop('id'), id, `the provided id ${id} was not used`);
+      });
     });
   });
 });
