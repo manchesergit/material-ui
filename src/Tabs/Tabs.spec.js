@@ -54,4 +54,30 @@ describe('<Tabs />', () => {
       assert.strictEqual(wrapper.state().selectedIndex, 0);
     });
   });
+
+  describe('ID handling', () => {
+    it('should produce an ID when one has not been provided', () => {
+      const wrapper = shallowWithContext(
+        <Tabs value="2">
+          <Tab value="1" />
+          <Tab value="2" />
+        </Tabs>
+      );
+
+      assert.ok(wrapper.find('div > div').get(0).props.id, 'an ID value should be generated');
+      assert.ok(wrapper.find('div > div').get(0).props.id.length > 0, 'an ID value should be generated');
+    });
+
+    it('should use the given ID', () => {
+      const id = '12345';
+      const wrapper = shallowWithContext(
+        <Tabs value="2" id={id}>
+          <Tab value="1" />
+          <Tab value="2" />
+        </Tabs>
+      );
+
+      assert.strictEqual(wrapper.prop('id'), id, 'the provided id ${id} was not used');
+    });
+  });
 });
