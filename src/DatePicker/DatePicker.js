@@ -338,13 +338,12 @@ class DatePicker extends Component {
     const {prepareStyles} = this.context.muiTheme;
     const formatDate = formatDateProp || this.formatDate;
     const inputId = id || this.uniqueId;
-    const divId = `${inputId}-div`;
     const textFieldId = `${inputId}-textField`;
     const datePickerId = `${inputId}-datePicker`;
 
     return (
-      <div id={divId} className={className} style={prepareStyles(Object.assign({}, style))} >
-        <EventListener target={divId} onKeyDown={this.handleKeyEvent} />
+      <div id={inputId} className={className} style={prepareStyles(Object.assign({}, style))} >
+        <EventListener target={inputId} onKeyDown={this.handleKeyEvent} />
         <DatePickerDialog
           id={datePickerId}
           DateTimeFormat={DateTimeFormat}
