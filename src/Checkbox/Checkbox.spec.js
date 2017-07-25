@@ -97,5 +97,40 @@ describe('<Checkbox />', () => {
         'should take into account the input change state');
     });
   });
-});
+  describe('a11y checks', () => {
+    it('aria-checked should be true when checked by default', () => {
+      const wrapper = mountWithContext(
+        <Checkbox defaultChecked={true} />
+      );
 
+      const input = wrapper.find('input');
+
+      assert.ok(input.prop('aria-checked'), 'Should be true');
+    });
+    it('aria-checked should be false when unchecked by default', () => {
+      const wrapper = mountWithContext(
+        <Checkbox defaultChecked={false} />
+      );
+
+      const input = wrapper.find('input');
+
+      assert.isNotOk(input.prop('aria-checked'), 'Should be false');
+    });
+    it('aria-checked should show correct state after change ', () => {
+      const wrapper = mountWithContext(
+        <Checkbox defaultChecked={false} />
+      );
+
+      const input = wrapper.find('input');
+      // Simulate a change on the input - toggle to checked
+      input.node.checked = !input.node.checked;
+      input.simulate('change');
+      assert.ok(input.prop('aria-checked'), 'Should be true');
+      // Simulate a change on the input - toggle to unchecked
+      input.node.checked = !input.node.checked;
+      input.simulate('change');
+
+      assert.isNotOk(input.prop('aria-checked'), 'Should be false');
+    });
+  });
+});
