@@ -148,7 +148,7 @@ class Step extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
-    const divId = `${this.makeBaseId()}-stepDiv`;
+    const divId = this.makeBaseId();
     const labelId = this.canBeLabelled() ? this.makeLabelId() : null;
 
     return (
