@@ -154,5 +154,12 @@ describe('<Stepper />', () => {
       );
       assert.strictEqual(wrapper.prop('id'), id, 'should use supplied id');
     });
+
+    it('should generate an id if one not supplied', () => {
+      const wrapper = shallowWithContext(
+        <Stepper />
+      );
+      assert.ok(wrapper.prop('id'), 'should generate an id if one not supplied');
+    });
   });
 });
