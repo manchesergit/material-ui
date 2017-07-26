@@ -77,4 +77,21 @@ describe('<Step />', () => {
       assert.strictEqual(childWrapper.prop('active'), false);
     });
   });
+
+  describe('id handling', () => {
+    it('should use the supplied id without overriding', () => {
+      const id = '12345';
+      const wrapper = shallowWithContext(
+        <Step id={id} />
+      );
+      assert.strictEqual(wrapper.props('id').id, id, 'should use provided id');
+    });
+
+    it('should generate an id if one not supplied', () => {
+      const wrapper = shallowWithContext(
+        <Step />
+      );
+      assert.ok(wrapper.prop('id'), 'should generate an id if not supplied');
+    });
+  });
 });
