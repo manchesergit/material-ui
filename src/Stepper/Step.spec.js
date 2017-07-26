@@ -84,7 +84,7 @@ describe('<Step />', () => {
       const wrapper = shallowWithContext(
         <Step id={id} />
       );
-      assert.strictEqual(wrapper.props('id').id, id, 'should use provided id');
+      assert.strictEqual(wrapper.prop('id'), id, 'should use provided id');
     });
 
     it('should generate an id if one not supplied', () => {
