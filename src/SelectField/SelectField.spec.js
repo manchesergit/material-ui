@@ -1,10 +1,11 @@
 /* eslint-env mocha */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import {assert} from 'chai';
 import getMuiTheme from '../styles/getMuiTheme';
 import SelectField from './SelectField';
+import TextFieldLabel from '../TextField';
 import TouchRipple from '../internal/TouchRipple';
 import MenuItem from '../MenuItem';
 import TestUtils from 'react-dom/test-utils';
@@ -22,6 +23,24 @@ describe('<SelectField />', () => {
         <SelectField disabled={true} />
       );
       assert.strictEqual(wrapper.find(TouchRipple).length, 0, 'should not contain a TouchRipple');
+    });
+  });
+  describe('label back reference', () => {
+    it('label should back refer to parent', () => {
+      const selectFieldId = 'test-select-field-id';
+      const wrapper = mountWithContext(
+        <SelectField
+          multiple={false}
+          id={selectFieldId}
+          floatingLabelText="Testing Label"
+        >
+          <MenuItem className="item1" value="item1" primaryText="item 1" />
+          <MenuItem className="item2" value="item2" primaryText="item 2" />
+          <MenuItem className="item3" value="item3" primaryText="item 3" />
+        </SelectField>
+      );
+      assert.strictEqual(wrapper.find({id: selectFieldId.concat('-TextFieldLabel')}).props().htmlFor,
+        selectFieldId, 'should back refer to parent');
     });
   });
 

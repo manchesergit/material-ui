@@ -43,6 +43,18 @@ describe('<TextField />', () => {
     wrapper.update();
     assert.strictEqual(wrapper.find(TextFieldLabel).props().shrink, true, 'should shrink TextFieldLabel');
   });
+  it('TextFieldLabel has reference to parent TextField', () => {
+    const textFieldId = 'test-text-field';
+    const wrapper = shallowWithContext(
+      <TextField
+        floatingLabelText="floating label text"
+        id={textFieldId}
+      />
+    );
+
+    assert.strictEqual(wrapper.find(TextFieldLabel).props().htmlFor,
+      textFieldId, 'should have ref to parent TextField');
+  });
 
   describe('prop: children', () => {
     it('should forward any property to the root', () => {
