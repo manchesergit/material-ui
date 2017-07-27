@@ -159,4 +159,22 @@ describe('<StepButton />', () => {
       assert.strictEqual(handleTouchStart.callCount, 2, 'should call handleTouchStart twice');
     });
   });
+
+  describe('ID handling', () => {
+    it('should use the supplied id without overriding', () => {
+      const id = '12345';
+      const expectedId = `${id}-StepButton`;
+      const wrapper = themedShallow(
+        <StepButton id={id} />
+      );
+      assert.strictEqual(wrapper.prop('id'), expectedId, 'should use provided id');
+    });
+
+    it('should generate an id if one not supplied', () => {
+      const wrapper = themedShallow(
+        <StepButton />
+      );
+      assert.ok(wrapper.props('id'), 'should generate an id if not supplied');
+    });
+  });
 });

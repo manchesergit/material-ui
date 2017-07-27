@@ -91,7 +91,6 @@ class Step extends Component {
 
     if (this.classCanBeLabelled(child)) {
       const ariaLabelledBy = this.makeLabelId();
-
       return React.cloneElement(child, Object.assign(
         {active, completed, disabled, icon, last, id},
         child.props, {id: childId}, {labelledById: ariaLabelledBy}
@@ -113,7 +112,6 @@ class Step extends Component {
         return true;
       }
     }
-
     return false;
   }
 
