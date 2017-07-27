@@ -146,7 +146,6 @@ class StepButton extends Component {
     } = this.props;
 
     const baseId = id ? `${id}-${this.constructor.name}` : this.uniqueId;
-
     const styles = getStyles(this.props, this.context, this.state);
 
     const childLabelId = `${baseId}-stepLabel`;
