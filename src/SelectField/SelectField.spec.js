@@ -25,7 +25,7 @@ describe('<SelectField />', () => {
       assert.strictEqual(wrapper.find(TouchRipple).length, 0, 'should not contain a TouchRipple');
     });
   });
-  describe('label back reference', () => {
+  describe('FloatingLabel renders as span', () => {
     it('label should back refer to parent', () => {
       const selectFieldId = 'test-select-field-id';
       const wrapper = mountWithContext(
@@ -39,8 +39,8 @@ describe('<SelectField />', () => {
           <MenuItem className="item3" value="item3" primaryText="item 3" />
         </SelectField>
       );
-      assert.strictEqual(wrapper.find({id: selectFieldId.concat('-TextFieldLabel')}).props().htmlFor,
-        selectFieldId, 'should back refer to parent');
+      assert.strictEqual(wrapper.find({id: selectFieldId.concat('-TextFieldLabel')}).type(), 'span',
+        selectFieldId, 'should render as span');
     });
   });
 

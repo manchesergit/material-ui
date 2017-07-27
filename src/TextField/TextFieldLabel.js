@@ -42,7 +42,10 @@ const TextFieldLabel = (props) => {
   const uniqueId = `TextFieldLabel-${className}-${Math.floor(Math.random() * 0xFFFF)}`;
   const baseId = id || uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
 
-  const Container = React.Children.count(children) > 1 ? 'label' : 'span';
+  // if we have a html for value then we are rendering an label to back refer
+  // to an input other wise its a selectfield so make it a span to
+  // prevent orphaned label errors on a11y tests
+  const Container = htmlFor ? 'label' : 'span';
 
   return (
     <Container
