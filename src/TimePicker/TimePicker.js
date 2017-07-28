@@ -42,6 +42,12 @@ class TimePicker extends Component {
      * Tells the component to display the picker in `ampm` (12hr) format or `24hr` format.
      */
     format: PropTypes.oneOf(['ampm', '24hr']),
+
+    /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the constructor name along with appropriate properties and a random number will be used.
+     */
     id: PropTypes.string,
     /**
      * How many minutes should be added/subtracted when moving the clock pointer.
@@ -121,11 +127,10 @@ class TimePicker extends Component {
     this.setState({
       time: this.isControlled() ? this.getControlledTime() : this.props.defaultTime,
     });
-    const generatedId = Math.floor(Math.random() * 0xFFFF);
-    const uniqueId = `${this.constructor.name}-${generatedId}`;
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
 
-    const uniqueLabelId = `${this.constructor.name}-label-${generatedId}`;
+    const uniqueLabelId = `${this.constructor.name}-label-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueLabelId = uniqueLabelId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
@@ -137,6 +142,9 @@ class TimePicker extends Component {
     }
   }
 
+  makeBaseId() {
+    return this.props.id || this.uniqueId;
+  }
   /**
    * Alias for `openDialog()` for an api consistent with TextField.
    */
@@ -202,6 +210,7 @@ class TimePicker extends Component {
       dialogBodyStyle,
       dialogStyle,
       format,
+      id, // eslint-disable-line no-unused-vars
       okLabel,
       onFocus, // eslint-disable-line no-unused-vars
       onTouchTap, // eslint-disable-line no-unused-vars
@@ -222,7 +231,7 @@ class TimePicker extends Component {
     const timePickerDialogId = `${baseId}-timePickerDialog`;
 
     return (
-      <div id={divId} style={prepareStyles(Object.assign({}, style))}>
+      <div id={this.makeBaseId()} style={prepareStyles(Object.assign({}, style))}>
         <EventListener target={divId} onKeyDown={this.handleKeyEvent} />
         <TextField
           {...other}
