@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 import React from 'react';
-import {shallow} from 'enzyme';
 import {render} from 'enzyme';
 import {assert} from 'chai';
 import Toggle from './Toggle';
@@ -8,7 +7,6 @@ import getMuiTheme from '../styles/getMuiTheme';
 
 describe('<Toggle />', () => {
   const muiTheme = getMuiTheme();
-  const shallowWithContext = (node) => shallow(node, {context: {muiTheme}});
   const renderWithContext = (node) => render(node, {context: {muiTheme}});
   Toggle.muiName = 'toggle';
 
