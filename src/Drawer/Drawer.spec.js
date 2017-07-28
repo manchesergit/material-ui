@@ -3,6 +3,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {assert} from 'chai';
 import Drawer from './Drawer';
+import MenuItem from '../MenuItem';
 import getMuiTheme from '../styles/getMuiTheme';
 import merge from 'lodash.merge';
 
@@ -34,6 +35,22 @@ describe('<Drawer />', () => {
       assert.throws(() => shallowWithContext(
         <Drawer width="80" />
       ), Error, 'Not a valid percentage format.');
+    });
+    it('Empty drawer should have no role', () => {
+      const wrapper = shallowWithContext(
+        <Drawer />
+      );
+      assert.isNotOk(wrapper.prop('role'), 'should not have role');
+    });
+    it('Drawer with menu items has role of menu', () => {
+      const wrapper = shallowWithContext(
+        <Drawer
+          open={true}
+        >
+          <MenuItem> test menu item</MenuItem>
+        </Drawer>
+      );
+      assert.equal(wrapper.prop('role'), 'menu', 'should not have role');
     });
   });
 
