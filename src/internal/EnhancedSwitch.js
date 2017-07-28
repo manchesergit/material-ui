@@ -124,9 +124,6 @@ class EnhancedSwitch extends Component {
     const generatedId = Math.floor(Math.random() * 0xFFFF);
     const uniqueId = `${this.constructor.name}-${this.props.labelPosition}-${generatedId}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
-  }
-
-  componentWillMount() {
     this.componentWillReceiveProps(this.props);
   }
 
