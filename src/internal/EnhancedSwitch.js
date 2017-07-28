@@ -124,6 +124,7 @@ class EnhancedSwitch extends Component {
     const generatedId = Math.floor(Math.random() * 0xFFFF);
     const uniqueId = `${this.constructor.name}-${this.props.labelPosition}-${generatedId}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.componentWillReceiveProps(this.props);
   }
 
   componentDidMount() {
@@ -276,6 +277,7 @@ class EnhancedSwitch extends Component {
       id,
       name,
       value,
+      checked, // eslint-disable-line no-unused-vars
       iconStyle,
       inputStyle,
       inputType,
@@ -377,6 +379,7 @@ class EnhancedSwitch extends Component {
         style={prepareStyles(Object.assign(styles.input, inputStyle))}
         name={name, inputId}
         value={value}
+        checked={this.state.switched}
         disabled={disabled}
         onBlur={this.handleBlur}
         onFocus={this.handleFocus}

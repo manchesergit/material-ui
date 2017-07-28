@@ -1,11 +1,10 @@
 /* eslint-env mocha */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {mount, shallow} from 'enzyme';
+import {mount} from 'enzyme';
 import {assert} from 'chai';
 import getMuiTheme from '../styles/getMuiTheme';
 import SelectField from './SelectField';
-import TextFieldLabel from '../TextField';
 import TouchRipple from '../internal/TouchRipple';
 import MenuItem from '../MenuItem';
 import TestUtils from 'react-dom/test-utils';
