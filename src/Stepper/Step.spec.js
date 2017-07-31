@@ -3,6 +3,8 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import {assert} from 'chai';
 import Step from './Step';
+import StepLabel from './StepLabel';
+import StepButton from './StepButton';
 import getMuiTheme from '../styles/getMuiTheme';
 
 describe('<Step />', () => {
@@ -92,6 +94,30 @@ describe('<Step />', () => {
         <Step />
       );
       assert.ok(wrapper.prop('id'), 'should generate an id if not supplied');
+    });
+
+    it('should have a reference to ID in returned ariaLabelledBy tag', () => {
+      const id = '12345';
+      const expectedID = `${id}-LabelledBy`;
+      const wrapper = shallowWithContext(
+        <Step id={id}>
+          <StepLabel />
+        </Step>
+      );
+      assert.strictEqual(wrapper.find(StepLabel).props().labelledById,
+    expectedID, 'StepLabel ariaLabelledBy should have reference to parent Step');
+    });
+
+    it('should have a reference to ID in returned ariaLabelledBy tag', () => {
+      const id = '12345';
+      const expectedID = `${id}-LabelledBy`;
+      const wrapper = shallowWithContext(
+        <Step id={id}>
+          <StepButton />
+        </Step>
+      );
+      assert.strictEqual(wrapper.find(StepButton).props().labelledById,
+    expectedID, 'StepButton ariaLabelledBy should have reference to parent Step');
     });
   });
 });
