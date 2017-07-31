@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import React from 'react';
-import {shallow} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import {assert} from 'chai';
 
 import FlatButton from './FlatButton';
@@ -10,6 +10,7 @@ import ActionAndroid from '../svg-icons/action/android';
 describe('<FlatButton />', () => {
   const muiTheme = getMuiTheme();
   const shallowWithContext = (node) => shallow(node, {context: {muiTheme}});
+  const mountWithContext = (node) => mount(node, {context: {muiTheme}});
   const flatButtonTheme = muiTheme.flatButton;
   const testChildren = <div className="unique">Hello World</div>;
 
@@ -199,6 +200,66 @@ describe('<FlatButton />', () => {
       );
 
       assert.strictEqual(wrapper.props().target, '_blank', 'should be _blank');
+    });
+  });
+  describe('a11y warning checks', () => {
+    it('throws an error if no for on input', () => {
+      const inputId = 'test-input-id';
+      const buttonId = 'test-button-id';
+      assert.throws(() => mountWithContext(
+        <FlatButton
+          label="test-button"
+          id={buttonId}
+        >
+          <input type="text" id={inputId} />
+        </FlatButton>
+      ), Error, 'Warning: Material-UI: <FlatButton /> should contain a \'for\' attribute inside the label tag.');
+    });
+    it('throws error for no aria-labelledby', () => {
+      const inputId = 'test-input-id';
+      const buttonId = 'test-button-id';
+      assert.throws(() => mountWithContext(
+        <FlatButton
+          label="test-button"
+          id={buttonId}
+          htmlFor={inputId}
+        >
+          <input type="text" id={inputId} />
+        </FlatButton>
+      ), Error,
+      'Material-UI: <FlatButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
+    });
+    it('throws error for no aria-describedby', () => {
+      const inputId = 'test-input-id';
+      const buttonId = 'test-button-id';
+      assert.throws(() => mountWithContext(
+        <FlatButton
+          label="test-button"
+          id={buttonId}
+          htmlFor={inputId}
+        >
+          <input type="text" id={inputId} aria-labelledby={buttonId} />
+        </FlatButton>
+      ), Error,
+      'Material-UI: <FlatButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
+    });
+    it('No a11y check errors', () => {
+      const inputId = 'test-input-id';
+      const buttonId = 'test-button-id';
+      const wrapper = mountWithContext(
+        <FlatButton
+          label="test-button"
+          id={buttonId}
+          htmlFor={inputId}
+        >
+          <input
+            type="text" id={inputId}
+            aria-labelledby={buttonId}
+            aria-describedby={buttonId}
+          />
+        </FlatButton>
+      );
+      assert.ok(wrapper.find(buttonId));
     });
   });
 });

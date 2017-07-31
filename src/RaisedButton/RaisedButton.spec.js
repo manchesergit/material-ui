@@ -156,4 +156,65 @@ describe('<RaisedButton />', () => {
       assert.strictEqual(wrapper.find(ActionAndroid).props().style.foo, 'bar');
     });
   });
+
+  describe('a11y warning checks', () => {
+    it('throws an error if no for on input', () => {
+      const inputId = 'test-input-id';
+      const buttonId = 'test-button-id';
+      assert.throws(() => mountWithContext(
+        <RaisedButton
+          label="test-button"
+          id={buttonId}
+        >
+          <input type="text" id={inputId} />
+        </RaisedButton>
+      ), Error, 'Warning: Material-UI: <RaisedButton /> should contain a \'for\' attribute inside the label tag.');
+    });
+    it('throws error for no aria-labelledby', () => {
+      const inputId = 'test-input-id';
+      const buttonId = 'test-button-id';
+      assert.throws(() => mountWithContext(
+        <RaisedButton
+          label="test-button"
+          id={buttonId}
+          htmlFor={inputId}
+        >
+          <input type="text" id={inputId} />
+        </RaisedButton>
+      ), Error,
+      'Material-UI: <RaisedButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
+    });
+    it('throws error for no aria-describedby', () => {
+      const inputId = 'test-input-id';
+      const buttonId = 'test-button-id';
+      assert.throws(() => mountWithContext(
+        <RaisedButton
+          label="test-button"
+          id={buttonId}
+          htmlFor={inputId}
+        >
+          <input type="text" id={inputId} aria-labelledby={buttonId} />
+        </RaisedButton>
+      ), Error,
+      'Material-UI: <RaisedButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
+    });
+    it('No a11y check errors', () => {
+      const inputId = 'test-input-id';
+      const buttonId = 'test-button-id';
+      const wrapper = mountWithContext(
+        <RaisedButton
+          label="test-button"
+          id={buttonId}
+          htmlFor={inputId}
+        >
+          <input
+            type="text" id={inputId}
+            aria-labelledby={buttonId}
+            aria-describedby={buttonId}
+          />
+        </RaisedButton>
+      );
+      assert.ok(wrapper.find(buttonId));
+    });
+  });
 });

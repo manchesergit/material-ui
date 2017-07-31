@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import {assert} from 'chai';
 import getMuiTheme from '../styles/getMuiTheme';
 import SelectField from './SelectField';
@@ -12,6 +12,10 @@ import TestUtils from 'react-dom/test-utils';
 describe('<SelectField />', () => {
   const muiTheme = getMuiTheme();
   const mountWithContext = (node) => mount(node, {
+    context: {muiTheme},
+    childContextTypes: {muiTheme: PropTypes.object},
+  });
+  const shallowWithContext = (node) => shallow(node, {
     context: {muiTheme},
     childContextTypes: {muiTheme: PropTypes.object},
   });
@@ -139,6 +143,32 @@ describe('<SelectField />', () => {
 
     afterEach(function() {
       if (wrapper) wrapper.unmount();
+    });
+  });
+  describe('a11y checks', () => {
+    it('should use ID provided', () => {
+      const selectFieldId = 'test-select-field-id';
+      const wrapper = shallowWithContext(
+        <SelectField
+          multiple={false}
+          id={selectFieldId}
+          floatingLabelText="Testing Label"
+        >
+          <MenuItem className="item1" value="item1" primaryText="item 1" />
+        </SelectField>
+      );
+      assert.equal(wrapper.prop('id'), selectFieldId);
+    });
+    it('should generate an ID if none provided', () => {
+      const wrapper = shallowWithContext(
+        <SelectField
+          multiple={false}
+          floatingLabelText="Testing Label"
+        >
+          <MenuItem className="item1" value="item1" primaryText="item 1" />
+        </SelectField>
+      );
+      assert.isOk(wrapper.prop('id'));
     });
   });
 });
