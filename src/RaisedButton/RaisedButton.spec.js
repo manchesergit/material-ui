@@ -8,6 +8,7 @@ import {assert} from 'chai';
 import RaisedButton from './RaisedButton';
 import ActionAndroid from '../svg-icons/action/android';
 import getMuiTheme from '../styles/getMuiTheme';
+import mute from 'mute';
 
 describe('<RaisedButton />', () => {
   const muiTheme = getMuiTheme();
@@ -161,6 +162,8 @@ describe('<RaisedButton />', () => {
     it('throws an error if no for on input', () => {
       const inputId = 'test-input-id';
       const buttonId = 'test-button-id';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
       assert.throws(() => mountWithContext(
         <RaisedButton
           label="test-button"
@@ -169,10 +172,15 @@ describe('<RaisedButton />', () => {
           <input type="text" id={inputId} />
         </RaisedButton>
       ), Error, 'Warning: Material-UI: <RaisedButton /> should contain a \'for\' attribute inside the label tag.');
+
+      unmute(); // stdout and error back on again
     });
+
     it('throws error for no aria-labelledby', () => {
       const inputId = 'test-input-id';
       const buttonId = 'test-button-id';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
       assert.throws(() => mountWithContext(
         <RaisedButton
           label="test-button"
@@ -183,10 +191,15 @@ describe('<RaisedButton />', () => {
         </RaisedButton>
       ), Error,
       'Material-UI: <RaisedButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
+
+      unmute(); // stdout and error back on again
     });
+
     it('throws error for no aria-describedby', () => {
       const inputId = 'test-input-id';
       const buttonId = 'test-button-id';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
       assert.throws(() => mountWithContext(
         <RaisedButton
           label="test-button"
@@ -197,7 +210,10 @@ describe('<RaisedButton />', () => {
         </RaisedButton>
       ), Error,
       'Material-UI: <RaisedButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
+
+      unmute(); // stdout and error back on again
     });
+
     it('No a11y check errors', () => {
       const inputId = 'test-input-id';
       const buttonId = 'test-button-id';

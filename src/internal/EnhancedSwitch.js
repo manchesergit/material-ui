@@ -113,10 +113,12 @@ class EnhancedSwitch extends Component {
     /* We need to know the value of checked if its been passed as it will populated the aria-checked
      * property of the input element.  It needs to be copied from the params as we can't cleanly do a
      * state check and a pram check at render time */
+
+    const checked = this.continsCheckedProperty(props) ? props.checked :
+                    this.containsDefaultCheckedProperty(props) ? props.defaultChecked : props.switched;
     this.state = {
       isKeyboardFocused: false,
-      isChecked: this.continsCheckedProperty(props) ? props.checked :
-        this.containsDefaultCheckedProperty(props) ? props.defaultChecked : false,
+      isChecked: checked,
     };
   }
 

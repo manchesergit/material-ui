@@ -6,6 +6,7 @@ import {assert} from 'chai';
 import FlatButton from './FlatButton';
 import getMuiTheme from '../styles/getMuiTheme';
 import ActionAndroid from '../svg-icons/action/android';
+import mute from 'mute';
 
 describe('<FlatButton />', () => {
   const muiTheme = getMuiTheme();
@@ -202,10 +203,13 @@ describe('<FlatButton />', () => {
       assert.strictEqual(wrapper.props().target, '_blank', 'should be _blank');
     });
   });
+
   describe('a11y warning checks', () => {
     it('throws an error if no for on input', () => {
       const inputId = 'test-input-id';
       const buttonId = 'test-button-id';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
       assert.throws(() => mountWithContext(
         <FlatButton
           label="test-button"
@@ -214,10 +218,15 @@ describe('<FlatButton />', () => {
           <input type="text" id={inputId} />
         </FlatButton>
       ), Error, 'Warning: Material-UI: <FlatButton /> should contain a \'for\' attribute inside the label tag.');
+
+      unmute(); // stdout and error back on again
     });
+
     it('throws error for no aria-labelledby', () => {
       const inputId = 'test-input-id';
       const buttonId = 'test-button-id';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
       assert.throws(() => mountWithContext(
         <FlatButton
           label="test-button"
@@ -228,10 +237,15 @@ describe('<FlatButton />', () => {
         </FlatButton>
       ), Error,
       'Material-UI: <FlatButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
+
+      unmute(); // stdout and error back on again
     });
+
     it('throws error for no aria-describedby', () => {
       const inputId = 'test-input-id';
       const buttonId = 'test-button-id';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
       assert.throws(() => mountWithContext(
         <FlatButton
           label="test-button"
@@ -242,7 +256,10 @@ describe('<FlatButton />', () => {
         </FlatButton>
       ), Error,
       'Material-UI: <FlatButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
+
+      unmute(); // stdout and error back on again
     });
+
     it('No a11y check errors', () => {
       const inputId = 'test-input-id';
       const buttonId = 'test-button-id';
