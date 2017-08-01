@@ -256,11 +256,35 @@ class RaisedButton extends Component {
     zDepth: 0,
   };
 
+
   componentWillMount() {
     const zDepth = this.props.disabled ? 0 : 1;
     this.setState({
       zDepth: zDepth,
       initialZDepth: zDepth,
+    });
+  }
+
+  componentDidMount() {
+    // Code duplication can be reduced in milestone three
+    const warning = require('warning');
+    React.Children.forEach(this.props.children, (child) => {
+      if (child !== null) {
+        if (child.type === 'input') {
+          if (!this.props.hasOwnProperty('htmlFor')) {
+            warning(false,
+              'Material-UI: <RaisedButton /> should contain a \'for\' attribute inside the label tag.');
+            }
+          if (!child.props.hasOwnProperty('aria-labelledby')) {
+            warning(false,
+              'Material-UI: <RaisedButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
+          }
+          if (!child.props.hasOwnProperty('aria-describedby')) {
+            warning(false,
+              'Material-UI: <RaisedButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
+          }
+        }
+      }
     });
   }
 
@@ -413,27 +437,6 @@ class RaisedButton extends Component {
       iconCloned,
       labelElement,
     ];
-
-    // Code duplication can be reduced in milestone three
-    const warning = require('warning');
-    React.Children.forEach(children, (child) => {
-      if (child !== null) {
-        if (child.type === 'input') {
-          if (!this.props.hasOwnProperty('htmlFor')) {
-            warning(false,
-            'Material-UI: <RaisedButton /> should contain a \'for\' attribute inside the label tag.');
-          }
-          if (!child.props.hasOwnProperty('aria-labelledby')) {
-            warning(false,
-              'Material-UI: <RaisedButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
-          }
-          if (!child.props.hasOwnProperty('aria-describedby')) {
-            warning(false,
-               'Material-UI: <RaisedButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
-          }
-        }
-      }
-    });
 
     const ariaLabel = label ? null : icon ? 'Button with an icon' : 'Button';
 
