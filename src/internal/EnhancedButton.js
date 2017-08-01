@@ -106,6 +106,28 @@ class EnhancedButton extends Component {
       this.button.focus();
       this.props.onKeyboardFocus(null, true);
     }
+
+    const warning = require('warning');
+    React.Children.forEach(this.props.children, (child) => {
+      if (child !== null) {
+        if (child.type === 'input') {
+          if (this.props.forInLabel !== undefined) {
+            if (this.props.forInLabel === true) {
+              warning(false,
+              'Material-UI: <FlatButton /> should contain a \'for\' attribute inside the label tag.');
+            }
+          }
+          if (!child.props.hasOwnProperty('aria-labelledby')) {
+            warning(false,
+              'Material-UI: <FlatButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
+          }
+          if (!child.props.hasOwnProperty('aria-describedby')) {
+            warning(false,
+               'Material-UI: <FlatButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
+          }
+        }
+      }
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -334,28 +356,6 @@ class EnhancedButton extends Component {
         </span>
       );
     }
-
-    const warning = require('warning');
-    React.Children.forEach(children, (child) => {
-      if (child !== null) {
-        if (child.type === 'input') {
-          if (forInLabel !== undefined) {
-            if (forInLabel === true) {
-              warning(false,
-              'Material-UI: <FlatButton /> should contain a \'for\' attribute inside the label tag.');
-            }
-          }
-          if (!child.props.hasOwnProperty('aria-labelledby')) {
-            warning(false,
-              'Material-UI: <FlatButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
-          }
-          if (!child.props.hasOwnProperty('aria-describedby')) {
-            warning(false,
-               'Material-UI: <FlatButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
-          }
-        }
-      }
-    });
 
     const ariaRole = overrideRole || 'button';
     const buttonProps = {
