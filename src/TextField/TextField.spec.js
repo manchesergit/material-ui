@@ -236,7 +236,7 @@ describe('<TextField />', () => {
       const wrapper = shallowWithContext(
         <TextField name={classname} />
       );
-      assert.ok(wrapper.props('id'), 'should generate an id if not supplied');
+      assert.ok(wrapper.prop('id'), 'should generate an id if not supplied');
     });
   });
 });

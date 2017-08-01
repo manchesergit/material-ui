@@ -89,4 +89,21 @@ describe('<Snackbar />', () => {
       );
     });
   });
+
+  describe('ID handling', () => {
+    let Id = '';
+    it('should have a unique value in ID field', () => {
+      const wrapper = shallowWithContext(
+        <Snackbar open={true} message="" />
+          );
+      Id = wrapper.find(SnackbarBody).props('div > div > span').contentId;
+    });
+    it('should have a unique value in ID field', () => {
+      const wrapper = shallowWithContext(
+        <Snackbar open={true} message="" />
+          );
+      const secondID = wrapper.find(SnackbarBody).props('div > div > span').contentId;
+      assert.notEqual(Id, secondID, 'These IDs are not equal');
+    });
+  });
 });
