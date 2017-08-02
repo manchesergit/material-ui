@@ -94,6 +94,9 @@ class TableHeader extends Component {
 
   createSuperHeaderRow(child, props) {
     const children = [];
+    if (this.props.adjustForCheckbox) {
+      children.push(this.getCheckboxPlaceholder(props));
+    }
     React.Children.forEach(child.props.children, (child) => {
       children.push(child);
     });
@@ -139,6 +142,7 @@ class TableHeader extends Component {
           width: 24,
           cursor: disabled ? 'default' : 'inherit',
         }}
+        role="presentation"
       />
     );
   }
@@ -146,11 +150,13 @@ class TableHeader extends Component {
   getSelectAllCheckboxColumn(props) {
     if (!this.props.displaySelectAll) return this.getCheckboxPlaceholder(props);
 
+    const disabled = !this.props.enableSelectAll;
     const checkbox = (
       <Checkbox
         key="selectallcb"
         name="selectallcb"
         value="selected"
+        disabled={disabled}
         checked={this.props.selectAllSelected}
         onCheck={this.handleCheckAll}
       />
@@ -164,6 +170,7 @@ class TableHeader extends Component {
         label="Select All"
         style={{
           width: 24,
+          cursor: disabled ? 'not-allowed' : 'inherit',
         }}
       >
         <span
