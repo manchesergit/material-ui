@@ -274,7 +274,7 @@ class RaisedButton extends Component {
           if (!this.props.hasOwnProperty('htmlFor')) {
             warning(false,
               'Material-UI: <RaisedButton /> should contain a \'for\' attribute inside the label tag.');
-            }
+          }
           if (!child.props.hasOwnProperty('aria-labelledby')) {
             warning(false,
               'Material-UI: <RaisedButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');

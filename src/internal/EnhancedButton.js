@@ -294,7 +294,6 @@ class EnhancedButton extends Component {
       disableTouchRipple, // eslint-disable-line no-unused-vars
       focusRippleColor, // eslint-disable-line no-unused-vars
       focusRippleOpacity, // eslint-disable-line no-unused-vars
-      forInLabel,
       href,
       keyboardFocused, // eslint-disable-line no-unused-vars
       touchRippleColor, // eslint-disable-line no-unused-vars
