@@ -131,17 +131,35 @@ class TableHeaderColumn extends Component {
       );
     }
 
+    let thcNode;
+
+    if (React.Children.count(children) === 0) {
+      thcNode = (
+        <td
+          role="presentation"
+          className={className}
+          style={prepareStyles(Object.assign(styles.root, style))}
+          {...handlers}
+          {...other}
+        />
+      );
+    } else {
+      thcNode = (
+        <th
+          role="columnheader"
+          className={className}
+          style={prepareStyles(Object.assign(styles.root, style))}
+          {...handlers}
+          {...other}
+        >
+          {tooltipNode}
+          {children}
+        </th>
+      );
+    }
+
     return (
-      <th
-        role="columnheader"
-        className={className}
-        style={prepareStyles(Object.assign(styles.root, style))}
-        {...handlers}
-        {...other}
-      >
-        {tooltipNode}
-        {children}
-      </th>
+        thcNode
     );
   }
 }
