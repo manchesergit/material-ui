@@ -105,5 +105,13 @@ describe('<Snackbar />', () => {
       const secondID = wrapper.find(SnackbarBody).props('div > div > span').contentId;
       assert.notEqual(Id, secondID, 'These IDs are not equal');
     });
+
+    it('should use the supplied ID without overriding', () => {
+      const id = '12345';
+      const wrapper = shallowWithContext(
+        <Snackbar contentId={id} open={true} message="" />
+      );
+      assert.strictEqual(wrapper.props().children.props.contentId, id, 'should use provided ID');
+    });
   });
 });
