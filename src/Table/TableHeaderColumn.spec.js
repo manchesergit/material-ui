@@ -30,5 +30,21 @@ describe('<TableHeaderColumn />', () => {
       assert.equal(wrapper.type(), 'th', 'TableHeaderColumn should render as th');
       assert.equal(wrapper.prop('role'), 'columnheader', 'should have role of columnHeader');
     });
+    it('Should render as td if its a selectAll header', () => {
+      const wrapper = shallowWithContext(
+        <TableHeaderColumn isSelectAll={true}>
+          some test textColor
+        </TableHeaderColumn>
+      );
+      assert.equal(wrapper.type(), 'td', 'TableHeaderColumn should render as td');
+    });
+    it('Should render as th if it isSelectAll is false', () => {
+      const wrapper = shallowWithContext(
+        <TableHeaderColumn isSelectAll={false}>
+          some test textColor
+        </TableHeaderColumn>
+      );
+      assert.equal(wrapper.type(), 'th', 'TableHeaderColumn should render as th');
+    });
   });
 });

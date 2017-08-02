@@ -42,6 +42,12 @@ class TableHeaderColumn extends Component {
      * Not used here but we need to remove it from the root element.
      */
     hoverable: PropTypes.bool,
+    /**
+    *
+    * Used to identify selectAll. If true renders selectAll as td to prevent
+    * a11y issues
+    */
+    isSelectAll: PropTypes.bool,
     /** @ignore */
     onClick: PropTypes.func,
     /**
@@ -67,6 +73,10 @@ class TableHeaderColumn extends Component {
      * Additional styling that can be applied to the tooltip.
      */
     tooltipStyle: PropTypes.object,
+  };
+
+  static defaultProps = {
+    isSelectAll: false,
   };
 
   static contextTypes = {
@@ -107,6 +117,7 @@ class TableHeaderColumn extends Component {
       style,
       tooltip,
       tooltipStyle,
+      isSelectAll,
       ...other
     } = this.props;
 
@@ -133,7 +144,8 @@ class TableHeaderColumn extends Component {
 
     let thcNode;
 
-    if (React.Children.count(children) === 0) {
+    if (React.Children.count(children) === 0 ||
+        isSelectAll) {
       thcNode = (
         <td
           role="presentation"
@@ -141,7 +153,10 @@ class TableHeaderColumn extends Component {
           style={prepareStyles(Object.assign(styles.root, style))}
           {...handlers}
           {...other}
-        />
+        >
+          {tooltipNode}
+          {children}
+        </td>
       );
     } else {
       thcNode = (
