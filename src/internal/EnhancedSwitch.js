@@ -379,7 +379,7 @@ class EnhancedSwitch extends Component {
         ref="checkbox"
         type={inputType}
         style={prepareStyles(Object.assign(styles.input, inputStyle))}
-        name={name, inputId}
+        name={name || inputId}
         value={value}
         checked={this.state.switched}
         disabled={disabled}

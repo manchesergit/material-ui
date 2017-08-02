@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import React from 'react';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import {assert} from 'chai';
 import EnhancedSwitch from './EnhancedSwitch';
 import getMuiTheme from '../styles/getMuiTheme';
@@ -8,6 +8,7 @@ import getMuiTheme from '../styles/getMuiTheme';
 describe('<EnhancedSwitch />', () => {
   const muiTheme = getMuiTheme();
   const shallowWithContext = (node) => shallow(node, {context: {muiTheme}});
+  const mountWithContext = (node) => mount(node, {context: {muiTheme}});
   const switchElement = (<div />);
 
   describe('IDs are handled correctly', () => {
@@ -32,6 +33,21 @@ describe('<EnhancedSwitch />', () => {
         <EnhancedSwitch {...enhancedSwitchProps} />
       );
       assert.ok(wrapper.prop('id'), 'base id should be generated');
+    });
+    it('should propogate name to input control', () => {
+      const controlName = 'test-name';
+      const switchpropWithName = {...enhancedSwitchProps, name: controlName};
+      const wrapper = mountWithContext(
+        <EnhancedSwitch {...switchpropWithName} />
+      );
+      assert.equal(wrapper.find('input').prop('name'), controlName, 'name should be set');
+    });
+    it('should generate control name if no name supplied', () => {
+      const wrapper = mountWithContext(
+        <EnhancedSwitch {...enhancedSwitchProps} />
+        );
+      assert.isOk(wrapper.find('input').prop('name'), 'name should be set');
+      assert.equal(wrapper.find('input').prop('name'), wrapper.find('input').prop('id'), 'name should be set');
     });
   });
 
