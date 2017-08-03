@@ -168,18 +168,12 @@ class TableHeader extends Component {
         key={key}
         aria-hidden={true}
         label="Select All"
+        isSelectAll={true}
         style={{
           width: 24,
           cursor: disabled ? 'not-allowed' : 'inherit',
         }}
       >
-        <span
-          style={{
-            display: 'none',
-          }}
-        >
-          Select All
-        </span>
         {checkbox}
       </TableHeaderColumn>
     );
