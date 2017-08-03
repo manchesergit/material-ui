@@ -142,9 +142,6 @@ class TimePicker extends Component {
     }
   }
 
-  makeBaseId() {
-    return this.props.id || this.uniqueId;
-  }
   /**
    * Alias for `openDialog()` for an api consistent with TextField.
    */
@@ -210,7 +207,7 @@ class TimePicker extends Component {
       dialogBodyStyle,
       dialogStyle,
       format,
-      id, // eslint-disable-line no-unused-vars
+      id,
       okLabel,
       onFocus, // eslint-disable-line no-unused-vars
       onTouchTap, // eslint-disable-line no-unused-vars
@@ -225,14 +222,14 @@ class TimePicker extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
     const {time} = this.state;
-    const baseId = this.uniqueId;
+    const baseId = id || this.uniqueId;
     const divId = `${baseId}-div`;
     const timePickerHintTextId = `${baseId}-timePickerHintText`;
     const timePickerDialogId = `${baseId}-timePickerDialog`;
 
     return (
-      <div id={this.makeBaseId()} style={prepareStyles(Object.assign({}, style))}>
-        <EventListener target={divId} onKeyDown={this.handleKeyEvent} />
+      <div id={baseId} style={prepareStyles(Object.assign({}, style))}>
+        <EventListener target={baseId} onKeyDown={this.handleKeyEvent} />
         <TextField
           {...other}
           hintTextId={timePickerHintTextId}
