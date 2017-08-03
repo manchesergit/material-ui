@@ -282,11 +282,10 @@ describe('<TextField />', () => {
   describe('ID handling', () => {
     it('should use the supplied id without overriding', () => {
       const id = '12345';
-      const expectedId = `${id}-div`;
       const wrapper = shallowWithContext(
         <TextField id={id} />
       );
-      assert.strictEqual(wrapper.prop('id'), expectedId, 'should use provided id');
+      assert.strictEqual(wrapper.prop('id'), id, 'should use provided id');
     });
 
     it('should generate an id if one not supplied', () => {
