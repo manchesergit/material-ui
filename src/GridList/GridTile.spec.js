@@ -62,4 +62,16 @@ describe('<GridTile />', () => {
         titleStyle.fontSize, 'should overwrite title fontSize');
     });
   });
+
+  describe('prop: imageDescription', () => {
+    it('should use supplied alt tag', () => {
+      const testChildren = <img src={tileData.img} />;
+      const imageDescription = 'test description';
+      const wrapper = shallowWithContext(
+        <GridTile imageDescription={imageDescription}>{testChildren}</GridTile>
+      );
+      assert.strictEqual(wrapper.children().props().alt, imageDescription,
+    'imageDescription and alt tag should be the same');
+    });
+  });
 });
