@@ -97,27 +97,25 @@ describe('<Step />', () => {
     });
 
     it('should have a reference to ID in returned ariaLabelledBy tag', () => {
-      const id = '12345';
-      const expectedID = `${id}-LabelledBy`;
+      const labelledById = '12345';
       const wrapper = shallowWithContext(
-        <Step id={id}>
+        <Step id={labelledById}>
           <StepLabel />
         </Step>
       );
       assert.strictEqual(wrapper.find(StepLabel).props().labelledById,
-    expectedID, 'StepLabel ariaLabelledBy should have reference to parent Step');
+    labelledById, 'StepLabel ariaLabelledBy should have reference to parent Step');
     });
 
     it('should have a reference to ID in returned ariaLabelledBy tag', () => {
-      const id = '12345';
-      const expectedID = `${id}-LabelledBy`;
+      const labelledById = '12345';
       const wrapper = shallowWithContext(
-        <Step id={id}>
+        <Step id={labelledById}>
           <StepButton />
         </Step>
       );
       assert.strictEqual(wrapper.find(StepButton).props().labelledById,
-    expectedID, 'StepButton ariaLabelledBy should have reference to parent Step');
+    labelledById, 'StepButton ariaLabelledBy should have reference to parent Step');
     });
   });
 });
