@@ -139,7 +139,6 @@ describe('<TextField />', () => {
 
     it('should use the ID given for hint test in the properties', () => {
       const id = '12345';
-      const expectedId = `${id}-TextFieldHint`;
       class MyComponent1 extends Component {
         state = {
           value: '',
@@ -164,7 +163,7 @@ describe('<TextField />', () => {
       const wrapper = mountWithContext(<MyComponent1 />);
       const input = wrapper.find('input');
       input.simulate('change', {target: {value: 'a'}});
-      assert.strictEqual(wrapper.find(TextFieldHint).props().id, expectedId,
+      assert.strictEqual(wrapper.find(TextFieldHint).props().id, id,
     'should use provided ID');
     });
 
