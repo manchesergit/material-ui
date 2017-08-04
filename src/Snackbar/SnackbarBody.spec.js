@@ -35,4 +35,18 @@ describe('<SnackbarBody />', () => {
       );
     });
   });
+
+  describe('ID handling', () => {
+    it('should use the supplied ID without overriding', () => {
+      const id = '12345';
+      const wrapper = shallowWithContext(
+        <SnackbarBody
+          contentId={id} open={true} message="Message"
+          width={SMALL}
+        />
+      );
+      assert.strictEqual(wrapper.props().children.props.children[0].props.id,
+      id, 'contentId provided should be the same id value for message');
+    });
+  });
 });
