@@ -88,6 +88,12 @@ class IconButton extends Component {
     labelledBy: PropTypes.string,
     /** @ignore */
     onBlur: PropTypes.func,
+    /**
+     * Callback function fired when the button is touch-tapped.
+     *
+     * @param {object} event TouchTap event targeting the button.
+     */
+    onClick: PropTypes.func,
     /** @ignore */
     onFocus: PropTypes.func,
     /**
@@ -105,12 +111,6 @@ class IconButton extends Component {
     onMouseOut: PropTypes.func,
     /** @ignore */
     onTouchStart: PropTypes.func,
-    /**
-     * Callback function fired when the button is touch-tapped.
-     *
-     * @param {object} event TouchTap event targeting the button.
-     */
-    onTouchTap: PropTypes.func,
     /**
      * Override the inline-styles of the root element.
      */

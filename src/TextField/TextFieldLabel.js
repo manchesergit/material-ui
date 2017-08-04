@@ -32,7 +32,7 @@ const TextFieldLabel = (props) => {
     className,
     children,
     htmlFor,
-    onTouchTap,
+    onClick,
   } = props;
 
   const {prepareStyles} = muiTheme;
@@ -54,7 +54,7 @@ const TextFieldLabel = (props) => {
       className={className}
       style={prepareStyles(styles.root)}
       htmlFor={htmlFor}
-      onTouchTap={onTouchTap}
+      onClick={onClick}
     >
       {children}
     </Container>
@@ -94,7 +94,7 @@ TextFieldLabel.propTypes = {
    *
    * @param {object} event TouchTap event targeting the text field label.
    */
-  onTouchTap: PropTypes.func,
+  onClick: PropTypes.func,
   /**
    * True if the floating label should shrink.
    */

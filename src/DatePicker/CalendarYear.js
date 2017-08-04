@@ -63,7 +63,7 @@ class CalendarYear extends Component {
         <YearButton
           id={id}
           key={`yb${year}`}
-          onTouchTap={this.handleTouchTapYear}
+          onClick={this.handleTouchTapYear}
           selected={selected}
           year={year}
           utils={utils}

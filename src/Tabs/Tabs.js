@@ -222,7 +222,7 @@ class Tabs extends Component {
         id: tabId,
         selected: this.getSelected(tab, index),
         width: `${width}%`,
-        onTouchTap: this.handleTabTouchTap,
+        onClick: this.handleTabTouchTap,
         role: 'tab',
         tabContainerId: this.uniqueId,
       });

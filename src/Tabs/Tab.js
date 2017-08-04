@@ -59,7 +59,7 @@ class Tab extends Component {
      * @ignore
      * This property is overriden by the Tabs component.
      */
-    onTouchTap: PropTypes.func,
+    onClick: PropTypes.func,
     /**
      * @ignore
      * Defines if the current tab is selected or not.
@@ -91,8 +91,8 @@ class Tab extends Component {
   };
 
   handleTouchTap = (event) => {
-    if (this.props.onTouchTap) {
-      this.props.onTouchTap(this.props.value, event, this);
+    if (this.props.onClick) {
+      this.props.onClick(this.props.value, event, this);
     }
   };
 
@@ -101,7 +101,7 @@ class Tab extends Component {
       icon,
       index, // eslint-disable-line no-unused-vars
       onActive, // eslint-disable-line no-unused-vars
-      onTouchTap, // eslint-disable-line no-unused-vars
+      onClick, // eslint-disable-line no-unused-vars
       selected, // eslint-disable-line no-unused-vars
       label,
       buttonStyle,
@@ -138,7 +138,7 @@ class Tab extends Component {
         touchRippleColor={rippleColor}
         focusRippleOpacity={rippleOpacity}
         touchRippleOpacity={rippleOpacity}
-        onTouchTap={this.handleTouchTap}
+        onClick={this.handleTouchTap}
         overrideRole="tab"
         aria-controls={tabContainerId}
       >
