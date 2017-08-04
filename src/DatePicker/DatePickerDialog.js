@@ -173,8 +173,10 @@ class DatePickerDialog extends Component {
     const componentId = id || this.uniqueId;
     const containerId = `${componentId}-${container}Container`;
     const calendarId = `${componentId}-calendar`;
-    const eventTarget = modal ? componentId : 'window';
     const escOverride = modal ? disableEscapeKeyForDialogs : null;
+
+    const windowListener = modal ? null : ( <EventListener target="window" onKeyUp={this.handleContainerKeyUp} />);
+    const containerListener = modal ? this.handleContainerKeyUp : null;
 
     return (
       <div ref="root" id={componentId} {...other}>
@@ -191,11 +193,9 @@ class DatePickerDialog extends Component {
           style={Object.assign(styles.dialogBodyContent, containerStyle)}
           id={containerId}
           modal={modal}
+          onKeyUp={containerListener}
         >
-          <EventListener
-            target={eventTarget}
-            onKeyUp={this.handleContainerKeyUp}
-          />
+          {windowListener}
           <Calendar
             id={calendarId}
             autoOk={autoOk}
