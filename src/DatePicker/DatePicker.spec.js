@@ -1,15 +1,26 @@
 /* eslint-env mocha */
 import React from 'react';
+import PropTypes from 'prop-types';
 import {shallow} from 'enzyme';
+import {mount} from 'enzyme'
 import {assert} from 'chai';
 
 import DatePicker from './DatePicker';
 import getMuiTheme from '../styles/getMuiTheme';
 import TextField from '../TextField';
+import keycode from 'keycode';
+import {spy} from 'sinon';
 
 describe('<DatePicker />', () => {
   const muiTheme = getMuiTheme();
-  const shallowWithContext = (node) => shallow(node, {context: {muiTheme}});
+  const mountWithContext = (node) => mount(node, {
+    context: {muiTheme},
+    childContextTypes: {muiTheme: PropTypes.object},
+  });
+  const shallowWithContext = (node) => shallow(node, {
+    context: {muiTheme},
+    childContextTypes: {muiTheme: PropTypes.object},
+  });
 
   describe('formatDate', () => {
     it('should use the default format', () => {
@@ -22,6 +33,7 @@ describe('<DatePicker />', () => {
         'should format the date to ISO 8601 (YYYY-MM-DD)');
     });
   });
+
   describe('id handling', () => {
     it('should use the supplied id without overridding', () => {
       const date = new Date(1448967059892); // Tue, 01 Dec 2015 10:50:59 GMT
@@ -41,6 +53,46 @@ describe('<DatePicker />', () => {
 
       assert.ok(wrapper.prop('id'),
         'should generate an id if one not supplied');
+    });
+  });
+
+  describe('opening date picker', () => {
+    it('should open when space is pressed', () => {
+      const spaceBar = keycode('space');
+      const callback = spy();
+      const wrapper = mountWithContext(<DatePicker onShow={callback} />);
+      wrapper.simulate('keyDown', {keyCode: spaceBar});
+
+      assert.strictEqual(callback.callCount, 1, 'expected the onShow event to fire when the space bar is pressed');
+    });
+
+    it('should open when enter is pressed', () => {
+      const enter = keycode('enter');
+      const callback = spy();
+      const wrapper = mountWithContext(<DatePicker onShow={callback} />);
+      wrapper.simulate('keyDown', {keyCode: enter});
+
+      assert.strictEqual(callback.callCount, 1, 'expected the onShow event to fire when the enter is pressed');
+    });
+
+    it('should not open when space is pressed and its disabled', () => {
+      const spaceBar = keycode('space');
+      const callback = spy();
+      const wrapper = mountWithContext(<DatePicker onShow={callback} disabled={true} />);
+      wrapper.simulate('keyDown', {keyCode: spaceBar});
+
+      assert.strictEqual(callback.callCount, 0,
+        'expected the onShow event to not fire when the space is pressed as it should be disabled');
+    });
+
+    it('should not open when enter is pressed and its disabled', () => {
+      const enter = keycode('enter');
+      const callback = spy();
+      const wrapper = mountWithContext(<DatePicker onShow={callback} disabled={true} />);
+      wrapper.simulate('keyDown', {keyCode: enter});
+
+      assert.strictEqual(callback.callCount, 0,
+        'expected the onShow event to not fire when the enter is pressed as it should be disabled');
     });
   });
 });
