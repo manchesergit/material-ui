@@ -342,8 +342,12 @@ class DatePicker extends Component {
     const datePickerId = `${inputId}-datePicker`;
 
     return (
-      <div id={inputId} className={className} style={prepareStyles(Object.assign({}, style))} >
-        <EventListener target={inputId} onKeyDown={this.handleKeyEvent} />
+      <div
+        id={inputId}
+        className={className}
+        style={prepareStyles(Object.assign({}, style))}
+        onKeyDown={this.handleKeyEvent}
+      >
         <DatePickerDialog
           id={datePickerId}
           DateTimeFormat={DateTimeFormat}
