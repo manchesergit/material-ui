@@ -119,13 +119,12 @@ const StepLabel = (props, context) => {
   const styles = getStyles(props, context);
   const icon = renderIcon(completed, userIcon, styles, baseId);
 
-  const rootSpanId = `${baseId}-labelRootSpan`;
   const iconSpanId = `${baseId}-labelIconSpan`;
   const labelledBy = labelledById || `${baseId}-label`;
 
   return (
     <span
-      id={rootSpanId}
+      id={baseId}
       aria-labelledby={labelledBy}
       style={prepareStyles(Object.assign(styles.root, style))}
       {...other}

@@ -236,6 +236,14 @@ describe('<StepLabel />', () => {
         );
         assert.ok(wrapper.props('id'), 'should generate an id if not supplied');
       });
+
+      it('should have a reference to ID in returned aria-labelledby tag', () => {
+        const labelledById = '12345';
+        const wrapper = shallowWithContext(<StepLabel labelledById={labelledById} />);
+
+        assert.strictEqual(wrapper.prop('aria-labelledby'),
+          labelledById, 'aria-labelledby should be the value provided');
+      });
     });
   });
 });
