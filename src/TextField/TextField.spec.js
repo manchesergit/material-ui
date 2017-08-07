@@ -45,16 +45,11 @@ describe('<TextField />', () => {
   });
 
   it('TextFieldLabel has reference to parent TextField', () => {
-    const textFieldId = 'test-text-field';
-    const wrapper = mountWithContext(
-      <TextField
-        floatingLabelText="floating label text"
-        id={textFieldId}
-      />
-    );
+    const wrapper = shallowWithContext(<TextField floatingLabelText="somehting" />);
 
+    // the html for should be pointing the label to the input box
     assert.strictEqual(wrapper.find(TextFieldLabel).props().htmlFor,
-      textFieldId, 'should have ref to parent TextField');
+      wrapper.find('input').prop('id'), 'should have ref to parent TextField');
   });
 
   describe('prop: children', () => {
