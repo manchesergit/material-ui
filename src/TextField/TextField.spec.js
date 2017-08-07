@@ -43,9 +43,10 @@ describe('<TextField />', () => {
     wrapper.update();
     assert.strictEqual(wrapper.find(TextFieldLabel).props().shrink, true, 'should shrink TextFieldLabel');
   });
+
   it('TextFieldLabel has reference to parent TextField', () => {
     const textFieldId = 'test-text-field';
-    const wrapper = shallowWithContext(
+    const wrapper = mountWithContext(
       <TextField
         floatingLabelText="floating label text"
         id={textFieldId}
@@ -136,63 +137,6 @@ describe('<TextField />', () => {
       assert.strictEqual(wrapper.find(TextFieldHint).props().show, true,
         'The hint text should keep the same state');
     });
-
-    it('should use the ID given for hint test in the properties', () => {
-      const id = '12345';
-      class MyComponent1 extends Component {
-        state = {
-          value: '',
-        };
-
-        handleChange = () => {
-          this.setState({value: ''});
-        };
-
-        render() {
-          return (
-            <TextField
-              id={id}
-              value={this.state.value}
-              hintText="bar"
-              onChange={this.handleChange}
-            />
-          );
-        }
-      }
-
-      const wrapper = mountWithContext(<MyComponent1 />);
-      const input = wrapper.find('input');
-      input.simulate('change', {target: {value: 'a'}});
-      assert.strictEqual(wrapper.find(TextFieldHint).props().id, id,
-    'should use provided ID');
-    });
-
-    it('should produce a unique ID', () => {
-      class MyComponent1 extends Component {
-        state = {
-          value: '',
-        };
-
-        handleChange = () => {
-          this.setState({value: ''});
-        };
-
-        render() {
-          return (
-            <TextField
-              value={this.state.value}
-              hintText="bar"
-              onChange={this.handleChange}
-            />
-          );
-        }
-      }
-
-      const wrapper = mountWithContext(<MyComponent1 />);
-      const input = wrapper.find('input');
-      input.simulate('change', {target: {value: 'a'}});
-      assert.ok(wrapper.find(TextFieldHint).props().id, 'should generate an ID if not supplied');
-    });
   });
 
   describe('prop: floatingLabelFocusStyle', () => {
@@ -278,7 +222,7 @@ describe('<TextField />', () => {
     });
   });
 
-  describe('ID handling', () => {
+  describe('ID handeling and generation', () => {
     it('should use the supplied id without overriding', () => {
       const id = '12345';
       const wrapper = shallowWithContext(
