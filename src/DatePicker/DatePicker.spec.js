@@ -57,42 +57,76 @@ describe('<DatePicker />', () => {
   });
 
   describe('opening date picker', () => {
-    it('should open when space is pressed', () => {
-      const spaceBar = keycode('space');
-      const callback = spy();
-      const wrapper = mountWithContext(<DatePicker onShow={callback} />);
-      wrapper.simulate('keyDown', {keyCode: spaceBar});
+    describe('check the dialog actually opens', () => {
+      it('should open when the mouse button is pressed on it', () => {
+        const callback = spy();
+        const wrapper = mountWithContext(<DatePicker id="bob" onShow={callback} />);
 
-      assert.strictEqual(callback.callCount, 1, 'expected the onShow event to fire when the space bar is pressed');
+        // this has to be in a timeout as the click event is delayed and will not be registered properly by spy
+        setTimeout(() => {
+          wrapper.simulate('click');
+          assert.strictEqual(callback.callCount, 1,
+              'expected the onShow event to fire when the mouse button is pressed');
+        }, 10);
+      });
+
+      it('should open when space is pressed', () => {
+        const spaceBar = keycode('space');
+        const callback = spy();
+        const wrapper = mountWithContext(<DatePicker onShow={callback} />);
+        wrapper.simulate('keyDown', {keyCode: spaceBar});
+
+        assert.strictEqual(callback.callCount, 1, 'expected the onShow event to fire when the space bar is pressed');
+      });
+
+      it('should open when enter is pressed', () => {
+        const enter = keycode('enter');
+        const callback = spy();
+        const wrapper = mountWithContext(<DatePicker onShow={callback} />);
+        wrapper.simulate('keyDown', {keyCode: enter});
+
+        assert.strictEqual(callback.callCount, 1, 'expected the onShow event to fire when enter is pressed');
+      });
+
+      it('should not open when space is pressed and its disabled', () => {
+        const spaceBar = keycode('space');
+        const callback = spy();
+        const wrapper = mountWithContext(<DatePicker onShow={callback} disabled={true} />);
+        wrapper.simulate('keyDown', {keyCode: spaceBar});
+
+        assert.strictEqual(callback.callCount, 0,
+          'expected the onShow event to not fire when the space is pressed as it should be disabled');
+      });
+
+      it('should not open when enter is pressed and its disabled', () => {
+        const enter = keycode('enter');
+        const callback = spy();
+        const wrapper = mountWithContext(<DatePicker onShow={callback} disabled={true} />);
+        wrapper.simulate('keyDown', {keyCode: enter});
+
+        assert.strictEqual(callback.callCount, 0,
+          'expected the onShow event to not fire when the enter is pressed as it should be disabled');
+      });
     });
 
-    it('should open when enter is pressed', () => {
-      const enter = keycode('enter');
-      const callback = spy();
-      const wrapper = mountWithContext(<DatePicker onShow={callback} />);
-      wrapper.simulate('keyDown', {keyCode: enter});
+    describe('check the dialog will not open', () => {
+      it('should not open when a key pressed', () => {
+        const key = keycode('a');
+        const callback = spy();
+        const wrapper = mountWithContext(<DatePicker onShow={callback} />);
+        wrapper.simulate('keyDown', {keyCode: key});
 
-      assert.strictEqual(callback.callCount, 1, 'expected the onShow event to fire when the enter is pressed');
-    });
+        assert.strictEqual(callback.callCount, 0, 'expected nothing to fire when the [a] is pressed');
+      });
 
-    it('should not open when space is pressed and its disabled', () => {
-      const spaceBar = keycode('space');
-      const callback = spy();
-      const wrapper = mountWithContext(<DatePicker onShow={callback} disabled={true} />);
-      wrapper.simulate('keyDown', {keyCode: spaceBar});
+      it('should not open when escape is pressed', () => {
+        const key = keycode('esc');
+        const callback = spy();
+        const wrapper = mountWithContext(<DatePicker onShow={callback} />);
+        wrapper.simulate('keyDown', {keyCode: key});
 
-      assert.strictEqual(callback.callCount, 0,
-        'expected the onShow event to not fire when the space is pressed as it should be disabled');
-    });
-
-    it('should not open when enter is pressed and its disabled', () => {
-      const enter = keycode('enter');
-      const callback = spy();
-      const wrapper = mountWithContext(<DatePicker onShow={callback} disabled={true} />);
-      wrapper.simulate('keyDown', {keyCode: enter});
-
-      assert.strictEqual(callback.callCount, 0,
-        'expected the onShow event to not fire when the enter is pressed as it should be disabled');
+        assert.strictEqual(callback.callCount, 0, 'expected nothing to fire when escape is pressed');
+      });
     });
   });
 });
