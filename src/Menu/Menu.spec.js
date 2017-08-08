@@ -249,12 +249,35 @@ describe('<Menu />', () => {
 
       const wrapper = mountWithContext(<MyComponent1 />);
 
-      wrapper.find('.item1').simulate('touchTap');
-      wrapper.find('.item2').simulate('touchTap');
-      wrapper.find('.item3').simulate('touchTap');
-      wrapper.find('.item1').simulate('touchTap');   // deselect
+      wrapper.find('.item1').simulate('click');
+      wrapper.find('.item2').simulate('click');
+      wrapper.find('.item3').simulate('click');
+      wrapper.find('.item1').simulate('click');   // deselect
 
       assert.deepEqual(wrapper.state().value, ['item2', 'item3']);
+    });
+  });
+
+  describe('Nested menu', () => {
+    it('should ignore loosing focus on click away for item with menu items', () => {
+      const menuItems = [<MenuItem />, <MenuItem />];
+
+      const wrapper = mountWithContext(
+        <Menu className="menu">
+          <MenuItem className="item1" />
+          <MenuItem className="item2" menuItems={menuItems} />
+        </Menu>
+      );
+
+      wrapper.find('.item1').simulate('click');
+      assert.strictEqual(wrapper.state('focusIndex'), 0);
+      document.body.dispatchEvent(new window.Event('mouseup', {bubbles: true}));
+      assert.strictEqual(wrapper.state('focusIndex'), -1);
+
+      wrapper.find('.item2').simulate('click');
+      assert.strictEqual(wrapper.state('focusIndex'), 1);
+      document.body.dispatchEvent(new window.Event('mouseup', {bubbles: true}));
+      assert.strictEqual(wrapper.state('focusIndex'), 1);
     });
   });
 });

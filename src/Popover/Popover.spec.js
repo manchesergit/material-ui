@@ -7,11 +7,20 @@ import Popover from './Popover';
 import PopoverAnimationDefault from './PopoverAnimationDefault';
 import Paper from '../Paper';
 import getMuiTheme from '../styles/getMuiTheme';
+import Menu from '../Menu';
+import MenuItem from '../MenuItem';
+import TestUtils from 'react-dom/test-utils';
+import keycode from 'keycode';
+import PropTypes from 'prop-types';
+import {spy} from 'sinon';
 
 describe('<Popover />', () => {
   const muiTheme = getMuiTheme();
   const shallowWithContext = (node) => shallow(node, {context: {muiTheme}});
-  const mountWithContext = (node) => mount(node, {context: {muiTheme}});
+  const mountWithContext = (node) => mount(node, {
+    context: {muiTheme},
+    childContextTypes: {muiTheme: PropTypes.object},
+  });
 
   describe('state: closing', () => {
     it('should not create new timeout when popover is already closing', () => {
@@ -31,9 +40,12 @@ describe('<Popover />', () => {
     it('should stop listening correctly', (done) => {
       const wrapper = mountWithContext(<Popover open={true} />);
 
-      wrapper.instance().handleScroll();
-      wrapper.instance().handleScroll();
-      wrapper.unmount();
+      // Ensure layering has been set up correctly before simulation
+      setTimeout(() => {
+        wrapper.instance().handleScroll();
+        wrapper.instance().handleScroll();
+        wrapper.unmount();
+      }, 10);
 
       setTimeout(() => {
          // Wait for the end of the throttle. Makes sure we don't crash.
@@ -124,6 +136,37 @@ describe('<Popover />', () => {
       window.navigator.__defineGetter__('userAgent', function getUserAgent() { // eslint-disable-line no-underscore-dangle,max-len
         return `${this.appCodeName}/${this.appVersion}`;
       });
+    });
+  });
+  describe('a11y tests', () => {
+    const keycodeEvent = (key) => ({keyCode: keycode(key)});
+    it('esc key should request close ', () => {
+      const escSpy = spy();
+      const wrapper = mountWithContext(
+        <Popover
+          open={true}
+          onRequestClose={escSpy}
+        >
+          <Menu>
+            <MenuItem id="test-menu-item" primaryText="menu 1" />
+            <MenuItem primaryText="menu 2" />
+          </Menu>
+        </Popover>
+      );
+
+      // popover reneders directly into document... so find a component on
+      // our popover to simulate the esc against
+      const node = document.getElementById('test-menu-item');
+      // simulate a key being pressed
+      TestUtils.Simulate.keyDown(node, keycodeEvent('down'));
+      // check our onRequestClose handler was not called
+      assert.isNotOk(escSpy.called);
+      // simulate our esc key being pressed
+      TestUtils.Simulate.keyDown(node, keycodeEvent('esc'));
+      // check our onRequestClose handler was called
+      assert.isOk(escSpy.called);
+      // unmount our component since we are done
+      wrapper.unmount();
     });
   });
 });

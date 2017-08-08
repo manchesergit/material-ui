@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 import React from 'react';
 import {shallow} from 'enzyme';
+import {mount} from 'enzyme';
 import {assert} from 'chai';
 import Step from './Step';
 import StepLabel from './StepLabel';
@@ -11,6 +12,16 @@ describe('<Step />', () => {
   const muiTheme = getMuiTheme();
   const shallowWithContext = (node, context = {}) => {
     return shallow(node, {
+      context: {
+        muiTheme,
+        stepper: {orientation: 'horizontal'},
+        ...context,
+      },
+    });
+  };
+
+  const mountWithContext = (node, context = {}) => {
+    return mount(node, {
       context: {
         muiTheme,
         stepper: {orientation: 'horizontal'},
@@ -96,26 +107,28 @@ describe('<Step />', () => {
       assert.ok(wrapper.prop('id'), 'should generate an id if not supplied');
     });
 
-    it('should have a reference to ID in returned ariaLabelledBy tag', () => {
+    it('should pass its reference to child StepLabel', () => {
       const labelledById = '12345';
-      const wrapper = shallowWithContext(
+      const wrapper = mountWithContext(
         <Step id={labelledById}>
           <StepLabel />
         </Step>
       );
-      assert.strictEqual(wrapper.find(StepLabel).props().labelledById,
-    labelledById, 'StepLabel ariaLabelledBy should have reference to parent Step');
+
+      assert.strictEqual(wrapper.find(StepLabel).prop('labelledById'),
+        `${wrapper.prop('id')}-LabelledBy`, 'StepLabel labelledById should be the same start as the ID for the Step');
     });
 
-    it('should have a reference to ID in returned ariaLabelledBy tag', () => {
+    it('should pass its reference to child button', () => {
       const labelledById = '12345';
-      const wrapper = shallowWithContext(
+      const wrapper = mountWithContext(
         <Step id={labelledById}>
           <StepButton />
         </Step>
       );
-      assert.strictEqual(wrapper.find(StepButton).props().labelledById,
-    labelledById, 'StepButton ariaLabelledBy should have reference to parent Step');
+
+      assert.strictEqual(wrapper.find(StepButton).prop('labelledById'),
+        `${wrapper.prop('id')}-LabelledBy`, 'StepButton labelledById should be the same start as the ID for the Step');
     });
   });
 });

@@ -243,6 +243,12 @@ class ListItem extends Component {
      */
     nestedListStyle: PropTypes.object,
     /**
+     * Callback function fired when the list item is touch-tapped.
+     *
+     * @param {object} event TouchTap event targeting the list item.
+     */
+    onClick: PropTypes.func,
+    /**
      * Callback function fired when the `ListItem` is focused or blurred by the keyboard.
      *
      * @param {object} event `focus` or `blur` event targeting the `ListItem`.
@@ -263,12 +269,6 @@ class ListItem extends Component {
     onTouchEnd: PropTypes.func,
     /** @ignore */
     onTouchStart: PropTypes.func,
-    /**
-     * Callback function fired when the list item is touch-tapped.
-     *
-     * @param {object} event TouchTap event targeting the list item.
-     */
-    onTouchTap: PropTypes.func,
     /**
      * Control toggle state of nested list.
      */
@@ -477,8 +477,8 @@ class ListItem extends Component {
   };
 
   handleTouchTap = (event) => {
-    if (this.props.onTouchTap) {
-      this.props.onTouchTap(event);
+    if (this.props.onClick) {
+      this.props.onClick(event);
     }
 
     if (this.props.primaryTogglesNestedList) {
@@ -544,7 +544,7 @@ class ListItem extends Component {
 
     // Stop the event from bubbling up to the list-item
     event.stopPropagation();
-    if (iconButton && iconButton.props.onTouchTap) iconButton.props.onTouchTap(event);
+    if (iconButton && iconButton.props.onClick) iconButton.props.onClick(event);
   };
 
   handleTouchStart = (event) => {
@@ -596,7 +596,7 @@ class ListItem extends Component {
       onMouseLeave, // eslint-disable-line no-unused-vars
       onNestedListToggle, // eslint-disable-line no-unused-vars
       onTouchStart, // eslint-disable-line no-unused-vars
-      onTouchTap, // eslint-disable-line no-unused-vars
+      onClick, // eslint-disable-line no-unused-vars
       rightAvatar,
       rightIcon,
       rightIconButton,
@@ -672,7 +672,7 @@ class ListItem extends Component {
         onKeyboardFocus: this.handleRightIconButtonKeyboardFocus,
         onMouseEnter: this.handleRightIconButtonMouseEnter,
         onMouseLeave: this.handleRightIconButtonMouseLeave,
-        onTouchTap: this.handleRightIconButtonTouchTap,
+        onClick: this.handleRightIconButtonTouchTap,
         onMouseDown: this.handleRightIconButtonMouseUp,
         onMouseUp: this.handleRightIconButtonMouseUp,
       };
@@ -682,7 +682,7 @@ class ListItem extends Component {
         rightIconButtonElement = this.state.open ?
           <IconButton><OpenIcon /></IconButton> :
           <IconButton><CloseIcon /></IconButton>;
-        rightIconButtonHandlers.onTouchTap = this.handleNestedListToggle;
+        rightIconButtonHandlers.onClick = this.handleNestedListToggle;
       }
 
       this.pushElement(
@@ -742,7 +742,7 @@ class ListItem extends Component {
               onMouseEnter={this.handleMouseEnter}
               onTouchStart={this.handleTouchStart}
               onTouchEnd={this.handleTouchEnd}
-              onTouchTap={this.handleTouchTap}
+              onClick={this.handleTouchTap}
               disabled={disabled}
               ref={(node) => this.button = node}
               style={Object.assign({}, styles.root, style)}

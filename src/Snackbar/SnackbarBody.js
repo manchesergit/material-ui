@@ -83,7 +83,7 @@ export const SnackbarBody = (props, context) => {
     <FlatButton
       style={styles.action}
       label={action}
-      onTouchTap={onActionTouchTap}
+      onClick={onActionTouchTap}
     />
   );
 

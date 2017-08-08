@@ -435,10 +435,10 @@ class TextField extends Component {
     const textFieldHintId = hintTextId || `${inputId}-TextFieldHint`;
     const textFieldUnderlineId = `${inputId}-TextFieldUnderline`;
     const enhancedTextareaId = `${inputId}-EnhancedTextarea`;
-    const wrapperId = `${inputId}-div`;
+
     // if we have children then its a selectfield where the children will
     // be rendered as a menu not an input so wont need a for reference
-    const floatingTextFor = children ? null : inputId;
+    const floatingTextFor = children ? null : enhancedTextareaId;
 
     const errorTextElement = this.state.errorText && (
       <div style={prepareStyles(Object.assign(styles.error, errorStyle))}>
@@ -465,7 +465,7 @@ class TextField extends Component {
     );
 
     const inputProps = {
-      id: inputId,
+      id: enhancedTextareaId,
       ref: (elem) => this.input = elem,
       disabled: this.props.disabled,
       onBlur: this.handleInputBlur,
@@ -494,7 +494,6 @@ class TextField extends Component {
     } else {
       inputElement = multiLine ? (
         <EnhancedTextarea
-          id={enhancedTextareaId}
           role={roleLabel}
           aria-label={ariaLabel}
           style={childStyleMerged}
@@ -509,7 +508,6 @@ class TextField extends Component {
         />
       ) : (
         <input
-          id={enhancedTextareaId}
           role={roleLabel}
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
@@ -531,7 +529,7 @@ class TextField extends Component {
 
     return (
       <div
-        id={wrapperId}
+        id={inputId}
         {...rootProps}
         className={className}
         style={prepareStyles(Object.assign(styles.root, style))}

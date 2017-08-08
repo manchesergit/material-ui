@@ -211,7 +211,7 @@ class DateDisplay extends Component {
             tabIndex="0"
             key={year}
             style={styles.yearTitle}
-            onTouchTap={this.handleTouchTapYear}
+            onClick={this.handleTouchTapYear}
             onFocus={this.handleFocusYear}
             onBlur={this.handleBlurYear}
             onMouseEnter={this.handleFocusYear}
@@ -224,7 +224,7 @@ class DateDisplay extends Component {
         <SlideInTransitionGroup style={styles.monthDay} direction={this.state.transitionDirection}>
           <div
             key={dateTime}
-            onTouchTap={this.handleTouchTapMonthDay}
+            onClick={this.handleTouchTapMonthDay}
             style={styles.monthDayTitle}
           >
             {dateTime}
