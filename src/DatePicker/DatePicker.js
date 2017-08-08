@@ -347,6 +347,7 @@ class DatePicker extends Component {
         className={className}
         style={prepareStyles(Object.assign({}, style))}
         onKeyDown={this.handleKeyEvent}
+        onClick={this.handleTouchTap}
       >
         <TextField
           id={textFieldId}
@@ -354,7 +355,6 @@ class DatePicker extends Component {
           aria-label="Date Picker"
           {...other}
           onFocus={this.handleFocus}
-          onClick={this.handleTouchTap}
           ref="input"
           style={textFieldStyle}
           value={this.state.date ? formatDate(this.state.date) : ''}
