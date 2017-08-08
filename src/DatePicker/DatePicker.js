@@ -348,6 +348,17 @@ class DatePicker extends Component {
         style={prepareStyles(Object.assign({}, style))}
         onKeyDown={this.handleKeyEvent}
       >
+        <TextField
+          id={textFieldId}
+          role="textbox"
+          aria-label="Date Picker"
+          {...other}
+          onFocus={this.handleFocus}
+          onClick={this.handleTouchTap}
+          ref="input"
+          style={textFieldStyle}
+          value={this.state.date ? formatDate(this.state.date) : ''}
+        />
         <DatePickerDialog
           id={datePickerId}
           DateTimeFormat={DateTimeFormat}
@@ -372,17 +383,6 @@ class DatePicker extends Component {
           hideCalendarDate={hideCalendarDate}
           openToYearSelection={openToYearSelection}
           utils={utils}
-        />
-        <TextField
-          id={textFieldId}
-          role="textbox"
-          aria-label="Date Picker"
-          {...other}
-          onFocus={this.handleFocus}
-          onClick={this.handleTouchTap}
-          ref="input"
-          style={textFieldStyle}
-          value={this.state.date ? formatDate(this.state.date) : ''}
         />
       </div>
     );
