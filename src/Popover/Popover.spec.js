@@ -9,6 +9,7 @@ import Paper from '../Paper';
 import getMuiTheme from '../styles/getMuiTheme';
 import Menu from '../Menu';
 import MenuItem from '../MenuItem';
+import RaisedButton from '../RaisedButton';
 import TestUtils from 'react-dom/test-utils';
 import keycode from 'keycode';
 import PropTypes from 'prop-types';
@@ -167,6 +168,83 @@ describe('<Popover />', () => {
       assert.isOk(escSpy.called);
       // unmount our component since we are done
       wrapper.unmount();
+    });
+    it('should return focus when dismissed ', () => {
+      class TestPopover1 extends React.Component {
+
+        constructor(props) {
+          super(props);
+
+          this.state = {
+            open: false,
+          };
+        }
+
+        handleTouchTap = (event) => {
+          // This prevents ghost click.
+          event.preventDefault();
+
+          this.setState({
+            open: true,
+            anchorEl: event.currentTarget,
+          });
+        };
+
+        handleRequestClose = () => {
+          this.setState({
+            open: false,
+          });
+        };
+
+        render() {
+          return (
+            <div id="mak">
+              <RaisedButton
+                onClick={this.handleTouchTap}
+                label="Click me"
+                id="test-button"
+              />
+              <Popover
+                open={this.state.open}
+                anchorEl={this.state.anchorEl}
+                anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                onRequestClose={this.handleRequestClose}
+              >
+                <Menu>
+                  <MenuItem id="test-menu-item" primaryText="menu item 1" />
+                </Menu>
+              </Popover>
+            </div>
+          );
+        }
+      }
+      // render our test component
+      const wrapper = mountWithContext(
+        <TestPopover1 />
+      );
+
+      // make sure our button has focus to start with
+      const origin = wrapper.find('button').getDOMNode();
+      origin.focus();
+      assert.equal(origin.id, document.activeElement.id);
+
+      // click our button to open our popover
+      TestUtils.Simulate.click(origin);
+
+      // check our popover is open and has focus
+      const pop = document.activeElement;
+      assert.notEqual(pop.id, origin.id);
+      assert.equal(pop.id, 'test-menu-item');
+
+      // simulate our esc key being pressed to dismiss the popover
+      TestUtils.Simulate.keyDown(pop, keycodeEvent('esc'));
+      // check focus has returned to our button, need to wait on it closing!!
+      setTimeout(() => {
+        assert.equal(origin.id, document.activeElement.id);
+        // unmount our component since we are done
+        wrapper.unmount();
+      }, 100);
     });
   });
 });
