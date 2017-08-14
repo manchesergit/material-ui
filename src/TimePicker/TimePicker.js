@@ -223,7 +223,6 @@ class TimePicker extends Component {
     const {prepareStyles} = this.context.muiTheme;
     const {time} = this.state;
     const baseId = id || this.uniqueId;
-    const divId = `${baseId}-div`;
     const timePickerHintTextId = `${baseId}-timePickerHintText`;
     const timePickerDialogId = `${baseId}-timePickerDialog`;
 
