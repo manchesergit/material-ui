@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 import React from 'react';
-import {shallow} from 'enzyme';
+import PropTypes from 'prop-types';
+import {shallow, mount} from 'enzyme';
 import {assert} from 'chai';
 import Calendar from './Calendar';
 import CalendarMonth from './CalendarMonth';
@@ -8,10 +9,28 @@ import CalendarYear from './CalendarYear';
 import DateDisplay from './DateDisplay';
 import {addMonths, dateTimeFormat} from './dateUtils';
 import getMuiTheme from '../styles/getMuiTheme';
+import keycode from 'keycode';
+import ReactDOM from 'react-dom';
 
 describe('<Calendar />', () => {
   const muiTheme = getMuiTheme();
   const shallowWithContext = (node) => shallow(node, {context: {muiTheme}});
+  const mountWithContext = (node) => mount(node, {
+    context: {muiTheme},
+    childContextTypes: {muiTheme: PropTypes.object},
+  });
+
+  let wrapperNode;
+  beforeEach(() => {
+    // Pattern from "react-router": http://git.io/vWpfs
+    wrapperNode = document.createElement('div');
+    document.body.appendChild(wrapperNode);
+  });
+
+  afterEach(() => {
+    ReactDOM.unmountComponentAtNode(wrapperNode);
+    wrapperNode.parentNode.removeChild(wrapperNode);
+  });
 
   describe('Next Month Button', () => {
     it('should initially be disabled if the current month is the same as the month in the maxDate prop', () => {
@@ -273,6 +292,45 @@ describe('<Calendar />', () => {
         );
 
         assert.strictEqual(wrapper.prop('id'), id, `the provided id ${id} was not used`);
+      });
+    });
+
+    describe('Year picker activation', () => {
+      it('should open the year picker when the year is clicked', () => {
+        class calendarLauncher extends React.Component {
+          render() {
+            return (<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
+          }
+        }
+
+        let handle = null;
+        //
+        // ReactDOM.render(
+        //   <div
+        //     ref={(c) => {
+        //       handle = c;
+        //     }}
+        //   >
+        //     <Calendar DateTimeFormat={dateTimeFormat} locale="en-US"  contextTypes={muiTheme} />
+        //   </div>,
+        //   wrapperNode,
+        // );
+
+        const wrapper = mountWithContext(<calendarLauncher/>);
+        const calendar = wrapper.find('Calendar');
+        calendar.simulate('keyUp', keycode('space'));
+
+        console.log(wrapper.find('DateDisplay'));
+        //handle.keyUp(keycode('tab'));
+
+        // const wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
+        // //console.log(wrapper.html());
+        // console.log(wrapper.find(CalendarYear));
+        // console.log('=====================================================================================');
+        // wrapper.simulate('keyUp', {keyCode: () => { keycode('tab'); }})
+        // wrapper.simulate('keyUp', {keyCode: () => { keycode('space'); }})
+        // //console.log(wrapper.html());
+        // console.log(wrapper.find(CalendarYear));
       });
     });
   });

@@ -147,6 +147,7 @@ class DateDisplay extends Component {
   handleKeyUp = (event) => {
     if (!this.props.disableYearSelection) {
       if ((keycode(event) === 'enter' || keycode(event) === 'space')) {
+        console.log('\ntapped\n');
         this.handleTouchTapYear();
       }
     }
