@@ -23,6 +23,9 @@ describe('<Tabs />', () => {
       );
 
       assert.strictEqual(wrapper.state().selectedIndex, 0);
+      assert.strictEqual(wrapper.find('Tab').at(0).prop('selected'), true);
+      assert.strictEqual(wrapper.find('Tab').at(1).prop('selected'), false);
+      assert.strictEqual(wrapper.find('InkBar').prop('left'), '0%');
     });
   });
 
@@ -36,6 +39,25 @@ describe('<Tabs />', () => {
       );
 
       assert.strictEqual(wrapper.state().selectedIndex, 1);
+      assert.strictEqual(wrapper.find('Tab').at(0).prop('selected'), false);
+      assert.strictEqual(wrapper.find('Tab').at(1).prop('selected'), true);
+      assert.strictEqual(wrapper.find('InkBar').prop('left'), '50%');
+    });
+
+    it('should still use the value prop even after another tab is selected if value stays the same', () => {
+      const wrapper = shallowWithContext(
+        <Tabs value="2">
+          <Tab value="1" />
+          <Tab value="2" />
+        </Tabs>
+      );
+
+      wrapper.setState({selectedIndex: 0});
+
+      assert.strictEqual(wrapper.state().selectedIndex, 0);
+      assert.strictEqual(wrapper.find('Tab').at(0).prop('selected'), false);
+      assert.strictEqual(wrapper.find('Tab').at(1).prop('selected'), true);
+      assert.strictEqual(wrapper.find('InkBar').prop('left'), '50%');
     });
 
     it('should set the right tab active when the children change', () => {
@@ -54,6 +76,9 @@ describe('<Tabs />', () => {
       });
 
       assert.strictEqual(wrapper.state().selectedIndex, 0);
+      assert.strictEqual(wrapper.find('Tab').at(0).prop('selected'), true);
+      assert.strictEqual(wrapper.find('Tab').at(1).prop('selected'), false);
+      assert.strictEqual(wrapper.find('InkBar').prop('left'), '0%');
     });
   });
 

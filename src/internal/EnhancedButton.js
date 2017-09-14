@@ -355,7 +355,6 @@ class EnhancedButton extends Component {
       style: prepareStyles(mergedStyles),
       ref: (node) => this.button = node,
       disabled: disabled,
-      href: href,
       onBlur: this.handleBlur,
       onFocus: this.handleFocus,
       onKeyUp: this.handleKeyUp,
@@ -365,7 +364,9 @@ class EnhancedButton extends Component {
       id: baseId,
     };
 
-    const buttonChildren = this.createButtonChildren(baseId);
+    if (href) buttonProps.href = href;
+
+    const buttonChildren = this.createButtonChildren();
 
     if (React.isValidElement(containerElement)) {
       return React.cloneElement(containerElement, buttonProps, buttonChildren);
