@@ -365,7 +365,10 @@ class DialogInline extends Component {
       this.setState({forceMove: !insideWindow});
 
       if (!insideWindow) {
-        this.setFocus(this.state.lastElement || dialogWindow); // if theres something pushed to state use that
+        // force a move to the last element IF we are in a tabstop or not in an overlay covering the entire screen
+        if (!DomUtils.isOnWindowOverlay(document.activeElement) || this.isNodeTabStop(document.activeElement)) {
+          this.setFocus(this.state.lastElement || dialogWindow); // if theres something pushed to state use that
+        }
       } else {
         this.setState({lastElement: document.activeElement}); // save this element incase we go out of foucs
       }
@@ -377,11 +380,11 @@ class DialogInline extends Component {
     if (element !== null) {
       // timeout to allow the browser to do its stuff before we do ours
       if (element !== document.activeElement){
-      const waitTime = 1;
-      setTimeout(() => document.activeElement.blur(), waitTime);
-      setTimeout(() => element.focus(), waitTime);
+        const waitTime = 1;
+        setTimeout(() => document.activeElement.blur(), waitTime);
+        setTimeout(() => element.focus(), waitTime);
+      }
     }
-  }
   }
 
   // is the given node either of the tabstops or not
