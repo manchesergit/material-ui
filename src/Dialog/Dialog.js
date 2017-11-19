@@ -357,6 +357,7 @@ class DialogInline extends Component {
    */
   moveActive() {
     if (this.props.open) {
+      if (document.activeElement === document.body) return; // if on the body its too late
       const dialogWindow = this.getDialogElement();
       const insideWindow = DomUtils.isDescendant(dialogWindow, document.activeElement) ||
                             dialogWindow === document.activeElement;
