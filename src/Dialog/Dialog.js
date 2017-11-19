@@ -376,10 +376,19 @@ class DialogInline extends Component {
   setFocus(element) {
     if (element !== null) {
       // timeout to allow the browser to do its stuff before we do ours
+      if (element !== document.activeElement){
       const waitTime = 1;
       setTimeout(() => document.activeElement.blur(), waitTime);
       setTimeout(() => element.focus(), waitTime);
     }
+  }
+  }
+
+  // is the given node either of the tabstops or not
+  isNodeTabStop(node) {
+    if (node === document.getElementById(this.getTabStopTopId())) return true;
+    if (node === document.getElementById(this.getTabStopBottomId())) return true;
+    return false;
   }
 
   render() {
