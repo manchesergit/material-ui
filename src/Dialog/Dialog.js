@@ -334,6 +334,18 @@ class DialogInline extends Component {
     return `${id}-paper`;
   }
 
+  // gets the id for the tab stop on top of the dialog
+  getTabStopTopId() {
+    const id = this.makeIdValue();
+    return `${id}-tabstopTop`;
+  }
+
+  // gets the id for the tab stop on bottom of the dialog
+  getTabStopBottomId() {
+    const id = this.makeIdValue();
+    return `${id}-tabstopBottom`;
+  }
+
   // get the element that is the dialog on screen
   getDialogElement() {
     return document.getElementById(this.makePaperId());
@@ -445,8 +457,8 @@ class DialogInline extends Component {
     const transitionGroupId = `${baseId}-transitionGroup`;
     const transitionItemId = `${baseId}-transitionItem`;
     const overlayId = `${baseId}-overlay`;
-    const tabstopTopId = `${baseId}-tabstopTop`;
-    const tabstopBottomId = `${baseId}-tabstopBottom`;
+    const tabstopTopId = this.getTabStopTopId();
+    const tabstopBottomId = this.getTabStopBottomId();
     const paperId = this.makePaperId();
 
     // the tab indexes are used to tell the browser where it can get to
