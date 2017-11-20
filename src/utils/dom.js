@@ -29,13 +29,16 @@ export default {
     // short cut everything as the document body can't be an overlay for anything else
     if (node === document.body) return false;
 
-    const windowHeight = window.innerHeight;
-    const windowWidth = window.innerWidth;
+    // lets only deal in whole pixels here... otherwise it gets a bit tricky
+    const windowHeight = Math.trunc(window.innerHeight);
+    const windowWidth = Math.trunc(window.innerWidth);
     let toTest = node;
 
     while (toTest !== null) {
       const nodeSize = toTest.getBoundingClientRect();
-      if ((nodeSize.height === windowHeight) && (nodeSize.width === windowWidth)) return true;
+      const width = Math.trunc(nodeSize.width);
+      const height = Math.trunc(nodeSize.height);
+      if ((height === windowHeight) && (width === windowWidth)) return true;
       toTest = toTest.parentNode;
       if (toTest === document.body) return false; // we may have back tracked all the way out to the body
     }
