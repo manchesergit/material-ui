@@ -71,6 +71,10 @@ class FlatButton extends Component {
      */
     icon: PropTypes.node,
     /**
+     * The ID to give to the button so it can be identfied.
+     */
+    id: PropTypes.string,
+    /**
      * Label for the button.
      */
     label: validateLabel,

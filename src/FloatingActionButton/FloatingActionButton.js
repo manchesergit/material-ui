@@ -105,6 +105,10 @@ class FloatingActionButton extends Component {
      */
     iconStyle: PropTypes.object,
     /**
+     * The ID to give to the button so it can be identfied.
+     */
+    id: PropTypes.string,
+    /**
      * If true, the button will be a small floating action button.
      */
     mini: PropTypes.bool,

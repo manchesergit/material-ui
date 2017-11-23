@@ -174,6 +174,10 @@ class RaisedButton extends Component {
      */
     icon: PropTypes.node,
     /**
+     * The ID to give to the button so it can be identfied.
+     */
+    id: PropTypes.string,
+    /**
      * The label to be displayed within the button.
      * If content is provided via the `children` prop, that content will be
      * displayed in addition to the label provided here.
