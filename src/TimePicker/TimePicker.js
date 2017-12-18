@@ -169,7 +169,7 @@ class TimePicker extends Component {
     }
   };
 
-  handleTouchTapInput = (event) => {
+  handleClickInput = (event) => {
     event.preventDefault();
 
     if (!this.props.disabled) {
@@ -238,7 +238,7 @@ class TimePicker extends Component {
           ref="input"
           value={time === emptyTime ? null : formatTime(time, format, pedantic)}
           onFocus={this.handleFocusInput}
-          onClick={this.handleTouchTapInput}
+          onClick={this.handleClickInput}
         />
         <TimePickerDialog
           ref="dialogWindow"

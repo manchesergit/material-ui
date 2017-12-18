@@ -84,13 +84,13 @@ class DatePickerDialog extends Component {
     });
   };
 
-  handleTouchTapDay = () => {
+  handleClickDay = () => {
     if (this.props.autoOk) {
-      setTimeout(this.handleTouchTapOk, 300);
+      setTimeout(this.handleClickOk, 300);
     }
   };
 
-  handleTouchTapCancel = () => {
+  handleClickCancel = () => {
     this.dismiss();
     const ActiveElement = window.prevActiveElement;
     ActiveElement.focus();
@@ -102,7 +102,7 @@ class DatePickerDialog extends Component {
     ActiveElement.focus();
   };
 
-  handleTouchTapOk = () => {
+  handleClickOk = () => {
     if (this.props.onAccept && !this.refs.calendar.isSelectedDateDisabled()) {
       this.props.onAccept(this.refs.calendar.getSelectedDate());
     }
@@ -116,7 +116,7 @@ class DatePickerDialog extends Component {
     if (this.state.open) {
       switch (keycode(event)) {
         case 'enter':
-          this.handleTouchTapOk();
+          this.handleClickOk();
           break;
         case 'esc':
           this.handleRequestClose();
@@ -205,14 +205,14 @@ class DatePickerDialog extends Component {
             firstDayOfWeek={firstDayOfWeek}
             initialDate={initialDate}
             locale={locale}
-            onTouchTapDay={this.handleTouchTapDay}
+            onClickDay={this.handleClickDay}
             maxDate={maxDate}
             minDate={minDate}
             mode={mode}
             open={open}
             ref="calendar"
-            onTouchTapCancel={this.handleTouchTapCancel}
-            onTouchTapOk={this.handleTouchTapOk}
+            onClickCancel={this.handleClickCancel}
+            onClickOk={this.handleClickOk}
             okLabel={okLabel}
             openToYearSelection={openToYearSelection}
             shouldDisableDate={shouldDisableDate}

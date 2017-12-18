@@ -148,7 +148,7 @@ class Tabs extends Component {
     return selectedIndex;
   }
 
-  handleTabTouchTap = (value, event, tab) => {
+  handleTabClick = (value, event, tab) => {
     const valueLink = this.getValueLink(this.props);
     const index = tab.props.index;
 
@@ -222,7 +222,7 @@ class Tabs extends Component {
         id: tabId,
         selected: this.getSelected(tab, index),
         width: `${width}%`,
-        onClick: this.handleTabTouchTap,
+        onClick: this.handleTabClick,
         role: 'tab',
         tabContainerId: this.uniqueId,
       });

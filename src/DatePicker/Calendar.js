@@ -35,9 +35,9 @@ class Calendar extends Component {
     minDate: PropTypes.object,
     mode: PropTypes.oneOf(['portrait', 'landscape']),
     okLabel: PropTypes.node,
-    onTouchTapCancel: PropTypes.func,
-    onTouchTapDay: PropTypes.func,
-    onTouchTapOk: PropTypes.func,
+    onClickCancel: PropTypes.func,
+    onClickDay: PropTypes.func,
+    onClickOk: PropTypes.func,
     open: PropTypes.bool,
     openToYearSelection: PropTypes.bool,
     shouldDisableDate: PropTypes.func,
@@ -161,9 +161,9 @@ class Calendar extends Component {
     }
   }
 
-  handleTouchTapDay = (event, date) => {
+  handleClickDay = (event, date) => {
     this.setSelectedDate(date);
-    if (this.props.onTouchTapDay) this.props.onTouchTapDay(event, date);
+    if (this.props.onClickDay) this.props.onClickDay(event, date);
   };
 
   handleMonthChange = (months) => {
@@ -176,9 +176,9 @@ class Calendar extends Component {
     });
   };
 
-  handleTouchTapYear = (event, year) => {
+  handleClickYear = (event, year) => {
     this.setSelectedDate(this.props.utils.setYear(this.state.selectedDate, year), event);
-    this.handleTouchTapDateDisplayMonthDay();
+    this.handleClickDateDisplayMonthDay();
   };
 
   getToolbarInteractions() {
@@ -188,13 +188,13 @@ class Calendar extends Component {
     };
   }
 
-  handleTouchTapDateDisplayMonthDay = () => {
+  handleClickDateDisplayMonthDay = () => {
     this.setState({
       displayMonthDay: true,
     });
   };
 
-  handleTouchTapDateDisplayYear = () => {
+  handleClickDateDisplayYear = () => {
     this.setState({
       displayMonthDay: false,
       initalDisplayYear: this.props.utils.getYear(this.getSelectedDate()),
@@ -282,7 +282,7 @@ class Calendar extends Component {
           key="years"
           DateTimeFormat={this.props.DateTimeFormat}
           locale={this.props.locale}
-          onTouchTapYear={this.handleTouchTapYear}
+          onClickYear={this.handleClickYear}
           selectedDate={this.state.selectedDate}
           minDate={this.getMinDate()}
           maxDate={this.getMaxDate()}
@@ -355,8 +355,8 @@ class Calendar extends Component {
       id, // eslint-disable-line no-unused-vars
       locale,
       okLabel,
-      onTouchTapCancel, // eslint-disable-line no-unused-vars
-      onTouchTapOk, // eslint-disable-line no-unused-vars
+      onClickCancel, // eslint-disable-line no-unused-vars
+      onClickOk, // eslint-disable-line no-unused-vars
       utils,
     } = this.props;
 
@@ -372,8 +372,8 @@ class Calendar extends Component {
           <DateDisplay
             DateTimeFormat={DateTimeFormat}
             disableYearSelection={this.props.disableYearSelection}
-            onTouchTapMonthDay={this.handleTouchTapDateDisplayMonthDay}
-            onTouchTapYear={this.handleTouchTapDateDisplayYear}
+            onClickMonthDay={this.handleClickDateDisplayMonthDay}
+            onClickYear={this.handleClickDateDisplayYear}
             locale={locale}
             monthDaySelected={this.state.displayMonthDay}
             mode={this.props.mode}
@@ -407,7 +407,7 @@ class Calendar extends Component {
                   key={this.state.displayDate.toDateString()}
                   minDate={this.getMinDate()}
                   maxDate={this.getMaxDate()}
-                  onTouchTapDay={this.handleTouchTapDay}
+                  onClickDay={this.handleClickDay}
                   ref={(ref) => this.calendarRefs.calendar = ref}
                   selectedDate={this.state.selectedDate}
                   shouldDisableDate={this.props.shouldDisableDate}
@@ -426,8 +426,8 @@ class Calendar extends Component {
               autoOk={this.props.autoOk}
               cancelLabel={cancelLabel}
               okLabel={okLabel}
-              onTouchTapCancel={onTouchTapCancel}
-              onTouchTapOk={onTouchTapOk}
+              onClickCancel={onClickCancel}
+              onClickOk={onClickOk}
             />
           }
         </div>

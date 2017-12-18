@@ -86,14 +86,14 @@ class HomePage extends Component {
         <div style={styles.tagline}>
           <h1 style={styles.h1}>Material-UI</h1>
           <h2 style={styles.h2}>
-            A Set of React Components <span style={styles.nowrap}>
-            that Implement</span> <span style={styles.nowrap}>
+            React components <span style={styles.nowrap}>
+            that implement</span> <span style={styles.nowrap}>
             Google&apos;s Material Design</span>
           </h2>
           <RaisedButton
             className="demo-button"
             label="Demo"
-            onClick={this.handleTouchTapDemo}
+            onClick={this.handleClickDemo}
             style={styles.demoStyle}
             labelStyle={styles.label}
           />
@@ -199,7 +199,7 @@ class HomePage extends Component {
     );
   }
 
-  handleTouchTapDemo = () => {
+  handleClickDemo = () => {
     this.context.router.push('/components');
   };
 

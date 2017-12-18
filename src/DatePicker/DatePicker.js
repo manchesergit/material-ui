@@ -115,9 +115,9 @@ class DatePicker extends Component {
      */
     onChange: PropTypes.func,
     /**
-     * Callback function that is fired when a touch tap event occurs on the Date Picker's `TextField`.
+     * Callback function that is fired when a click event occurs on the Date Picker's `TextField`.
      *
-     * @param {object} event TouchTap event targeting the `TextField`.
+     * @param {object} event Click event targeting the `TextField`.
      */
     onClick: PropTypes.func,
     /**
@@ -258,7 +258,7 @@ class DatePicker extends Component {
     }
   };
 
-  handleTouchTap = (event) => {
+  handleClick = (event) => {
     if (this.props.onClick) {
       this.props.onClick(event);
     }
@@ -355,6 +355,7 @@ class DatePicker extends Component {
           aria-label="Date Picker"
           {...other}
           onFocus={this.handleFocus}
+          onClick={this.handleClick}
           ref="input"
           style={textFieldStyle}
           value={this.state.date ? formatDate(this.state.date) : ''}

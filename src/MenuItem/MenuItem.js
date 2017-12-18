@@ -121,9 +121,9 @@ class MenuItem extends Component {
      */
     menuItems: PropTypes.node,
     /**
-     * Callback function fired when the menu item is touch-tapped.
+     * Callback function fired when the menu item is clicked.
      *
-     * @param {object} event TouchTap event targeting the menu item.
+     * @param {object} event Click event targeting the menu item.
      */
     onClick: PropTypes.func,
     /**
@@ -233,7 +233,7 @@ class MenuItem extends Component {
     });
   };
 
-  handleTouchTap = (event) => {
+  handleClick = (event) => {
     event.preventDefault();
 
     this.setState({
@@ -326,7 +326,7 @@ class MenuItem extends Component {
           </Menu>
         </Popover>
       );
-      other.onClick = this.handleTouchTap;
+      other.onClick = this.handleClick;
     }
 
     return (
