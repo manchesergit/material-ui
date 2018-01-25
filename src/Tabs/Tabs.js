@@ -47,6 +47,10 @@ class Tabs extends Component {
      */
     inkBarStyle: PropTypes.object,
     /**
+     * Override the inline-styles of the InkBar container.
+     */
+    inkBarContainerStyle: PropTypes.object,
+    /**
      * Called when the selected value change.
      */
     onChange: PropTypes.func,
@@ -176,6 +180,7 @@ class Tabs extends Component {
       contentContainerStyle,
       initialSelectedIndex, // eslint-disable-line no-unused-vars
       inkBarStyle,
+      inkBarContainerStyle,
       onChange, // eslint-disable-line no-unused-vars
       style,
       tabItemContainerStyle,
@@ -250,7 +255,7 @@ class Tabs extends Component {
         >
           {tabs}
         </div>
-        <div style={{width: inkBarContainerWidth}}>
+        <div style={prepareStyles(Object.assign({width: inkBarContainerWidth}, inkBarContainerStyle))}>
           {inkBar}
         </div>
         <div
