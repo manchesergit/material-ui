@@ -85,6 +85,7 @@ class EnhancedButton extends Component {
 
   state = {
     isKeyboardFocused: false,
+    lastHandledEventTime: 0,
   };
 
   componentWillMount() {
@@ -265,12 +266,21 @@ class EnhancedButton extends Component {
   };
 
   handleClick = (event) => {
-    // this.cancelFocusTimeout();
-    if (!this.props.disabled) {
-      tabPressed = false;
-      // this.removeKeyboardFocus(event);
-      this.props.onClick(event);
-    }
+    // when firing the handleClick from the handleKeyUp, 2 events are generated, both with the same timeStamp
+    // the chances of someone managing to fire two events in the same millisecond are ... well slim to none.
+    const bumpTime = this.state.lastHandledEventTime + 1;
+    // this is for the chance that no event is provided
+    const eventTime = event ? event.hasOwnProperty('timeStamp') ? event.timeStamp : bumpTime : bumpTime;
+    // don't bother running the handler code if the event being processed happened in the same millisecond as the last one processed
+    if (eventTime !== this.state.lastHandledEventTime) {
+      this.setState({lastHandledEventTime: eventTime});
+      this.cancelFocusTimeout();
+      if (!this.props.disabled) {
+        tabPressed = false;
+        this.removeKeyboardFocus(event);
+        this.props.onClick(event);
+      }
+     }
   };
 
   render() {
