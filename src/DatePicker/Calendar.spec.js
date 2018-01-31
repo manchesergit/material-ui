@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 import React from 'react';
-import {shallow} from 'enzyme';
+import PropTypes from 'prop-types';
+import {shallow, mount} from 'enzyme';
 import {assert} from 'chai';
 import Calendar from './Calendar';
 import CalendarMonth from './CalendarMonth';
@@ -8,10 +9,28 @@ import CalendarYear from './CalendarYear';
 import DateDisplay from './DateDisplay';
 import {addMonths, dateTimeFormat} from './dateUtils';
 import getMuiTheme from '../styles/getMuiTheme';
+import keycode from 'keycode';
+import ReactDOM from 'react-dom';
 
 describe('<Calendar />', () => {
   const muiTheme = getMuiTheme();
   const shallowWithContext = (node) => shallow(node, {context: {muiTheme}});
+  const mountWithContext = (node) => mount(node, {
+    context: {muiTheme},
+    childContextTypes: {muiTheme: PropTypes.object},
+  });
+
+  let wrapperNode;
+  beforeEach(() => {
+    // Pattern from "react-router": http://git.io/vWpfs
+    wrapperNode = document.createElement('div');
+    document.body.appendChild(wrapperNode);
+  });
+
+  afterEach(() => {
+    ReactDOM.unmountComponentAtNode(wrapperNode);
+    wrapperNode.parentNode.removeChild(wrapperNode);
+  });
 
   describe('Next Month Button', () => {
     it('should initially be disabled if the current month is the same as the month in the maxDate prop', () => {
@@ -273,6 +292,34 @@ describe('<Calendar />', () => {
         );
 
         assert.strictEqual(wrapper.prop('id'), id, `the provided id ${id} was not used`);
+      });
+    });
+
+    describe('Year picker activation', () => {
+      const year = (new Date()).getFullYear();
+      const yearPickerId = 'displayYear';
+
+      it('should have the current year as the year picker label', () => {
+        let wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
+
+        // the year div on the calendar should have an ID of displayYear
+        const calendar = wrapper.find({id : `${yearPickerId}`});
+        assert.ok(calendar.length > 0, 'Could not find the displayYear div on the Calendar Component');
+        assert.ok(calendar.text() == year, 'The display year for the year picker should default to this year.');
+      });
+
+      it('should open the year picker when the year is clicked', () => {
+        let wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
+
+        // attempt to activate the year selector
+        const yearButton = () => wrapper.find({id :`${yearPickerId}`});
+        yearButton().simulate('click');
+
+        // theres should be a button generated now with the ID 'YearButton-2018' (if its still 2018)
+        const yearSelector = wrapper.find({id : `YearButton-${year}`});
+        assert.ok(yearSelector.length > 0, 'Could not find the current year in the list of years to pick from');
+        assert.ok(yearSelector.text() == year, 'The displayed year for this year was not the value expected');
+        assert.ok(yearSelector.type() == 'button', 'The selector for the current year is not a button');
       });
     });
   });
