@@ -9,7 +9,6 @@ import CalendarYear from './CalendarYear';
 import DateDisplay from './DateDisplay';
 import {addMonths, dateTimeFormat} from './dateUtils';
 import getMuiTheme from '../styles/getMuiTheme';
-import keycode from 'keycode';
 import ReactDOM from 'react-dom';
 
 describe('<Calendar />', () => {
@@ -300,26 +299,26 @@ describe('<Calendar />', () => {
       const yearPickerId = 'displayYear';
 
       it('should have the current year as the year picker label', () => {
-        let wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
+        const wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
 
         // the year div on the calendar should have an ID of displayYear
-        const calendar = wrapper.find({id : `${yearPickerId}`});
+        const calendar = wrapper.find({id: `${yearPickerId}`});
         assert.ok(calendar.length > 0, 'Could not find the displayYear div on the Calendar Component');
-        assert.ok(calendar.text() == year, 'The display year for the year picker should default to this year.');
+        assert.ok(calendar.text() === `${year}`, 'The display year for the year picker should default to this year.');
       });
 
       it('should open the year picker when the year is clicked', () => {
-        let wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
+        const wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
 
         // attempt to activate the year selector
-        const yearButton = () => wrapper.find({id :`${yearPickerId}`});
+        const yearButton = () => wrapper.find({id: `${yearPickerId}`});
         yearButton().simulate('click');
 
         // theres should be a button generated now with the ID 'YearButton-2018' (if its still 2018)
-        const yearSelector = wrapper.find({id : `YearButton-${year}`});
+        const yearSelector = wrapper.find({id: `YearButton-${year}`});
         assert.ok(yearSelector.length > 0, 'Could not find the current year in the list of years to pick from');
-        assert.ok(yearSelector.text() == year, 'The displayed year for this year was not the value expected');
-        assert.ok(yearSelector.type() == 'button', 'The selector for the current year is not a button');
+        assert.ok(yearSelector.text() === `${year}`, 'The displayed year for this year was not the value expected');
+        assert.ok(yearSelector.type() === 'button', 'The selector for the current year is not a button');
       });
     });
   });
