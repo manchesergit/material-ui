@@ -204,9 +204,9 @@ class DateDisplay extends Component {
     );
 
     return (
-      <div {...other} style={prepareStyles(styles.root, style)}>
+      <div id="dateDisplay-div" {...other} style={prepareStyles(styles.root, style)}>
         {yearTooltipElement}
-        <SlideInTransitionGroup style={styles.year} direction={this.state.transitionDirection}>
+        <SlideInTransitionGroup id="dateDisplay-yearTransition" style={styles.year} direction={this.state.transitionDirection}>
           <div
             id="displayYear"
             tabIndex="0"
@@ -222,8 +222,9 @@ class DateDisplay extends Component {
             {year}
           </div>
         </SlideInTransitionGroup>
-        <SlideInTransitionGroup style={styles.monthDay} direction={this.state.transitionDirection}>
+        <SlideInTransitionGroup id="dateDisplay-monthDayTransition" style={styles.monthDay} direction={this.state.transitionDirection}>
           <div
+            id="displayMonthDay"
             key={dateTime}
             onClick={this.handleTouchTapMonthDay}
             style={styles.monthDayTitle}
