@@ -85,6 +85,7 @@ class CalendarToolbar extends Component {
     return (
       <div style={styles.root}>
         <IconButton
+          id="PreviousMonthButton"
           disabled={!this.props.prevMonth}
           onClick={this.handleTouchTapPrevMonth}
         >
@@ -94,11 +95,12 @@ class CalendarToolbar extends Component {
           direction={this.state.transitionDirection}
           style={styles.titleDiv}
         >
-          <div key={dateTimeFormatted} style={styles.titleText}>
+          <div id="formattedDateTime" key={dateTimeFormatted} style={styles.titleText}>
             {dateTimeFormatted}
           </div>
         </SlideInTransitionGroup>
         <IconButton
+          id="NextMonthButton"
           disabled={!this.props.nextMonth}
           onClick={this.handleTouchTapNextMonth}
         >
