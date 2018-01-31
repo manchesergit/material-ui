@@ -494,11 +494,11 @@ class Popover extends Component {
   render() {
     const eventListener = this.state.open ?
       (<EventListener
-          target={this.props.scrollableContainer}
-          onScroll={this.handleScroll}
-          onResize={this.handleResize}
-          onKeyUp={this.handleKeyUp}
-        />) : null;
+        target={this.props.scrollableContainer}
+        onScroll={this.handleScroll}
+        onResize={this.handleResize}
+        onKeyUp={this.handleKeyUp}
+       />) : null;
     return (
       <div style={styles.root}>
         {eventListener}

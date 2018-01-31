@@ -1,7 +1,6 @@
 /* jshint esversion: 6 */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import EventListener from 'react-event-listener';
 import keycode from 'keycode';
 import {dateTimeFormat, formatIso, isEqualDate} from './dateUtils';
 import DatePickerDialog from './DatePickerDialog';

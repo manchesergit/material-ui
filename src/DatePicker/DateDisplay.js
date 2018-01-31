@@ -147,7 +147,6 @@ class DateDisplay extends Component {
   handleKeyUp = (event) => {
     if (!this.props.disableYearSelection) {
       if ((keycode(event) === 'enter' || keycode(event) === 'space')) {
-        console.log('\ntapped\n');
         this.handleTouchTapYear();
       }
     }
@@ -206,7 +205,11 @@ class DateDisplay extends Component {
     return (
       <div id="dateDisplay-div" {...other} style={prepareStyles(styles.root, style)}>
         {yearTooltipElement}
-        <SlideInTransitionGroup id="dateDisplay-yearTransition" style={styles.year} direction={this.state.transitionDirection}>
+        <SlideInTransitionGroup
+          id="dateDisplay-yearTransition"
+          style={styles.year}
+          direction={this.state.transitionDirection}
+        >
           <div
             id="displayYear"
             tabIndex="0"
@@ -222,7 +225,11 @@ class DateDisplay extends Component {
             {year}
           </div>
         </SlideInTransitionGroup>
-        <SlideInTransitionGroup id="dateDisplay-monthDayTransition" style={styles.monthDay} direction={this.state.transitionDirection}>
+        <SlideInTransitionGroup
+          id="dateDisplay-monthDayTransition"
+          style={styles.monthDay}
+          direction={this.state.transitionDirection}
+        >
           <div
             id="displayMonthDay"
             key={dateTime}

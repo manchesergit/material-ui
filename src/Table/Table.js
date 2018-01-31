@@ -150,7 +150,8 @@ class Table extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if ((this.props.allRowsSelected !== nextProps.allRowsSelected) || (this.state.allRowsSelected !== nextProps.allRowsSelected)){
+    if ((this.props.allRowsSelected !== nextProps.allRowsSelected) ||
+        (this.state.allRowsSelected !== nextProps.allRowsSelected)) {
       this.setState({allRowsSelected: nextProps.allRowsSelected});
     }
   }

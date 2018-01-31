@@ -379,7 +379,7 @@ class DialogInline extends Component {
   setFocus(element) {
     if (element !== null) {
       // timeout to allow the browser to do its stuff before we do ours
-      if (element !== document.activeElement){
+      if (element !== document.activeElement) {
         const waitTime = 1;
         setTimeout(() => document.activeElement.blur(), waitTime);
         setTimeout(() => element.focus(), waitTime);

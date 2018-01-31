@@ -271,7 +271,8 @@ class EnhancedButton extends Component {
     const bumpTime = this.state.lastHandledEventTime + 1;
     // this is for the chance that no event is provided
     const eventTime = event ? event.hasOwnProperty('timeStamp') ? event.timeStamp : bumpTime : bumpTime;
-    // don't bother running the handler code if the event being processed happened in the same millisecond as the last one processed
+    // don't bother running the handler code if the event being processed happened
+    // in the same millisecond as the last one processed
     if (eventTime !== this.state.lastHandledEventTime) {
       this.setState({lastHandledEventTime: eventTime});
       this.cancelFocusTimeout();
@@ -280,7 +281,7 @@ class EnhancedButton extends Component {
         this.removeKeyboardFocus(event);
         this.props.onClick(event);
       }
-     }
+    }
   };
 
   render() {
