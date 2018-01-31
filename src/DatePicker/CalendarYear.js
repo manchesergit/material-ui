@@ -115,7 +115,7 @@ class CalendarYear extends Component {
         calendarYearBackgroundColor,
       },
     } = this.context.muiTheme;
-console.log('year displayed');
+
     const styles = {
       root: {
         backgroundColor: calendarYearBackgroundColor,
