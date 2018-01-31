@@ -296,41 +296,30 @@ describe('<Calendar />', () => {
     });
 
     describe('Year picker activation', () => {
+      const year = (new Date()).getFullYear();
+      const yearPickerId = 'displayYear';
+
+      it('should have the current year as the year picker label', () => {
+        let wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
+
+        // the year div on the calendar should have an ID of displayYear
+        const calendar = wrapper.find({id : `${yearPickerId}`});
+        assert.ok(calendar.length > 0, 'Could not find the displayYear div on the Calendar Component');
+        assert.ok(calendar.text() == year, 'The display year for the year picker should default to this year.');
+      });
+
       it('should open the year picker when the year is clicked', () => {
-        class calendarLauncher extends React.Component {
-          render() {
-            return (<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
-          }
-        }
+        let wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
 
-        let handle = null;
-        //
-        // ReactDOM.render(
-        //   <div
-        //     ref={(c) => {
-        //       handle = c;
-        //     }}
-        //   >
-        //     <Calendar DateTimeFormat={dateTimeFormat} locale="en-US"  contextTypes={muiTheme} />
-        //   </div>,
-        //   wrapperNode,
-        // );
+        // attempt to activate the year selector
+        const yearButton = () => wrapper.find({id :`${yearPickerId}`});
+        yearButton().simulate('click');
 
-        const wrapper = mountWithContext(<calendarLauncher/>);
-        const calendar = wrapper.find('Calendar');
-        calendar.simulate('keyUp', keycode('space'));
-
-        console.log(wrapper.find('DateDisplay'));
-        //handle.keyUp(keycode('tab'));
-
-        // const wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
-        // //console.log(wrapper.html());
-        // console.log(wrapper.find(CalendarYear));
-        // console.log('=====================================================================================');
-        // wrapper.simulate('keyUp', {keyCode: () => { keycode('tab'); }})
-        // wrapper.simulate('keyUp', {keyCode: () => { keycode('space'); }})
-        // //console.log(wrapper.html());
-        // console.log(wrapper.find(CalendarYear));
+        // theres should be a button generated now with the ID 'YearButton-2018' (if its still 2018)
+        const yearSelector = wrapper.find({id : `YearButton-${year}`});
+        assert.ok(yearSelector.length > 0, 'Could not find the current year in the list of years to pick from');
+        assert.ok(yearSelector.text() == year, 'The displayed year for this year was not the value expected');
+        assert.ok(yearSelector.type() == 'button', 'The selector for the current year is not a button');
       });
     });
   });
