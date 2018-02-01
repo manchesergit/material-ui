@@ -297,10 +297,9 @@ describe('<Calendar />', () => {
     describe('Year picker activation', () => {
       const year = (new Date()).getFullYear();
       const yearPickerId = 'displayYear';
+      const wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
 
       it('should have the current year as the year picker label', () => {
-        const wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
-
         // the year div on the calendar should have an ID of displayYear
         const calendar = wrapper.find({id: `${yearPickerId}`});
         assert.ok(calendar.length > 0, 'Could not find the displayYear div on the Calendar Component');
@@ -308,13 +307,23 @@ describe('<Calendar />', () => {
       });
 
       it('should open the year picker when the year is clicked', () => {
-        const wrapper = mountWithContext(<Calendar DateTimeFormat={dateTimeFormat} locale="en-US" />);
-
         // attempt to activate the year selector
         const yearButton = () => wrapper.find({id: `${yearPickerId}`});
         yearButton().simulate('click');
 
-        // theres should be a button generated now with the ID 'YearButton-2018' (if its still 2018)
+        // there should be a button generated with the ID 'YearButton-2018' (if its still 2018)
+        const yearSelector = wrapper.find({id: `YearButton-${year}`});
+        assert.ok(yearSelector.length > 0, 'Could not find the current year in the list of years to pick from');
+        assert.ok(yearSelector.text() === `${year}`, 'The displayed year for this year was not the value expected');
+        assert.ok(yearSelector.type() === 'button', 'The selector for the current year is not a button');
+      });
+
+      it('should open the year picker when the year is pressed by the keyboad', () => {
+        // attempt to activate the year selector
+        const yearButton = () => wrapper.find({id: `${yearPickerId}`});
+        yearButton().simulate('keyPress', 32);  // press space
+
+        // there should be a button generated with the ID 'YearButton-2018' (if its still 2018) - same as mouse click
         const yearSelector = wrapper.find({id: `YearButton-${year}`});
         assert.ok(yearSelector.length > 0, 'Could not find the current year in the list of years to pick from');
         assert.ok(yearSelector.text() === `${year}`, 'The displayed year for this year was not the value expected');
