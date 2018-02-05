@@ -151,6 +151,11 @@ class FlatButton extends Component {
     touch: false,
   };
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.disabled) {
       this.setState({
@@ -179,6 +184,8 @@ class FlatButton extends Component {
     this.setState({touch: true});
     this.props.onTouchStart(event);
   };
+
+  getBaseId() { return this.props.id || this.uniqueId; }
 
   render() {
     const {
@@ -290,16 +297,16 @@ class FlatButton extends Component {
       labelElement,
     ];
 
-    const noFor = (!this.props.hasOwnProperty('htmlFor'));
+    const baseId = this.getBaseId();
 
     return (
       <EnhancedButton
+        id={baseId}
         aria-label="Flat Button"
         {...other}
         disabled={disabled}
         focusRippleColor={buttonRippleColor}
         focusRippleOpacity={0.3}
-        forInLabel={noFor}
         onKeyboardFocus={this.handleKeyboardFocus}
         onMouseLeave={this.handleMouseLeave}
         onMouseEnter={this.handleMouseEnter}
