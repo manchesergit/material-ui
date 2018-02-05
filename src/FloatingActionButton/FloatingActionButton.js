@@ -165,6 +165,9 @@ class FloatingActionButton extends Component {
     this.setState({
       zDepth: this.props.disabled ? 0 : this.props.zDepth,
     });
+
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentDidMount() {
@@ -251,6 +254,8 @@ class FloatingActionButton extends Component {
     }
   };
 
+  getBaseId() { return this.props.id || this.uniqueId; }
+
   render() {
     const {
       backgroundColor, // eslint-disable-line no-unused-vars
@@ -304,6 +309,8 @@ class FloatingActionButton extends Component {
       onKeyboardFocus: this.handleKeyboardFocus,
     };
 
+    const baseId = this.getBaseId();
+
     return (
       <Paper
         className={className}
@@ -312,6 +319,7 @@ class FloatingActionButton extends Component {
         circle={true}
       >
         <EnhancedButton
+          id={baseId}
           {...other}
           {...buttonEventHandlers}
           ref="container"

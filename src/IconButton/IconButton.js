@@ -254,6 +254,8 @@ class IconButton extends Component {
     }
   };
 
+  getBaseId() { return this.props.id || this.uniqueId; }
+
   render() {
     const {
       buttonAriaLabel, // eslint-disable-line no-unused-vars
@@ -275,7 +277,7 @@ class IconButton extends Component {
     } = this.props;
     let fonticon;
 
-    const baseId = id || this.uniqueId;
+    const baseId = this.getBaseId();
 
     /* aria tags to associate this button with parent containers or
      * nothing depending on how the call for this has been made */
