@@ -4,6 +4,7 @@ import transitions from '../styles/transitions';
 import {fade} from '../utils/colorManipulator';
 import EnhancedButton from '../internal/EnhancedButton';
 import Paper from '../Paper';
+import {checkChildrenInputWitha11y} from '../utils/inputNodeCheck';
 
 function validateLabel(props, propName, componentName) {
   if (process.env.NODE_ENV !== 'production') {
@@ -260,36 +261,21 @@ class RaisedButton extends Component {
     zDepth: 0,
   };
 
-
   componentWillMount() {
     const zDepth = this.props.disabled ? 0 : 1;
     this.setState({
       zDepth: zDepth,
       initialZDepth: zDepth,
     });
+
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentDidMount() {
-    // Code duplication can be reduced in milestone three
-    const warning = require('warning');
-    React.Children.forEach(this.props.children, (child) => {
-      if (child !== null) {
-        if (child.type === 'input') {
-          if (!this.props.hasOwnProperty('htmlFor')) {
-            warning(false,
-              'Material-UI: <RaisedButton /> should contain a \'for\' attribute inside the label tag.');
-          }
-          if (!child.props.hasOwnProperty('aria-labelledby')) {
-            warning(false,
-              'Material-UI: <RaisedButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
-          }
-          if (!child.props.hasOwnProperty('aria-describedby')) {
-            warning(false,
-              'Material-UI: <RaisedButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
-          }
-        }
-      }
-    });
+    // this test is done in enhanced button too, but this button burries its input tag inside another div
+    // the check will not traverse the child tree so we need to do it here
+    //checkChildrenInputWitha11y(`RaisedButton ${this.getBaseId()}`, this.props.children);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -381,6 +367,8 @@ class RaisedButton extends Component {
     });
   };
 
+  getBaseId() { return this.props.id || this.uniqueId; }
+
   render() {
     const {
       backgroundColor, // eslint-disable-line no-unused-vars
@@ -443,6 +431,7 @@ class RaisedButton extends Component {
     ];
 
     const ariaLabel = label ? null : icon ? 'Button with an icon' : 'Button';
+    const baseId = this.getBaseId();
 
     return (
       <Paper
@@ -451,6 +440,7 @@ class RaisedButton extends Component {
         zDepth={this.state.zDepth}
       >
         <EnhancedButton
+          id={baseId}
           {...other}
           {...buttonEventHandlers}
           ref="container"

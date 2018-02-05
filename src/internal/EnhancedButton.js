@@ -4,6 +4,7 @@ import Events from '../utils/events';
 import keycode from 'keycode';
 import FocusRipple from './FocusRipple';
 import TouchRipple from './TouchRipple';
+import {checkChildrenInputWitha11y, HtmlForTagName, InputTypeName} from '../utils/inputNodeCheck';
 
 let styleInjected = false;
 let listening = false;
@@ -49,7 +50,6 @@ class EnhancedButton extends Component {
     disabled: PropTypes.bool,
     focusRippleColor: PropTypes.string,
     focusRippleOpacity: PropTypes.number,
-    forInLabel: PropTypes.bool,
     href: PropTypes.string,
     id: PropTypes.string,
     keyboardFocused: PropTypes.bool,
@@ -106,27 +106,32 @@ class EnhancedButton extends Component {
       this.props.onKeyboardFocus(null, true);
     }
 
-    const warning = require('warning');
-    React.Children.forEach(this.props.children, (child) => {
-      if (child !== null) {
-        if (child.type === 'input') {
-          if (this.props.forInLabel !== undefined) {
-            if (this.props.forInLabel === true) {
-              warning(false,
-              'Material-UI: <FlatButton /> should contain a \'for\' attribute inside the label tag.');
-            }
-          }
-          if (!child.props.hasOwnProperty('aria-labelledby')) {
-            warning(false,
-              'Material-UI: <FlatButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
-          }
-          if (!child.props.hasOwnProperty('aria-describedby')) {
-            warning(false,
-               'Material-UI: <FlatButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
+    // ----------  a11y test incase the button has a child input tag -------------
+    let children = this.props.children; // children will be checked for input blocks
+    let excludeTag = null;              // this tag will not be checked
+
+    // if this button already has a 'for' value at this level, exclude it from the next level of checks
+    if (this.props.hasOwnProperty(HtmlForTagName)) {
+      excludeTag = HtmlForTagName;
+    }
+
+    // if the type of the children is a div, then we need to test the inside of the div
+    if (this.props.children.type === 'div') {
+      let grandChild = children; // this is what will end up being checked
+
+      // check all the children of the children for an input tag
+      React.Children.forEach(children.props.children, (child) => {
+        if (child !== null) {
+          if (child.type === InputTypeName) {
+            grandChild = child; // if theres an input tag use it as the base to test from
           }
         }
-      }
-    });
+      });
+      children = grandChild;  // test these instead of the this.props.children
+    }
+
+    checkChildrenInputWitha11y(this.getBaseId(), children, excludeTag);
+    // ----------  a11y test incase the button has a child input tag -------------
   }
 
   componentWillReceiveProps(nextProps) {
@@ -170,7 +175,7 @@ class EnhancedButton extends Component {
     }
   }
 
-  createButtonChildren(idBase) {
+  createButtonChildren() {
     const {
       centerRipple,
       children,
@@ -184,8 +189,8 @@ class EnhancedButton extends Component {
       touchRippleOpacity,
     } = this.props;
     const {isKeyboardFocused} = this.state;
-    const focusRippleId = `${idBase}-focusRipple`;
-    const touchRippleId = `${idBase}-touchRipple`;
+    const focusRippleId = `${this.getBaseId()}-focusRipple`;
+    const touchRippleId = `${this.getBaseId()}-touchRipple`;
 
     // Focus Ripple
     const focusRipple = isKeyboardFocused && !disabled && !disableFocusRipple && !disableKeyboardFocus ? (
@@ -284,6 +289,8 @@ class EnhancedButton extends Component {
     }
   };
 
+  getBaseId() { return this.props.id || this.uniqueId; }
+
   render() {
     const {
       id,
@@ -315,7 +322,7 @@ class EnhancedButton extends Component {
       ...other
     } = this.props;
 
-    const baseId = id || this.uniqueId;
+    const baseId = this.getBaseId();
     const spanId = `${baseId}-span`;
 
     const {
