@@ -205,77 +205,57 @@ describe('<FlatButton />', () => {
   });
 
   describe('a11y warning checks', () => {
-    it('throws an error if no for on input', () => {
-      const inputId = 'test-input-id';
-      const buttonId = 'test-button-id';
+    it('throws an error if no for attribute on input', () => {
+      const inputId = 'test-input-htmlFor';
+      const buttonId = 'test-button-htmlFor';
       const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
 
       assert.throws(() => mountWithContext(
-        <FlatButton
-          label="test-button"
-          id={buttonId}
-        >
+        <FlatButton label="test-button" id={buttonId}>
           <input type="text" id={inputId} />
         </FlatButton>
-      ), Error, 'Warning: Material-UI: <FlatButton /> should contain a \'for\' attribute inside the label tag.');
+      ), Error);
 
       unmute(); // stdout and error back on again
     });
 
     it('throws error for no aria-labelledby', () => {
-      const inputId = 'test-input-id';
-      const buttonId = 'test-button-id';
+      const inputId = 'test-input-labbelledby';
+      const buttonId = 'test-button-labbelledby';
       const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
 
       assert.throws(() => mountWithContext(
-        <FlatButton
-          label="test-button"
-          id={buttonId}
-          htmlFor={inputId}
-        >
+        <FlatButton label="test-button" id={buttonId} htmlFor={inputId}>
           <input type="text" id={inputId} />
         </FlatButton>
-      ), Error,
-      'Material-UI: <FlatButton /> should contain an \'aria-labelledby\' attribute inside the input tag.');
+      ), Error);
 
       unmute(); // stdout and error back on again
     });
 
     it('throws error for no aria-describedby', () => {
-      const inputId = 'test-input-id';
-      const buttonId = 'test-button-id';
+      const inputId = 'test-input-describedby';
+      const buttonId = 'test-button-describedby';
       const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
 
       assert.throws(() => mountWithContext(
-        <FlatButton
-          label="test-button"
-          id={buttonId}
-          htmlFor={inputId}
-        >
+        <FlatButton label="test-button" id={buttonId} htmlFor={inputId}>
           <input type="text" id={inputId} aria-labelledby={buttonId} />
         </FlatButton>
-      ), Error,
-      'Material-UI: <FlatButton /> should contain an \'aria-describedby\' attribute inside the input tag.');
+      ), Error);
 
       unmute(); // stdout and error back on again
     });
 
     it('No a11y check errors', () => {
-      const inputId = 'test-input-id';
-      const buttonId = 'test-button-id';
+      const inputId = 'test-input-noError';
+      const buttonId = 'test-button-noError';
       const wrapper = mountWithContext(
-        <FlatButton
-          label="test-button"
-          id={buttonId}
-          htmlFor={inputId}
-        >
-          <input
-            type="text" id={inputId}
-            aria-labelledby={buttonId}
-            aria-describedby={buttonId}
-          />
+        <FlatButton label="test-button" id={buttonId} htmlFor={inputId}>
+          <input type="text" id={inputId} aria-labelledby={buttonId} aria-describedby={buttonId} />
         </FlatButton>
       );
+
       assert.ok(wrapper.find(buttonId));
     });
   });

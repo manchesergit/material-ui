@@ -7,6 +7,7 @@ import IconButton from './IconButton';
 import FontIcon from '../FontIcon';
 import getMuiTheme from '../styles/getMuiTheme';
 import TouchRipple from '../internal/TouchRipple';
+import mute from 'mute';
 
 const dummy = <div />;
 
@@ -78,6 +79,7 @@ describe('<IconButton />', () => {
       assert.include(wrapper.props().style, hoveredStyle);
     });
   });
+
   describe('prop: disabled', () => {
     it('should disable the ripple effect', () => {
       const wrapper = mountWithContext(
@@ -90,6 +92,62 @@ describe('<IconButton />', () => {
         <IconButton disabled={false} />
       );
       assert.strictEqual(wrapper.find(TouchRipple).length, 1, 'should contain a TouchRipple descendent');
+    });
+  });
+
+  describe('a11y warning checks', () => {
+    it('throws an error if no for attribute on input', () => {
+      const inputId = 'test-input-htmlFor';
+      const buttonId = 'test-button-htmlFor';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
+      assert.throws(() => mountWithContext(
+        <IconButton label="test-button" id={buttonId}>
+          <input type="text" id={inputId} />
+        </IconButton>
+      ), Error);
+
+      unmute(); // stdout and error back on again
+    });
+
+    it('throws error for no aria-labelledby', () => {
+      const inputId = 'test-input-labbelledby';
+      const buttonId = 'test-button-labbelledby';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
+      assert.throws(() => mountWithContext(
+        <IconButton label="test-button" id={buttonId} htmlFor={inputId}>
+          <input type="text" id={inputId} />
+        </IconButton>
+      ), Error);
+
+      unmute(); // stdout and error back on again
+    });
+
+    it('throws error for no aria-describedby', () => {
+      const inputId = 'test-input-describedby';
+      const buttonId = 'test-button-describedby';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
+      assert.throws(() => mountWithContext(
+        <IconButton label="test-button" id={buttonId} htmlFor={inputId}>
+          <input type="text" id={inputId} aria-labelledby={buttonId} />
+        </IconButton>
+      ), Error);
+
+      unmute(); // stdout and error back on again
+    });
+
+    it('No a11y check errors', () => {
+      const inputId = 'test-input-noError';
+      const buttonId = 'test-button-noError';
+      const wrapper = mountWithContext(
+        <IconButton label="test-button" id={buttonId} htmlFor={inputId}>
+          <input type="text" id={inputId} aria-labelledby={buttonId} aria-describedby={buttonId} />
+        </IconButton>
+      );
+
+      assert.ok(wrapper.find(buttonId));
     });
   });
 });

@@ -1,14 +1,20 @@
 /* eslint-env mocha */
 import React from 'react';
-import {shallow} from 'enzyme';
+import PropTypes from 'prop-types';
+import {shallow, mount} from 'enzyme';
 import {assert} from 'chai';
 import EnhancedButton from './EnhancedButton';
 import getMuiTheme from '../styles/getMuiTheme';
+import mute from 'mute';
 
 describe('<EnhancedButton />', () => {
   const muiTheme = getMuiTheme();
   const shallowWithContext = (node) => shallow(node, {context: {muiTheme}});
   const testChildren = <div className="unique">Hello World</div>;
+  const mountWithContext = (node) => mount(node, {
+    context: {muiTheme},
+    childContextTypes: {muiTheme: PropTypes.object},
+  });
 
   it('renders a button', () => {
     const wrapper = shallowWithContext(
@@ -305,5 +311,61 @@ describe('<EnhancedButton />', () => {
     wrapper.setProps({disabled: true});
     wrapper.simulate('keyDown', {which: 13});
     assert.strictEqual(eventStack.length, 2, 'should not work when button is disabled');
+  });
+
+  describe('a11y warning checks', () => {
+    it('throws an error if no for attribute on input', () => {
+      const inputId = 'test-input-htmlFor';
+      const buttonId = 'test-button-htmlFor';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
+      assert.throws(() => mountWithContext(
+        <EnhancedButton label="test-button" id={buttonId}>
+          <input type="text" id={inputId} />
+        </EnhancedButton>
+      ), Error);
+
+      unmute(); // stdout and error back on again
+    });
+
+    it('throws error for no aria-labelledby', () => {
+      const inputId = 'test-input-labbelledby';
+      const buttonId = 'test-button-labbelledby';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
+      assert.throws(() => mountWithContext(
+        <EnhancedButton label="test-button" id={buttonId} htmlFor={inputId}>
+          <input type="text" id={inputId} />
+        </EnhancedButton>
+      ), Error);
+
+      unmute(); // stdout and error back on again
+    });
+
+    it('throws error for no aria-describedby', () => {
+      const inputId = 'test-input-describedby';
+      const buttonId = 'test-button-describedby';
+      const unmute = mute(); // turn off the stdout and stderr so the warning isn't shown on the console output
+
+      assert.throws(() => mountWithContext(
+        <EnhancedButton label="test-button" id={buttonId} htmlFor={inputId}>
+          <input type="text" id={inputId} aria-labelledby={buttonId} />
+        </EnhancedButton>
+      ), Error);
+
+      unmute(); // stdout and error back on again
+    });
+
+    it('No a11y check errors', () => {
+      const inputId = 'test-input-noError';
+      const buttonId = 'test-button-noError';
+      const wrapper = mountWithContext(
+        <EnhancedButton label="test-button" id={buttonId} htmlFor={inputId}>
+          <input type="text" id={inputId} aria-labelledby={buttonId} aria-describedby={buttonId} />
+        </EnhancedButton>
+      );
+
+      assert.ok(wrapper.find(buttonId));
+    });
   });
 });
