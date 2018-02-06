@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import transitions from '../styles/transitions';
 import AutoLockScrolling from './AutoLockScrolling';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props, context) {
   const {overlay} = context.muiTheme;
@@ -62,8 +63,7 @@ class Overlay extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   setOpacity(opacity) {

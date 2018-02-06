@@ -166,6 +166,24 @@ describe('<AppBar />', () => {
     });
   });
 
+  describe('ID handeling and generation', () => {
+    it('should use the supplied id without overriding', () => {
+      const id = '12345';
+      const wrapper = shallowWithContext(
+        <AppBar id={id} />
+      );
+      assert.strictEqual(wrapper.prop('id'), id, 'should use provided id');
+    });
+
+    it('should generate an id if one not supplied', () => {
+      const classname = 'abcde';
+      const wrapper = shallowWithContext(
+        <AppBar name={classname} />
+      );
+      assert.ok(wrapper.prop('id'), 'should generate an id if not supplied');
+    });
+  });
+
   it('call onTitleClick callback', () => {
     const onTitleClick = spy();
     const wrapper = shallowWithContext(

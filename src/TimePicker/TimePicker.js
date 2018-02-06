@@ -5,6 +5,7 @@ import TextField from '../TextField';
 import {formatTime} from './timeUtils';
 import EventListener from 'react-event-listener';
 import keycode from 'keycode';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 const emptyTime = new Date();
 emptyTime.setHours(0);
@@ -127,8 +128,8 @@ class TimePicker extends Component {
     this.setState({
       time: this.isControlled() ? this.getControlledTime() : this.props.defaultTime,
     });
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    
+    this.uniqueId = makeUniqueIdForElement(this);
 
     const uniqueLabelId = `${this.constructor.name}-label-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueLabelId = uniqueLabelId.replace(/[^A-Za-z0-9-]/gi, '');

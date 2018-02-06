@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import StepLabel from './StepLabel';
 import StepButton from './StepButton';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 const getStyles = ({index}, {stepper}) => {
   const {orientation} = stepper;
@@ -72,8 +73,7 @@ class Step extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   renderChild = (child) => {

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import transitions from '../styles/transitions';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 const reflow = (elem) => elem.offsetHeight;
 
@@ -26,8 +27,7 @@ class ExpandTransitionChild extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentWillUnmount() {

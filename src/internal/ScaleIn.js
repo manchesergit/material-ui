@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 import ScaleInChild from './ScaleInChild';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 class ScaleIn extends Component {
   static propTypes = {
@@ -26,8 +27,7 @@ class ScaleIn extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   render() {

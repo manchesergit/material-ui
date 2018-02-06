@@ -5,6 +5,7 @@ import keycode from 'keycode';
 import {dateTimeFormat, formatIso, isEqualDate} from './dateUtils';
 import DatePickerDialog from './DatePickerDialog';
 import TextField from '../TextField';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 class DatePicker extends Component {
   static propTypes = {
@@ -194,8 +195,7 @@ class DatePicker extends Component {
       date: this.isControlled() ? this.getControlledDate() : this.props.defaultDate,
     });
 
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentWillReceiveProps(nextProps) {

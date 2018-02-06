@@ -8,6 +8,7 @@ import TextFieldHint from './TextFieldHint';
 import TextFieldLabel from './TextFieldLabel';
 import TextFieldUnderline from './TextFieldUnderline';
 import warning from 'warning';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 const getStyles = (props, context, state) => {
   const {
@@ -291,8 +292,7 @@ class TextField extends Component {
       to build a robust unique id for the TextField component. Please provide an id or a name.`);
 
     const lineType = this.props.multiLine ? 'multiLine' : 'singleLine';
-    const uniqueId = `${this.constructor.name}-${lineType}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = `${makeUniqueIdForElement(this)}-${lineType}`;
   }
 
   componentWillReceiveProps(nextProps) {

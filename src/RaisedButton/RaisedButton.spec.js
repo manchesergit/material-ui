@@ -218,4 +218,25 @@ describe('<RaisedButton />', () => {
       assert.ok(wrapper.find(buttonId));
     });
   });
+
+  describe('ID handeling and generation', () => {
+    it('should use the supplied id without overriding', () => {
+      const id = '12345';
+      const wrapper = shallowWithContext(
+        <RaisedButton id={id} label="idPassthrough" />
+      );
+      // we have to go to the children of the RaisedButton as the button is constructed with paper at the top
+      // and the button somewhere after that
+      assert.strictEqual(wrapper.children().prop('id'), id, 'should use provided id');
+    });
+
+    it('should generate an id if one not supplied', () => {
+      const classname = 'abcde';
+      const wrapper = mountWithContext(
+        <RaisedButton name={classname} label="idGeneration" />
+      );
+
+      assert.ok(wrapper.children().prop('id'), 'should generate an id if not supplied');
+    });
+  });
 });

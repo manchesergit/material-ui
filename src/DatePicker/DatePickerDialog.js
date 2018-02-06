@@ -7,6 +7,7 @@ import Dialog from '../Dialog';
 import Popover from '../Popover/Popover';
 import PopoverAnimationVertical from '../Popover/PopoverAnimationVertical';
 import {dateTimeFormat} from './dateUtils';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 class DatePickerDialog extends Component {
   static propTypes = {
@@ -60,8 +61,7 @@ class DatePickerDialog extends Component {
 
   componentWillMount() {
     const distinctions = `${this.props.container}-${this.props.mode}`;
-    const uniqueId = `${this.constructor.name}-${distinctions}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   show = () => {

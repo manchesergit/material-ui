@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 import Dom from '../utils/dom';
 import CircleRipple from './CircleRipple';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 // Remove the first element of the array
 const shift = ([, ...newArray]) => newArray;
@@ -45,8 +46,7 @@ class TouchRipple extends Component {
   }
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   start(event, isRippleTouchGenerated) {

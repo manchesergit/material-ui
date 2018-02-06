@@ -5,6 +5,7 @@ import shallowEqual from 'recompose/shallowEqual';
 import autoPrefix from '../utils/autoPrefix';
 import transitions from '../styles/transitions';
 import ScaleIn from './ScaleIn';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 const pulsateDuration = 750;
 
@@ -23,8 +24,7 @@ class FocusRipple extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentDidMount() {

@@ -8,6 +8,7 @@ import MenuItem from '../MenuItem';
 import Divider from '../Divider';
 import Popover from '../Popover/Popover';
 import propTypes from '../utils/propTypes';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props, context, state) {
   const {anchorEl} = state;
@@ -227,8 +228,7 @@ class AutoComplete extends Component {
     });
     this.timerClickCloseId = null;
 
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentWillReceiveProps(nextProps) {

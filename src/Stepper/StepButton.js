@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import transitions from '../styles/transitions';
 import EnhancedButton from '../internal/EnhancedButton';
 import StepLabel from './StepLabel';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 const isLabel = (child) => {
   return child && child.type && child.type.muiName === 'StepLabel';
@@ -94,8 +95,7 @@ class StepButton extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   handleMouseEnter = (event) => {

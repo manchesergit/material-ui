@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import autoPrefix from '../utils/autoPrefix';
 import transitions from '../styles/transitions';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 class ScaleInChild extends Component {
   static propTypes = {
@@ -25,8 +26,7 @@ class ScaleInChild extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentWillUnmount() {

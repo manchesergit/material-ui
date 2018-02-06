@@ -4,6 +4,7 @@ import transitions from '../styles/transitions';
 import {fade} from '../utils/colorManipulator';
 import EnhancedButton from '../internal/EnhancedButton';
 import FlatButtonLabel from './FlatButtonLabel';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function validateLabel(props, propName, componentName) {
   if (process.env.NODE_ENV !== 'production') {
@@ -152,8 +153,7 @@ class FlatButton extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentWillReceiveProps(nextProps) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import transitions from '../styles/transitions';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props) {
   const {
@@ -34,9 +35,7 @@ const TextFieldHint = (props) => {
   } = props;
 
   const styles = getStyles(props);
-
-  const uniqueId = `TextFieldHint-${text}-${Math.floor(Math.random() * 0xFFFF)}`;
-  const baseId = id || uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  const baseId = id || makeUniqueIdForElement(this);
 
   return (
     <div id={baseId} style={prepareStyles(Object.assign(styles.root, style))}>

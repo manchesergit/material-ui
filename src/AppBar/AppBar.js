@@ -5,6 +5,7 @@ import NavigationMenu from '../svg-icons/navigation/menu';
 import Paper from '../Paper';
 import propTypes from '../utils/propTypes';
 import warning from 'warning';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 export function getStyles(props, context) {
   const {
@@ -160,8 +161,7 @@ class AppBar extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentDidMount() {

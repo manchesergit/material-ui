@@ -7,6 +7,7 @@ import FocusRipple from './FocusRipple';
 import TouchRipple from './TouchRipple';
 import Paper from './../Paper';
 import warning from 'warning';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props, context) {
   const {baseTheme} = context.muiTheme;
@@ -123,9 +124,7 @@ class EnhancedSwitch extends Component {
   }
 
   componentWillMount() {
-    const generatedId = Math.floor(Math.random() * 0xFFFF);
-    const uniqueId = `${this.constructor.name}-${this.props.labelPosition}-${generatedId}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = `${makeUniqueIdForElement(this)}-${this.props.labelPosition}`;
     this.componentWillReceiveProps(this.props);
   }
 

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 import SlideInChild from './SlideInChild';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 class SlideIn extends Component {
   static propTypes = {
@@ -23,8 +24,7 @@ class SlideIn extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${this.props.direction}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   getLeaveDirection = () => {

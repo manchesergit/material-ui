@@ -8,6 +8,7 @@ import Paper from '../Paper';
 import {extendChildren} from '../utils/childUtils';
 import warning from 'warning';
 import propTypes from '../utils/propTypes';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props, context) {
   const {floatingActionButton} = context.muiTheme;
@@ -166,8 +167,7 @@ class FloatingActionButton extends Component {
       zDepth: this.props.disabled ? 0 : this.props.zDepth,
     });
 
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentDidMount() {

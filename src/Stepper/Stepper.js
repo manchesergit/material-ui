@@ -1,6 +1,7 @@
 import React, {Component, Children} from 'react';
 import PropTypes from 'prop-types';
 import StepConnector from './StepConnector';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 const getStyles = (props) => {
   const {orientation} = props;
@@ -66,8 +67,7 @@ class Stepper extends Component {
   }
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${this.props.orientation}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   makeBaseId() {

@@ -6,6 +6,7 @@ import EnhancedButton from '../internal/EnhancedButton';
 import FontIcon from '../FontIcon';
 import Tooltip from '../internal/Tooltip';
 import {extendChildren} from '../utils/childUtils';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props, context) {
   const {baseTheme} = context.muiTheme;
@@ -161,8 +162,7 @@ class IconButton extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentWillReceiveProps(nextProps) {

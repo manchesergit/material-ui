@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import TextField from '../TextField';
 import DropDownMenu from '../DropDownMenu';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props) {
   return {
@@ -181,8 +182,7 @@ class SelectField extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   render() {

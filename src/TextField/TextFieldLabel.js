@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import transitions from '../styles/transitions';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props) {
   const defaultStyles = {
@@ -37,10 +38,8 @@ const TextFieldLabel = (props) => {
 
   const {prepareStyles} = muiTheme;
   const styles = getStyles(props);
-  const roleLabel = 'textbox';
-
-  const uniqueId = `TextFieldLabel-${className}-${Math.floor(Math.random() * 0xFFFF)}`;
-  const baseId = id || uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  const roleLabel = 'textbox';  
+  const baseId = id || makeUniqueIdForElement(this);
 
   // if we have a html for value then we are rendering an label to back refer
   // to an input other wise its a selectfield so make it a span to

@@ -264,4 +264,22 @@ describe('<FlatButton />', () => {
       assert.ok(wrapper.find(buttonId));
     });
   });
+
+  describe('ID handeling and generation', () => {
+    it('should use the supplied id without overriding', () => {
+      const id = '12345';
+      const wrapper = shallowWithContext(
+        <FlatButton id={id} label="idPassthough"  />
+      );
+      assert.strictEqual(wrapper.prop('id'), id, 'should use provided id');
+    });
+
+    it('should generate an id if one not supplied', () => {
+      const classname = 'abcde';
+      const wrapper = shallowWithContext(
+        <FlatButton name={classname} label="idGeneration" />
+      );
+      assert.ok(wrapper.prop('id'), 'should generate an id if not supplied');
+    });
+  });
 });

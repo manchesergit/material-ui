@@ -45,4 +45,23 @@ describe('<TextFieldLabel>', () => {
     wrapper.setProps({shrink: true});
     expect(wrapper.prop('style').color).to.equal('focuscolor');
   });
+
+  describe('ID handeling and generation', () => {
+    it('should use the supplied id without overriding', () => {
+      const id = '12345';
+      const wrapper = shallow(
+        <TextFieldLabel id={id} muiTheme={getMuiTheme()}/>
+      );
+      expect(wrapper.prop('id')).to.equal(id);
+    });
+
+    it('should generate an id if one not supplied', () => {
+      const classname = 'abcde';
+      const wrapper = shallow(
+        <TextFieldLabel name={classname} muiTheme={getMuiTheme()}/>
+      );
+      expect(wrapper.prop('id')).to.exist;
+      expect(wrapper.prop('id').length).to.be.above('TextFieldLabel'.length);
+    });
+  });
 });

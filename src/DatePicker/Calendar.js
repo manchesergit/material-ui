@@ -9,6 +9,7 @@ import CalendarYear from './CalendarYear';
 import CalendarToolbar from './CalendarToolbar';
 import DateDisplay from './DateDisplay';
 import SlideInTransitionGroup from '../internal/SlideIn';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 import {
   defaultUtils,
@@ -66,8 +67,7 @@ class Calendar extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `Calendar-${this.props.mode}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
 
     this.setState({
       displayDate: this.props.utils.getFirstDayOfMonth(this.props.initialDate),

@@ -5,6 +5,7 @@ import keycode from 'keycode';
 import FocusRipple from './FocusRipple';
 import TouchRipple from './TouchRipple';
 import {checkChildrenInputWitha11y, HtmlForTagName, InputTypeName} from '../utils/inputNodeCheck';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 let styleInjected = false;
 let listening = false;
@@ -94,8 +95,7 @@ class EnhancedButton extends Component {
       this.setState({isKeyboardFocused: true});
     }
 
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentDidMount() {

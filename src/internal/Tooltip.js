@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import transitions from '../styles/transitions';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props, context, state) {
   const verticalPosition = props.verticalPosition;
@@ -107,9 +108,7 @@ class Tooltip extends Component {
   };
 
   componentWillMount() {
-    const positionalIndicators = `${this.props.horizontalPosition}-${this.props.verticalPosition}`;
-    const uniqueId = `${this.constructor.name}-${positionalIndicators}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = `${makeUniqueIdForElement(this)}-${this.props.horizontalPosition}-${this.props.verticalPosition}`;
   }
 
   componentDidMount() {
