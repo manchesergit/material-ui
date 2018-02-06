@@ -254,7 +254,9 @@ class FloatingActionButton extends Component {
     }
   };
 
-  getBaseId() { return this.props.id || this.uniqueId; }
+  getBaseId() {
+    return this.props.id || this.uniqueId;
+  }
 
   render() {
     const {

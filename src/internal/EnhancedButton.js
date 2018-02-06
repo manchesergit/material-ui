@@ -289,11 +289,13 @@ class EnhancedButton extends Component {
     }
   };
 
-  getBaseId() { return this.props.id || this.uniqueId; }
+  getBaseId() {
+    return this.props.id || this.uniqueId;
+  }
 
   render() {
     const {
-      id,
+      id, // eslint-disable-line no-unused-vars
       centerRipple, // eslint-disable-line no-unused-vars
       children,
       containerElement,
@@ -304,8 +306,6 @@ class EnhancedButton extends Component {
       focusRippleColor, // eslint-disable-line no-unused-vars
       focusRippleOpacity, // eslint-disable-line no-unused-vars
       href,
-      // this needs to be removed eventually but its required so this param does not end up in other
-      forInLabel, // eslint-disable-line no-unused-vars
       keyboardFocused, // eslint-disable-line no-unused-vars
       touchRippleColor, // eslint-disable-line no-unused-vars
       touchRippleOpacity, // eslint-disable-line no-unused-vars

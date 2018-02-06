@@ -254,7 +254,9 @@ class IconButton extends Component {
     }
   };
 
-  getBaseId() { return this.props.id || this.uniqueId; }
+  getBaseId() {
+    return this.props.id || this.uniqueId;
+  }
 
   render() {
     const {
@@ -266,7 +268,7 @@ class IconButton extends Component {
       hoveredStyle,
       iconClassName,
       iconStyle,
-      id,
+      id, // eslint-disable-line no-unused-vars
       labelledBy, // eslint-disable-line no-unused-vars
       style,
       tooltip,

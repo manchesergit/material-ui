@@ -206,10 +206,15 @@ describe('<RaisedButton />', () => {
       const buttonId = 'test-button-noError';
       const wrapper = mountWithContext(
         <RaisedButton label="test-button" id={buttonId} htmlFor={inputId}>
-          <input type="text" id={inputId} aria-labelledby={buttonId} aria-describedby={buttonId} />
+          <input
+            type="text"
+            id={inputId}
+            aria-labelledby={buttonId}
+            aria-describedby={buttonId}
+          />
         </RaisedButton>
       );
-      
+
       assert.ok(wrapper.find(buttonId));
     });
   });

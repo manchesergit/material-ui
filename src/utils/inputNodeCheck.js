@@ -19,6 +19,8 @@ export function checkChildrenInputWitha11y(componentId, children, excludeTag) {
     // tags to test for in the children
     const elementId = componentId !== null ? `Element [id: ${componentId}]:` : '';
     const identity = `Material-UI: ${elementId}`;
+    const message =
+              'Buttons with a child <input> element should should contain the following property inside the input tag';
 
     React.Children.forEach(children, (child) => {
       if (child !== null) {
@@ -26,8 +28,7 @@ export function checkChildrenInputWitha11y(componentId, children, excludeTag) {
           for (let index = 0; index < a11yButtonTagsToTest.length; index++) {
             const tagToTest = a11yButtonTagsToTest[index];
             if (((tagToTest !== excludeTag)) && (!child.props.hasOwnProperty(tagToTest))) {
-              const message = `${identity} Buttons with a child <input> element should should contain the property '${tagToTest}' inside the input tag.`;
-              warning(false, message);
+              warning(false, `${identity} ${message} : '${tagToTest}'`);
             }
           }
         }

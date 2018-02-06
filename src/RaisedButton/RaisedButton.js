@@ -4,7 +4,6 @@ import transitions from '../styles/transitions';
 import {fade} from '../utils/colorManipulator';
 import EnhancedButton from '../internal/EnhancedButton';
 import Paper from '../Paper';
-import {checkChildrenInputWitha11y} from '../utils/inputNodeCheck';
 
 function validateLabel(props, propName, componentName) {
   if (process.env.NODE_ENV !== 'production') {
@@ -272,12 +271,6 @@ class RaisedButton extends Component {
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
-  componentDidMount() {
-    // this test is done in enhanced button too, but this button burries its input tag inside another div
-    // the check will not traverse the child tree so we need to do it here
-    //checkChildrenInputWitha11y(`RaisedButton ${this.getBaseId()}`, this.props.children);
-  }
-
   componentWillReceiveProps(nextProps) {
     const zDepth = nextProps.disabled ? 0 : 1;
     const nextState = {
@@ -367,7 +360,9 @@ class RaisedButton extends Component {
     });
   };
 
-  getBaseId() { return this.props.id || this.uniqueId; }
+  getBaseId() {
+    return this.props.id || this.uniqueId;
+  }
 
   render() {
     const {

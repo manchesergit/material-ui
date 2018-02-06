@@ -143,7 +143,12 @@ describe('<IconButton />', () => {
       const buttonId = 'test-button-noError';
       const wrapper = mountWithContext(
         <IconButton label="test-button" id={buttonId} htmlFor={inputId}>
-          <input type="text" id={inputId} aria-labelledby={buttonId} aria-describedby={buttonId} />
+          <input
+            type="text"
+            id={inputId}
+            aria-labelledby={buttonId}
+            aria-describedby={buttonId}
+          />
         </IconButton>
       );
 

@@ -185,7 +185,9 @@ class FlatButton extends Component {
     this.props.onTouchStart(event);
   };
 
-  getBaseId() { return this.props.id || this.uniqueId; }
+  getBaseId() {
+    return this.props.id || this.uniqueId;
+  }
 
   render() {
     const {

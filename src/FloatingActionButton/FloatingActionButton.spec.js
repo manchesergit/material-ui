@@ -132,7 +132,12 @@ describe('<FloatingActionButton />', () => {
       const buttonId = 'test-button-noError';
       const wrapper = mountWithContext(
         <FloatingActionButton label="test-button" id={buttonId} htmlFor={inputId}>
-          <input type="text" id={inputId} aria-labelledby={buttonId} aria-describedby={buttonId} />
+          <input
+            type="text"
+            id={inputId}
+            aria-labelledby={buttonId}
+            aria-describedby={buttonId}
+          />
         </FloatingActionButton>
       );
 
