@@ -103,4 +103,18 @@ describe('<Dialog />', () => {
       }
     }
   });
+
+  describe('ID handeling and generation', () => {
+    it('should use the supplied id without overriding', () => {
+      const id = '12345';
+      const wrapper = mountWithContext(
+        <Dialog id={id} open={true} />
+      );
+      assert.strictEqual(wrapper.prop('id'), id, 'should use provided id');
+    });
+
+    // there should be a test to make sure that the ID's are auto generated
+    // but I can't work out how to get deep enough into the tree to get at the data
+    // I'm stuck at RenderToLayer
+  });
 });

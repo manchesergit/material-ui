@@ -9,6 +9,7 @@ import Paper from '../Paper';
 import throttle from 'lodash.throttle';
 import PopoverAnimationDefault from './PopoverAnimationDefault';
 import DomUtils from '../utils/dom'; // used for working out if the current focus is a child of this
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 const styles = {
   root: {
@@ -153,8 +154,7 @@ class Popover extends Component {
   }
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentDidMount() {
@@ -248,6 +248,7 @@ class Popover extends Component {
       ...other
     } = this.props;
 
+    const baseId = this.uniqueId;
     let styleRoot = style;
 
     if (!animated) {
@@ -262,6 +263,7 @@ class Popover extends Component {
 
       return (
         <Paper
+          id={baseId}
           onKeyDown={this.handleKeyDown}
           style={Object.assign(styleRoot, style)} {...other}
         >
@@ -280,7 +282,7 @@ class Popover extends Component {
         open={this.state.open && !this.state.closing}
       >
         <div
-          id={this.uniqueId}
+          id={baseId}
           tabIndex="0"
           onKeyDown={this.handleKeyDown}
         >

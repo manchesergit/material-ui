@@ -8,6 +8,7 @@ import Overlay from '../internal/Overlay';
 import RenderToLayer from '../internal/RenderToLayer';
 import Paper from '../Paper';
 import DomUtils from '../utils/dom'; // used for working out if the current focus is a child of this
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 
@@ -27,8 +28,7 @@ class TransitionItem extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueIdTransactionItem = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueIdTransactionItem = makeUniqueIdForElement(this);
   }
 
   componentWillUnmount() {
@@ -198,8 +198,7 @@ class DialogInline extends Component {
   };
 
   componentWillMount() {
-    const uniqueId = `${this.constructor.name}-${this.makeRandomNumber()}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    this.uniqueId = makeUniqueIdForElement(this);
     this.opened = false;
   }
 
