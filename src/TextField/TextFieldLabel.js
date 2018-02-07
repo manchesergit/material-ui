@@ -38,7 +38,7 @@ const TextFieldLabel = (props) => {
 
   const {prepareStyles} = muiTheme;
   const styles = getStyles(props);
-  const roleLabel = 'textbox';  
+  const roleLabel = 'textbox';
   const baseId = id || makeUniqueIdForElement(this);
 
   // if we have a html for value then we are rendering an label to back refer
