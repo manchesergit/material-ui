@@ -19,6 +19,8 @@ function getStyles(props, context, state) {
 
   const {open} = state;
 
+  const easeOutTime = '400ms';  // how long the snackbar will stay up before starting to animate off screen
+
   const styles = {
     root: {
       position: 'fixed',
@@ -30,8 +32,8 @@ function getStyles(props, context, state) {
       transform: open ?
         'translate(-50%, 0)' :
         `translate(-50%, ${desktopSubheaderHeight}px)`,
-      transition: `${transitions.easeOut('400ms', 'transform')}, ${
-        transitions.easeOut('400ms', 'visibility')}`,
+      transition: `${transitions.easeOut(easeOutTime, 'transform')}, ${
+        transitions.easeOut(easeOutTime, 'visibility')}`,
     },
   };
 
@@ -179,9 +181,10 @@ class Snackbar extends Component {
   /* Timer that controls delay before snackbar auto hides
   has a minimum length of 10 seconds - for accessibility reasons*/
   setAutoHideTimer() {
+    const minimumAutoHideTime = 10000;
     let autoHideDuration = this.props.autoHideDuration;
-    if (autoHideDuration < 10000) {
-      autoHideDuration = 10000;
+    if (autoHideDuration < minimumAutoHideTime) {
+      autoHideDuration = minimumAutoHideTime;
     }
     if (autoHideDuration > 0) {
       clearTimeout(this.timerAutoHideId);
