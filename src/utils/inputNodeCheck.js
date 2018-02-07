@@ -35,4 +35,4 @@ export function checkChildrenInputWitha11y(componentId, children, excludeTag) {
       }
     });
   }
-};
+}
