@@ -269,7 +269,7 @@ describe('<FlatButton />', () => {
     it('should use the supplied id without overriding', () => {
       const id = '12345';
       const wrapper = shallowWithContext(
-        <FlatButton id={id} label="idPassthough"  />
+        <FlatButton id={id} label="idPassthough" />
       );
       assert.strictEqual(wrapper.prop('id'), id, 'should use provided id');
     });
