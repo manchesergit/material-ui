@@ -84,7 +84,8 @@ class IconButton extends Component {
      */
     id: PropTypes.string,
     /**
-     * value to be added into aria-labelledby
+     * The ID of the element that provides the labeling context for this button.
+     * This value will be output in the aria-labelledby tag.
      */
     labelledBy: PropTypes.string,
     /** @ignore */
