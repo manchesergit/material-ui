@@ -128,7 +128,7 @@ class TimePicker extends Component {
     this.setState({
       time: this.isControlled() ? this.getControlledTime() : this.props.defaultTime,
     });
-    
+
     this.uniqueId = makeUniqueIdForElement(this);
 
     const uniqueLabelId = `${this.constructor.name}-label-${Math.floor(Math.random() * 0xFFFF)}`;
