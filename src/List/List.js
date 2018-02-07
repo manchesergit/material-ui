@@ -42,7 +42,7 @@ class List extends Component {
     };
 
     return (
-      <div {...other} style={prepareStyles(Object.assign(styles.root, style))}>
+      <div role="list" {...other} style={prepareStyles(Object.assign(styles.root, style))}>
         {children}
       </div>
     );
