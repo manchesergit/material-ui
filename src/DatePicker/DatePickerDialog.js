@@ -60,8 +60,8 @@ class DatePickerDialog extends Component {
   };
 
   componentWillMount() {
-    const distinctions = `${this.props.container}-${this.props.mode}`;
-    this.uniqueId = makeUniqueIdForElement(this);
+    const mode = this.props.mode === undefined ? '' : `-${this.props.mode}`;
+    this.uniqueId = `${makeUniqueIdForElement(this)}-${this.props.container}${mode}`;
   }
 
   show = () => {
