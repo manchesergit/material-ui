@@ -51,6 +51,7 @@ class Snackbar extends Component {
      * If no value is specified the snackbar will dismiss normally.
      * If a value is provided the snackbar can still be dismissed normally.
      * If a snackbar is dismissed before the timer expires, the timer will be cleared.
+     * For accessibility reasons, this is set to a minimum of 10 seconds (10000 ms).
      */
     autoHideDuration: PropTypes.number,
     /**
