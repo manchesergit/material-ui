@@ -160,7 +160,7 @@ describe('<FloatingActionButton />', () => {
       const wrapper = shallowWithContext(
         <FloatingActionButton name={classname} label="idGeneration" />
       );
-      
+
       assert.ok(wrapper.children().prop('id'), 'should generate an id if not supplied');
     });
   });
