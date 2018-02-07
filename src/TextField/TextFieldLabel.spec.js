@@ -50,7 +50,7 @@ describe('<TextFieldLabel>', () => {
     it('should use the supplied id without overriding', () => {
       const id = '12345';
       const wrapper = shallow(
-        <TextFieldLabel id={id} muiTheme={getMuiTheme()}/>
+        <TextFieldLabel id={id} muiTheme={getMuiTheme()} />
       );
       expect(wrapper.prop('id')).to.equal(id);
     });
@@ -58,9 +58,8 @@ describe('<TextFieldLabel>', () => {
     it('should generate an id if one not supplied', () => {
       const classname = 'abcde';
       const wrapper = shallow(
-        <TextFieldLabel name={classname} muiTheme={getMuiTheme()}/>
+        <TextFieldLabel name={classname} muiTheme={getMuiTheme()} />
       );
-      expect(wrapper.prop('id')).to.exist;
       expect(wrapper.prop('id').length).to.be.above('TextFieldLabel'.length);
     });
   });
