@@ -73,6 +73,11 @@ class MenuItem extends Component {
      */
     animation: PropTypes.func,
     /**
+    * The accesability label to put on the list item button.
+    * This will be invisible to the user unless they are using assistive technology.
+    */
+    ariaLabel: PropTypes.string,
+    /**
      * If true, a left check mark will be rendered.
      */
     checked: PropTypes.bool,
@@ -113,10 +118,6 @@ class MenuItem extends Component {
      */
     leftIcon: PropTypes.element,
     /**
-     * The aria-label for the menu button which will be a string
-     */
-    menuAriaLabel: PropTypes.string,
-    /**
      * `MenuItem` elements to nest within the menu item.
      */
     menuItems: PropTypes.node,
@@ -134,14 +135,6 @@ class MenuItem extends Component {
      * The `SvgIcon` or `FontIcon` to be displayed on the right side.
      */
     rightIcon: PropTypes.element,
-    /**
-    * The prop 'menubar' used as child for its parent div role menuitem
-    */
-    roleBar: PropTypes.string,
-    /**
-    * The prop 'menuitem' used as child for its parent div role menu
-    */
-    roleItem: PropTypes.string,
     /**
      * Can be used to render secondary text within the menu item.
      */
@@ -165,15 +158,13 @@ class MenuItem extends Component {
   };
 
   static defaultProps = {
+    ariaLabel: 'Menu Button',
     anchorOrigin: {horizontal: 'right', vertical: 'top'},
     checked: false,
     desktop: false,
     disabled: false,
     focusState: 'none',
     insetChildren: false,
-    menuAriaLabel: 'Menu Button',
-    roleBar: 'menubar',
-    roleItem: 'menuitem',
     targetOrigin: {horizontal: 'left', vertical: 'top'},
   };
 
@@ -255,6 +246,7 @@ class MenuItem extends Component {
 
   render() {
     const {
+      ariaLabel,
       checked,
       children,
       desktop,
@@ -263,11 +255,8 @@ class MenuItem extends Component {
       innerDivStyle,
       insetChildren,
       leftIcon,
-      menuAriaLabel,
       menuItems,
       rightIcon,
-      roleBar,
-      roleItem,
       secondaryText,
       style,
       animation,
@@ -337,12 +326,11 @@ class MenuItem extends Component {
         innerDivStyle={mergedInnerDivStyles}
         insetChildren={insetChildren}
         leftIcon={leftIconElement}
-        menuButtonAriaLabel={menuAriaLabel}
-        menuBarRole={roleBar}
-        menuItemRole={roleItem}
+        ariaLabel={ariaLabel}
         ref="listItem"
         rightIcon={rightIconElement}
         style={mergedRootStyles}
+        role="menuitem"
       >
         {children}
         {secondaryTextElement}
