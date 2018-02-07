@@ -20,4 +20,4 @@ export default function makeUniqueIdForElement(element) {
 
   const uniqueId = `${name}-${Math.floor(Math.random() * 0xFFFF)}`;
   return uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
-};
+}
