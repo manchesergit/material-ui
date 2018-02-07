@@ -624,7 +624,8 @@ class Dialog extends Component {
      */
     overlayStyle: PropTypes.object,
     /**
-    * Overrides the use of the escape key for cancelling a modal dialog
+    * Overrides the use of the escape key for dismissing a modal dialog.
+    * Default behaviour allows modal dialogs to be dismissed using the escape key.
     */
     overrideModalEscKey: PropTypes.bool,
     /**
