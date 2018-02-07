@@ -151,6 +151,11 @@ class ListItem extends Component {
 
   static propTypes = {
     /**
+     * The accesability label to put on the list item button.
+     * This will be invisible to the user unless they are using assistive technology.
+     */
+    ariaLabel: PropTypes.string,
+    /**
      * If true, generate a nested-list-indicator icon when nested list
      * items are detected. Note that an indicator will not be created
      * if a `rightIcon` or `rightIconButton` has been provided to
@@ -220,15 +225,6 @@ class ListItem extends Component {
      * This is the `SvgIcon` or `FontIcon` to be displayed on the left side.
      */
     leftIcon: PropTypes.element,
-    /**
-     * Prop that passes the value for menuBarRole from MenuItem script to ListItem
-     */
-    menuBarRole: PropTypes.string,
-    /**
-     * Prop that passes the value for menuItemRole from MenuItem script to ListItem
-     */
-    menuButtonAriaLabel: PropTypes.string,
-    menuItemRole: PropTypes.string,
     /**
      * An array of `ListItem`s to nest underneath the current `ListItem`.
      */
@@ -304,6 +300,11 @@ class ListItem extends Component {
      */
     rightToggle: PropTypes.element,
     /**
+     * The role this item is being used in.
+     * The value will be populted into the role property.
+     */
+    role: PropTypes.string,
+    /**
      * This is the block element that contains the secondary text.
      * If a string is passed in, a div tag will be rendered.
      */
@@ -320,6 +321,7 @@ class ListItem extends Component {
   };
 
   static defaultProps = {
+    ariaLabel: null,
     autoGenerateNestedIndicator: true,
     containerElement: 'span',
     disableKeyboardFocus: false,
@@ -336,6 +338,7 @@ class ListItem extends Component {
     onTouchStart: () => {},
     open: null,
     primaryTogglesNestedList: false,
+    role: 'listitem',
     secondaryTextLines: 1,
   };
 
@@ -374,7 +377,7 @@ class ListItem extends Component {
     );
   }
 
-  // This method is needed by the `MenuItem` component.
+  // Allow other componets to set the focus to this list item.
   applyFocusState(focusState) {
     if (this.button) {
       const buttonEl = ReactDOM.findDOMNode(this.button);
@@ -397,6 +400,7 @@ class ListItem extends Component {
   createDisabledElement(styles, contentChildren, additionalProps) {
     const {
       innerDivStyle,
+      role,
       style,
     } = this.props;
 
@@ -409,6 +413,7 @@ class ListItem extends Component {
 
     return (
       <div
+        role={role}
         {...additionalProps}
         style={this.context.muiTheme.prepareStyles(mergedDivStyles)}
       >
@@ -420,6 +425,7 @@ class ListItem extends Component {
   createLabelElement(styles, contentChildren, additionalProps) {
     const {
       innerDivStyle,
+      role,
       style,
     } = this.props;
 
@@ -433,6 +439,7 @@ class ListItem extends Component {
 
     return (
       <label
+        role={role}
         {...additionalProps}
         style={this.context.muiTheme.prepareStyles(mergedLabelStyles)}
       >
@@ -572,6 +579,7 @@ class ListItem extends Component {
 
   render() {
     const {
+      ariaLabel,
       autoGenerateNestedIndicator,
       children,
       containerElement,
@@ -584,9 +592,6 @@ class ListItem extends Component {
       leftAvatar,
       leftCheckbox,
       leftIcon,
-      menuBarRole,
-      menuButtonAriaLabel,
-      menuItemRole,
       nestedItems,
       nestedLevel,
       nestedListStyle,
@@ -601,6 +606,7 @@ class ListItem extends Component {
       rightIcon,
       rightIconButton,
       rightToggle,
+      role,
       primaryText,
       primaryTogglesNestedList,
       secondaryText,
@@ -728,12 +734,12 @@ class ListItem extends Component {
     const simpleLabel = !primaryTogglesNestedList && (leftCheckbox || rightToggle);
 
     return (
-      <div role={menuItemRole}>
+      <div role="group">
         {
           simpleLabel ? this.createLabelElement(styles, contentChildren, other) :
           disabled ? this.createDisabledElement(styles, contentChildren, other) : (
             <EnhancedButton
-              aria-label={menuButtonAriaLabel}
+              aria-label={ariaLabel}
               containerElement={containerElement}
               {...other}
               disableKeyboardFocus={disableKeyboardFocus || this.state.rightIconButtonKeyboardFocused}
@@ -747,7 +753,7 @@ class ListItem extends Component {
               ref={(node) => this.button = node}
               style={Object.assign({}, styles.root, style)}
             >
-              <div role={menuBarRole} style={prepareStyles(Object.assign(styles.innerDiv, innerDivStyle))}>
+              <div role={role} style={prepareStyles(Object.assign(styles.innerDiv, innerDivStyle))}>
                 {contentChildren}
               </div>
             </EnhancedButton>
