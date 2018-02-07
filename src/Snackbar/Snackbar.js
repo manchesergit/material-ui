@@ -40,6 +40,8 @@ function getStyles(props, context, state) {
   return styles;
 }
 
+const minimumAutoHideTime = 10000;
+
 class Snackbar extends Component {
   static propTypes = {
     /**
@@ -51,7 +53,7 @@ class Snackbar extends Component {
      * If no value is specified the snackbar will dismiss normally.
      * If a value is provided the snackbar can still be dismissed normally.
      * If a snackbar is dismissed before the timer expires, the timer will be cleared.
-     * For accessibility reasons, this is set to a minimum of 10 seconds (10000 ms).
+     * For accessibility reasons, the default value is the minimum number of milliseconds that this can be set to.
      */
     autoHideDuration: PropTypes.number,
     /**
@@ -106,6 +108,11 @@ class Snackbar extends Component {
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
   };
+
+  static defaultProps = {
+    autoHideDuration: minimumAutoHideTime,
+  };
+
   componentWillMount() {
     this.setState({
       open: this.props.open,
@@ -182,7 +189,6 @@ class Snackbar extends Component {
   /* Timer that controls delay before snackbar auto hides
   has a minimum length of 10 seconds - for accessibility reasons*/
   setAutoHideTimer() {
-    const minimumAutoHideTime = 10000;
     let autoHideDuration = this.props.autoHideDuration;
     if (autoHideDuration < minimumAutoHideTime) {
       autoHideDuration = minimumAutoHideTime;
