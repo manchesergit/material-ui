@@ -8,7 +8,6 @@ import propTypes from '../utils/propTypes';
 import Paper from '../Paper';
 import throttle from 'lodash.throttle';
 import PopoverAnimationDefault from './PopoverAnimationDefault';
-import DomUtils from '../utils/dom'; // used for working out if the current focus is a child of this
 import makeUniqueIdForElement from '../utils/uniqueId';
 
 const styles = {
@@ -60,11 +59,6 @@ class Popover extends Component {
      */
     className: PropTypes.string,
     /**
-     * Should this popover behave like a modal dialog.
-     * Setting this to true will confine the next selectable control to children of this.
-     */
-    modal: PropTypes.bool,
-    /**
      * Callback function fired when the popover is requested to be closed.
      *
      * @param {string} reason The reason for the close request. Possibles values
@@ -76,8 +70,7 @@ class Popover extends Component {
      */
     open: PropTypes.bool,
     /**
-     * If true, the popover will keep a reference to the component from which it
-     * received focus and return focus to that element when the popover closes
+     * If true, the popover will return focus to the element that was previously in focus, when the popover is closed.
      */
     returnFocusOnBlur: PropTypes.bool,
     /**
@@ -120,7 +113,6 @@ class Popover extends Component {
     animated: true,
     autoCloseWhenOffScreen: true,
     canAutoPosition: true,
-    modal: false,
     onRequestClose: () => {},
     open: false,
     returnFocusOnBlur: true,
@@ -468,38 +460,12 @@ class Popover extends Component {
     return targetPosition;
   }
 
-  handleKeyUp = (event) => {
-    switch (keycode(event)) {
-      case 'tab':
-        if (this.props.modal && this.state.open) {
-          this.moveActive();
-        }
-        break;
-    }
-  };
-
-  /**
-   * check if the currently focused element is a child of this
-   * if its not, then move the focus back to the paper element that makes the base of the dialog
-   * TODO : this is shared code with the dialog, its should be a common function
-   */
-  moveActive() {
-    const dialogWindow = document.getElementById(this.uniqueId);
-    const insideWindow = DomUtils.isDescendant(dialogWindow, document.activeElement);
-
-    if (!insideWindow) {
-      setTimeout(() => document.activeElement.blur(), 1);
-      setTimeout(() => dialogWindow.focus(), 1);
-    }
-  }
-
   render() {
     const eventListener = this.state.open ?
       (<EventListener
         target={this.props.scrollableContainer}
         onScroll={this.handleScroll}
         onResize={this.handleResize}
-        onKeyUp={this.handleKeyUp}
        />) : null;
     return (
       <div style={styles.root}>
