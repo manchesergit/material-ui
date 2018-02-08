@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import transitions from '../styles/transitions';
 import withWidth, {SMALL} from '../utils/withWidth';
 import FlatButton from '../FlatButton';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props, context) {
   const {
@@ -78,9 +79,14 @@ export const SnackbarBody = (props, context) => {
 
   const {prepareStyles} = context.muiTheme;
   const styles = getStyles(props, context);
+  const baseId = contentId || makeUniqueIdForElement('SnackbarBody');
+  const innerWrapper = `${baseId}-innerBody-div`;
+  const outerWrapper = `${baseId}-outerBody-div`;
+  const actionButtonId = `${baseId}-actionButton`;
 
   const actionButton = action && (
     <FlatButton
+      id={actionButtonId}
       style={styles.action}
       label={action}
       onClick={onActionClick}
@@ -88,9 +94,9 @@ export const SnackbarBody = (props, context) => {
   );
 
   return (
-    <div {...other} style={prepareStyles(Object.assign(styles.root, style))}>
-      <div style={prepareStyles(Object.assign(styles.content, contentStyle))}>
-        <span id={contentId}>{message}</span>
+    <div id={outerWrapper} {...other} style={prepareStyles(Object.assign(styles.root, style))}>
+      <div id={innerWrapper} style={prepareStyles(Object.assign(styles.content, contentStyle))}>
+        <span id={baseId}>{message}</span>
         {actionButton}
       </div>
     </div>
