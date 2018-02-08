@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import UniqueId from 'lodash.uniqueid';
 import transitions from '../styles/transitions';
 import ClickAwayListener from '../internal/ClickAwayListener';
 import SnackbarBody from './SnackbarBody';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props, context, state) {
   const {
@@ -69,6 +69,10 @@ class Snackbar extends Component {
      */
     contentStyle: PropTypes.object,
     /**
+     * The ID to use for the snackbar.
+     */
+    id: PropTypes.string,
+    /**
      * The message to be displayed.
      *
      * (Note: If the message is an element or array, and the `Snackbar` may re-render while it is still open,
@@ -119,6 +123,7 @@ class Snackbar extends Component {
       message: this.props.message,
       action: this.props.action,
     });
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentDidMount() {
@@ -171,8 +176,6 @@ class Snackbar extends Component {
     clearTimeout(this.timerOneAtTheTimeId);
   }
 
-  contentId = UniqueId('snackbar')
-
   componentClickAway = () => {
     if (this.timerTransitionId) {
       // If transitioning, don't close the snackbar.
@@ -217,6 +220,7 @@ class Snackbar extends Component {
       autoHideDuration, // eslint-disable-line no-unused-vars
       contentStyle,
       bodyStyle,
+      id,
       message: messageProp, // eslint-disable-line no-unused-vars
       onRequestClose, // eslint-disable-line no-unused-vars
       onActionClick,
@@ -230,13 +234,16 @@ class Snackbar extends Component {
       open,
     } = this.state;
 
+    const contentId = id || this.uniqueId;
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
     const openAttr = open ? {open} : null;
+    const contentWrapperId = `${contentId}-wrapper`;
 
     return (
       <ClickAwayListener onClickAway={open ? this.componentClickAway : null}>
         <div
+          id={contentWrapperId}
           {...other}
           role="dialog"
           aria-live="polite"
@@ -246,7 +253,7 @@ class Snackbar extends Component {
         >
           <SnackbarBody
             action={action}
-            contentId={this.contentId}
+            contentId={contentId}
             contentStyle={contentStyle}
             message={message}
             open={open}
