@@ -116,6 +116,10 @@ class Snackbar extends Component {
   static defaultProps = {
     autoHideDuration: minimumAutoHideTime,
   };
+  static reasons = {
+    CLICKAWAY: 'clickaway',
+    TIMEOUT: 'timeout'
+  }
 
   componentWillMount() {
     this.setState({
@@ -183,7 +187,7 @@ class Snackbar extends Component {
     }
 
     if (this.props.open !== null && this.props.onRequestClose) {
-      this.props.onRequestClose('clickaway');
+      this.props.onRequestClose(Snackbar.reasons.CLICKAWAY);
     } else {
       this.setState({open: false});
     }
@@ -200,7 +204,7 @@ class Snackbar extends Component {
       clearTimeout(this.timerAutoHideId);
       this.timerAutoHideId = setTimeout(() => {
         if (this.props.open !== null && this.props.onRequestClose) {
-          this.props.onRequestClose('timeout');
+          this.props.onRequestClose(Snackbar.reasons.TIMEOUT);
         } else {
           this.setState({open: false});
         }

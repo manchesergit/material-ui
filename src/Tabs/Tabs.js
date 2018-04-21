@@ -52,6 +52,10 @@ class Tabs extends Component {
      */
     inkBarStyle: PropTypes.object,
     /**
+     * Override the inline-styles of the InkBar container.
+     */
+    inkBarContainerStyle: PropTypes.object,
+    /**
      * Called when the selected value change.
      */
     onChange: PropTypes.func,
