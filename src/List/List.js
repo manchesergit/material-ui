@@ -1,6 +1,7 @@
 import React, {Component, Children, isValidElement} from 'react';
 import PropTypes from 'prop-types';
 import Subheader from '../Subheader';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 class List extends Component {
   static propTypes = {
@@ -9,6 +10,10 @@ class List extends Component {
      * be part of the list.
      */
     children: PropTypes.node,
+    /**
+     * The ID to set on the list item and its children.
+     */
+    id: PropTypes.string,
     /**
      * Override the inline-styles of the root element.
      */
@@ -19,9 +24,14 @@ class List extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
+  componentWillMount() {
+    this.uniqueId = makeUniqueIdForElement(this);
+  }
+
   render() {
     const {
       children,
+      id,
       style,
       ...other
     } = this.props;
@@ -41,8 +51,10 @@ class List extends Component {
       },
     };
 
+    const baseId = id || this.uniqueId;
+
     return (
-      <div role="list" {...other} style={prepareStyles(Object.assign(styles.root, style))}>
+      <div id={baseId} role="list" {...other} style={prepareStyles(Object.assign(styles.root, style))}>
         {children}
       </div>
     );

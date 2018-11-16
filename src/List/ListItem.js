@@ -9,6 +9,7 @@ import IconButton from '../IconButton';
 import OpenIcon from '../svg-icons/navigation/expand-less';
 import CloseIcon from '../svg-icons/navigation/expand-more';
 import NestedList from './NestedList';
+import makeUniqueIdForElement from '../utils/uniqueId';
 
 function getStyles(props, context, state) {
   const {
@@ -193,6 +194,10 @@ class ListItem extends Component {
     */
     hoverColor: PropTypes.string,
     /**
+     * The ID to set on the list item and its children.
+     */
+    id: PropTypes.string,
+    /**
      * If true, the nested `ListItem`s are initially displayed.
      */
     initiallyOpen: PropTypes.bool,
@@ -359,6 +364,7 @@ class ListItem extends Component {
     this.setState({
       open: this.props.open === null ? this.props.initiallyOpen === true : this.props.open,
     });
+    this.uniqueId = makeUniqueIdForElement(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -397,7 +403,7 @@ class ListItem extends Component {
     }
   }
 
-  createDisabledElement(styles, contentChildren, additionalProps) {
+  createDisabledElement(styles, contentChildren, additionalProps, id) {
     const {
       innerDivStyle,
       role,
@@ -412,7 +418,7 @@ class ListItem extends Component {
     );
 
     return (
-      <div
+      <div id={id}
         role={role}
         {...additionalProps}
         style={this.context.muiTheme.prepareStyles(mergedDivStyles)}
@@ -422,7 +428,7 @@ class ListItem extends Component {
     );
   }
 
-  createLabelElement(styles, contentChildren, additionalProps) {
+  createLabelElement(styles, contentChildren, additionalProps, id) {
     const {
       innerDivStyle,
       role,
@@ -438,7 +444,7 @@ class ListItem extends Component {
     );
 
     return (
-      <label
+      <label id={id}
         role={role}
         {...additionalProps}
         style={this.context.muiTheme.prepareStyles(mergedLabelStyles)}
@@ -448,7 +454,7 @@ class ListItem extends Component {
     );
   }
 
-  createTextElement(styles, data, key) {
+  createTextElement(styles, data, key, id) {
     const {prepareStyles} = this.context.muiTheme;
     if (React.isValidElement(data)) {
       let style = Object.assign({}, styles, data.props.style);
@@ -458,11 +464,12 @@ class ListItem extends Component {
       return React.cloneElement(data, {
         key: key,
         style: style,
+        id: id,
       });
     }
 
     return (
-      <div key={key} style={prepareStyles(styles)}>
+      <div id={id} key={key} style={prepareStyles(styles)}>
         {data}
       </div>
     );
@@ -564,13 +571,14 @@ class ListItem extends Component {
     this.props.onTouchEnd(event);
   }
 
-  pushElement(children, element, baseStyles, additionalProps) {
+  pushElement(children, element, baseStyles, id, additionalProps) {
     if (element) {
       const styles = Object.assign({}, baseStyles, element.props.style);
       children.push(
         React.cloneElement(element, {
           key: children.length,
           style: styles,
+          id: id,
           ...additionalProps,
         })
       );
@@ -586,6 +594,7 @@ class ListItem extends Component {
       disabled,
       disableKeyboardFocus,
       hoverColor, // eslint-disable-line no-unused-vars
+      id,
       initiallyOpen, // eslint-disable-line no-unused-vars
       innerDivStyle,
       insetChildren, // eslint-disable-line no-unused-vars
@@ -618,16 +627,19 @@ class ListItem extends Component {
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
     const contentChildren = [children];
+    const baseId = id || this.uniqueId;
 
     if (leftIcon) {
       const additionalProps = {
         color: leftIcon.props.color || this.context.muiTheme.listItem.leftIconColor,
       };
+      const leftIconId = `${baseId}-leftIcon`;
       this.pushElement(
         contentChildren,
         leftIcon,
         Object.assign({}, styles.icons, styles.leftIcon),
-        additionalProps
+        leftIconId,
+        additionalProps,
       );
     }
 
@@ -635,35 +647,43 @@ class ListItem extends Component {
       const additionalProps = {
         color: rightIcon.props.color || this.context.muiTheme.listItem.rightIconColor,
       };
+      const rightIconId = `${baseId}-rightIcon`;
       this.pushElement(
         contentChildren,
         rightIcon,
         Object.assign({}, styles.icons, styles.rightIcon),
-        additionalProps
+        rightIconId,
+        additionalProps,
       );
     }
 
     if (leftAvatar) {
+      const leftAvatarId = `${baseId}-leftAvatar`;
       this.pushElement(
         contentChildren,
         leftAvatar,
-        Object.assign({}, styles.avatars, styles.leftAvatar)
+        Object.assign({}, styles.avatars, styles.leftAvatar),
+        leftAvatarId,
       );
     }
 
     if (rightAvatar) {
+      const rightAvatarId = `${baseId}-rightAvatar`;
       this.pushElement(
         contentChildren,
         rightAvatar,
-        Object.assign({}, styles.avatars, styles.rightAvatar)
+        Object.assign({}, styles.avatars, styles.rightAvatar),
+        rightAvatarId,
       );
     }
 
     if (leftCheckbox) {
+      const leftCheckboxId = `${baseId}-leftCheckbox`;
       this.pushElement(
         contentChildren,
         leftCheckbox,
-        Object.assign({}, styles.leftCheckbox)
+        Object.assign({}, styles.leftCheckbox),
+        leftCheckboxId,
       );
     }
 
@@ -683,62 +703,82 @@ class ListItem extends Component {
         onMouseUp: this.handleRightIconButtonMouseUp,
       };
 
+      const openIcon = `${baseId}-openIcon`;
+      const closeIcon = `${baseId}-closeIcon`;
+      const openIconButton = `${baseId}-openIconButton`;
+      const closeIconButton = `${baseId}-closeIconButton`;
+
       // Create a nested list indicator icon if we don't have an icon on the right
       if (needsNestedIndicator) {
         rightIconButtonElement = this.state.open ?
-          <IconButton><OpenIcon /></IconButton> :
-          <IconButton><CloseIcon /></IconButton>;
+          <IconButton id={openIconButton}><OpenIcon id={openIcon}/></IconButton> :
+          <IconButton id={closeIconButton}><CloseIcon id={closeIcon}/></IconButton>;
         rightIconButtonHandlers.onClick = this.handleNestedListToggle;
       }
 
+      const rightIconButtonId = `${baseId}-rightIconButton`;
       this.pushElement(
         contentChildren,
         rightIconButtonElement,
         Object.assign({}, styles.rightIconButton),
+        rightIconButtonId,
         rightIconButtonHandlers
       );
     }
 
+    const rightToggleId = `${baseId}-rightToggle`;
     if (rightToggle) {
       this.pushElement(
         contentChildren,
         rightToggle,
-        Object.assign({}, styles.rightToggle)
+        Object.assign({}, styles.rightToggle),
+        rightToggleId
       );
     }
 
     if (primaryText) {
+      const primaryTextId = `${baseId}-primaryText`;
       const primaryTextElement = this.createTextElement(
         styles.primaryText,
         primaryText,
-        'primaryText'
+        'primaryText',
+        primaryTextId
       );
       contentChildren.push(primaryTextElement);
     }
 
     if (secondaryText) {
+      const secondaryTextId = `${baseId}-secondaryText`;
       const secondaryTextElement = this.createTextElement(
         styles.secondaryText,
         secondaryText,
-        'secondaryText'
+        'secondaryText',
+        secondaryTextId
       );
       contentChildren.push(secondaryTextElement);
     }
 
+    const nestedListId = `${baseId}-nestedList`;
     const nestedList = nestedItems.length ? (
-      <NestedList nestedLevel={nestedLevel} open={this.state.open} style={nestedListStyle}>
+      <NestedList id={nestedListId} nestedLevel={nestedLevel} open={this.state.open} style={nestedListStyle}>
         {nestedItems}
       </NestedList>
     ) : undefined;
 
     const simpleLabel = !primaryTogglesNestedList && (leftCheckbox || rightToggle);
 
+    const listItemButtonId = `${baseId}-button`;
+    const listItemContentId = `${baseId}-content`;
+    const disabledId = `${baseId}-disabledElement`;
+    const labelId = `${baseId}-labelElement`;
+
     return (
-      <div role="group">
+      <div role="group" id={baseId}>
         {
-          simpleLabel ? this.createLabelElement(styles, contentChildren, other) :
-          disabled ? this.createDisabledElement(styles, contentChildren, other) : (
+          simpleLabel ? this.createLabelElement(styles, contentChildren, other, labelId) :
+          disabled ? this.createDisabledElement(styles, contentChildren, other, disabledId) : (
             <EnhancedButton
+              id={listItemButtonId}
               aria-label={ariaLabel}
               containerElement={containerElement}
               {...other}
@@ -753,7 +793,7 @@ class ListItem extends Component {
               ref={(node) => this.button = node}
               style={Object.assign({}, styles.root, style)}
             >
-              <div role={role} style={prepareStyles(Object.assign(styles.innerDiv, innerDivStyle))}>
+              <div id={listItemContentId} role={role} style={prepareStyles(Object.assign(styles.innerDiv, innerDivStyle))}>
                 {contentChildren}
               </div>
             </EnhancedButton>
