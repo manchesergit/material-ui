@@ -2,7 +2,7 @@
   "name": "material-ui-build",
   "private": true,
   "author": "Material-UI Team",
-  "version": "0.20.0",
+  "version": "0.20.2",
   "description": "React Components that Implement Google's Material Design.",
   "main": "./src/index.js",
   "keywords": [
@@ -55,7 +55,7 @@
     "lodash.throttle": "^4.1.1",
     "lodash.uniqueid": "^4.0.1",
     "prop-types": "^15.5.7",
-    "react-event-listener": "^0.5.1",
+    "react-event-listener": "^0.6.2",
     "react-transition-group": "^1.2.1",
     "recompose": "^0.26.0",
     "simple-assign": "^0.1.0",
@@ -112,5 +112,6 @@
     "rimraf": "^2.6.1",
     "sinon": "^3.0.0",
     "webpack": "^1.13.3"
-  }
+  },
+  "sideEffects": false
 }
